@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -6,9 +6,11 @@ import {
   ScrollView,
   RefreshControl,
   Dimensions,
+  Text,
 } from 'react-native';
-import {ResponsiveGrid} from 'react-native-flexible-grid';
-// import FastImage from "react-native-fast-image";
+import { ResponsiveGrid } from 'react-native-flexible-grid';
+import ProgressImage from 'react-native-image-progress';
+import * as Progress from 'react-native-progress';
 import ImageViewing from 'react-native-image-viewing';
 import styles from './Styles';
 import Path from '../../Services/Api/BaseUrl';
@@ -18,10 +20,10 @@ import {
   saveToStorage,
 } from '../../Services/Api/CommonServices';
 import Loader from '../../Components/Customs/Loader';
-import {checkLogin, goBackHandler} from '../../Services/CommonMethods';
+import { checkLogin, goBackHandler } from '../../Services/CommonMethods';
 import CheckNet from '../../Components/Common/CheckNet';
 import NetInfo from '@react-native-community/netinfo';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import {
   setDestination,
   setLoader,
@@ -29,16 +31,16 @@ import {
 } from '../../Reducers/CommonActions';
 import Header from '../../Components/Common/Header';
 import Search from '../../Components/Customs/Search';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import GlobalText from '../../Components/Customs/Text';
 import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
 import ExploreGridSkeleton from './ExploreGridSkeleton';
 import ComingSoon from '../../Components/Common/ComingSoon';
 
-const {height: screenHeight} = Dimensions.get('window');
+const { height: screenHeight } = Dimensions.get('window');
 
-const ExploreGrid = ({route, navigation, ...props}) => {
-  const {t} = useTranslation();
+const ExploreGrid = ({ route, navigation, ...props }) => {
+  const { t } = useTranslation();
   const [gallery, setGallery] = useState([]);
   const [offline, setOffline] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -63,11 +65,6 @@ const ExploreGrid = ({route, navigation, ...props}) => {
           if (res) {
             const newGallery = res;
             setGallery(newGallery);
-            // FastImage.preload(
-            //     newGallery.map((image) => ({
-            //         uri: Path.FTP_PATH + image.path,
-            //     }))
-            // );
           }
           props.setLoader(false);
           setLoading(false);
@@ -110,11 +107,6 @@ const ExploreGrid = ({route, navigation, ...props}) => {
             }
             setCurrentPage(res.data.data.current_page);
             setLastPage(res.data.data.last_page);
-            // FastImage.preload(
-            //     newGallery.map((image) => ({
-            //         uri: Path.FTP_PATH + image.path,
-            //     }))
-            // );
           }
           setLoading(false);
           setRefreshing(false);
@@ -167,25 +159,37 @@ const ExploreGrid = ({route, navigation, ...props}) => {
     setSelectedImage(null);
   };
 
-  const renderItem = ({item}) => (
-    <TouchableOpacity
-      onPress={() => openImageViewer(item)}
-      activeOpacity={0.7} // Improved touch responsiveness
-    >
-      <View style={styles.imageGridBoxContainer}>
-        {/* <FastImage
-                    source={{ uri: Path.FTP_PATH + item.path }}
-                    style={styles.imageGridBox}
-                    resizeMode={FastImage.resizeMode.cover}
-                /> */}
-      </View>
-    </TouchableOpacity>
-  );
+  const renderItem = ({ item }) => {
+    const imageUri = Path.FTP_PATH + item.path;
+    console.log('Image URI:', imageUri); // Log the image URI
+    return (
+      <TouchableOpacity
+        onPress={() => openImageViewer(item)}
+        activeOpacity={0.7}
+      >
+        <View style={styles.imageGridBoxContainer}>
+          <ProgressImage
+            source={{ uri: imageUri }}
+            style={styles.imageGridBox}
+            indicator={Progress.Circle}
+            indicatorProps={{
+              size: 30,
+              borderWidth: 0,
+              color: 'rgba(150, 150, 150, 1)',
+              unfilledColor: 'rgba(200, 200, 200, 0.2)',
+            }}
+            resizeMode="cover"
+            onError={(error) => console.error('Image load error:', error)}
+          />
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   const renderFooter = () => {
     if (loading && gallery.length) {
       return (
-        <View style={{paddingVertical: 20}}>
+        <View style={{ paddingVertical: 20 }}>
           <ActivityIndicator size="small" color="#0000ff" />
         </View>
       );
@@ -208,12 +212,13 @@ const ExploreGrid = ({route, navigation, ...props}) => {
         }
       />
       <ScrollView
-        style={{flex: 1}}
+        style={{ flex: 1 }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
         onScroll={handleScroll}
-        scrollEventThrottle={16}>
+        scrollEventThrottle={16}
+      >
         <CheckNet isOff={offline} />
         {loading && !gallery.length ? (
           <ExploreGridSkeleton />
@@ -223,7 +228,7 @@ const ExploreGrid = ({route, navigation, ...props}) => {
             data={gallery}
             renderItem={renderItem}
             showScrollIndicator={false}
-            style={{padding: 5, marginBottom: 70}}
+            style={{ padding: 5, marginBottom: 70 }}
             keyExtractor={item => item.id.toString()}
             ListFooterComponent={renderFooter}
           />
@@ -233,9 +238,10 @@ const ExploreGrid = ({route, navigation, ...props}) => {
               height: screenHeight,
               alignItems: 'center',
               padding: 50,
-            }}>
+            }}
+          >
             <GlobalText
-              style={{fontWeight: 'bold'}}
+              style={{ fontWeight: 'bold' }}
               text={offline ? t('NO_INTERNET') : t('NO_DATA')}
             />
           </View>

@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
-import {View, Animated} from 'react-native';
+import {View, Animated, LogBox, Image} from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
 import styles from './Styles';
 import Path from '../../Services/Api/BaseUrl';
-// import FastImage from "react-native-fast-image";
+import ProgressImage from 'react-native-image-progress';
+import * as Progress from 'react-native-progress';
 
 class AnimationStyle extends Component {
   state = {
@@ -19,11 +20,13 @@ class AnimationStyle extends Component {
     }).start();
   };
 
+  onLoadError = (error) => {
+    console.error('Image load error:', error.nativeEvent.error);
+  };
+
   render() {
     return (
-      <Animated.Image
-        onLoad={this.onLoad}
-        {...this.props}
+      <Animated.View
         style={[
           {
             opacity: this.state.opacity,
@@ -38,43 +41,53 @@ class AnimationStyle extends Component {
           },
           this.props.style,
         ]}
-      />
+      >
+        <ProgressImage
+          {...this.props}
+          // indicator={Progress.Circle} // Optional: Add a progress indicator
+          indicatorProps={{
+            size: 30,
+            borderWidth: 0,
+            color: 'rgba(150, 150, 150, 1)',
+            unfilledColor: 'rgba(200, 200, 200, 0.2)',
+          }}
+          resizeMode="stretch"
+          onLoad={this.onLoad}
+          onError={this.onLoadError}
+        />
+      </Animated.View>
     );
   }
 }
 
 const Banner = ({style, bannerImages}) => {
+  const handleImagePath = (imageUri) => {
+    console.log('Image path:', imageUri);
+  };
+
   return (
     <View style={[styles.banner, style]}>
       <Carousel
         loop
-        // mode={"parallax"}
-        // customAnimation={animationStyle}
         width={DIMENSIONS.windowWidth}
         height={DIMENSIONS.windowWidth / 2}
         autoPlay={true}
         data={bannerImages}
         scrollAnimationDuration={3000}
-        // onSnapToItem={(index) => console.log("current index:", index)}
-        renderItem={({index}) => (
-          <></>
-          // <FastImage
-          //     style={styles.bannerImage}
-          //     source={{
-          //         uri: `${Path.FTP_PATH}${bannerImages[index].image}`,
-          //         headers: { Authorization: "someAuthToken" },
-          //         priority: FastImage.priority.normal,
-          //     }}
-          //     resizeMode={FastImage.resizeMode.stretch}
-          // />
-          // <AnimationStyle
-          //     source={{
-          //         uri: `${Path.FTP_PATH}${bannerImages[index].image}`,
-          //     }}
-          //     style={styles.bannerImage}
-          // >
-          // </AnimationStyle>
-        )}
+        renderItem={({index}) => {
+          const imageUri = `${Path.FTP_PATH}${bannerImages[index].image}`;
+          handleImagePath(imageUri); // Log image path
+
+          // Fallback to standard Image component if needed
+          return (
+            <AnimationStyle
+              source={{ uri: imageUri }}
+              style={styles.bannerImage}
+              onLoad={() => console.log(`Image ${imageUri} loaded`)}
+              onError={(error) => console.error(`Image ${imageUri} failed to load`, error)}
+            />
+          );
+        }}
       />
     </View>
   );
