@@ -1,0 +1,5 @@
+MD5 certificate fingerprint = BA:D2:8B:3E:29:58:CC:4E:E6:2A:09:5F:A7:71:57:58
+
+SHA-1 certificate fingerprint = B2:8F:38:05:24:F3:64:B8:94:0F:51:02:47:FF:B6:9C:6D:CF:28:44
+
+SHA-256 certificate fingerprint = E0:5F:EF:52:5D:61:DE:AE:03:95:8A:4E:43:7D:80:9C:2E:6A:65:E0:31:7F:A4:0B:36:D6:8D:B6:30:DA:16:1A

@@ -6,7 +6,7 @@ import Octicons from "react-native-vector-icons/Octicons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import COLOR from "../../Services/Constants/COLORS";
 import DIMENSIONS from "../../Services/Constants/DIMENSIONS";
-import StarRating from "react-native-star-rating";
+// import StarRating from "react-native-star-rating";
 import { comnPost } from "../../Services/Api/CommonServices";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import GlobalText from "../Customs/Text";
@@ -104,7 +104,7 @@ const PlaceCard = ({ data, reload }) => {
                     </TouchableOpacity>
                     <View style={styles.flexRow}>
                         <View style={{ width: "40%" }}>
-                            <StarRating
+                            {/* <StarRating
                                 disabled={false}
                                 maxStars={5}
                                 rating={rating}
@@ -114,7 +114,7 @@ const PlaceCard = ({ data, reload }) => {
                                 starSize={14}
                                 starStyle={styles.starStyle}
                                 halfStarEnabled
-                            />
+                            /> */}
                         </View>
                         <TouchableOpacity onPress={() => onLikeClick()}>
                             {isLiked ? (

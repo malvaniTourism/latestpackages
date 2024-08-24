@@ -28,7 +28,7 @@ import Path from "../../Services/Api/BaseUrl";
 import Octicons from "react-native-vector-icons/Octicons";
 import CommentsSheet from "../../Components/Common/CommentsSheet";
 import BottomSheet from "../../Components/Customs/BottomSheet";
-import StarRating from "react-native-star-rating";
+// import StarRating from "react-native-star-rating";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import ReadMore from "react-native-read-more-text";
 import TextButton from "../../Components/Customs/Buttons/TextButton";
@@ -363,7 +363,7 @@ const CityDetails = ({ navigation, route, ...props }) => {
                                     ) : (
                                         <>
                                             <View style={styles.cityStarView}>
-                                                <StarRating
+                                                {/* <StarRating
                                                     disabled={false}
                                                     maxStars={5}
                                                     rating={rating}
@@ -376,7 +376,7 @@ const CityDetails = ({ navigation, route, ...props }) => {
                                                     starStyle={styles.starStyle}
                                                     halfStarEnabled
                                                     emptyStarColor={COLOR.grey}
-                                                />
+                                                /> */}
                                                 {rating > 0 && (
                                                     <GlobalText
                                                         text={rating}

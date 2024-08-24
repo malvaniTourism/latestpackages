@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, FlatList, TouchableOpacity, Text } from "react-native";
-import FastImage from "react-native-fast-image";
+// import FastImage from "react-native-fast-image";
 import ImageViewing from "react-native-image-viewing";
 import styles from "./Styles";
 import Path from "../../Services/Api/BaseUrl";
@@ -11,9 +11,9 @@ const ImageViewer = ({ images }) => {
 
     useEffect(() => {
         // Preload images for faster loading
-        FastImage.preload(
-            images.map((image) => ({ uri: Path.FTP_PATH + image.path }))
-        );
+        // FastImage.preload(
+        //     images.map((image) => ({ uri: Path.FTP_PATH + image.path }))
+        // );
     }, [images]);
 
     const openImageViewer = (image) => {
@@ -23,17 +23,17 @@ const ImageViewer = ({ images }) => {
 
     const renderItem = ({ item }) => (
         <TouchableOpacity onPress={() => openImageViewer(item)}>
-            <FastImage
+            {/* <FastImage
                 source={{ uri: Path.FTP_PATH + item.path }}
                 style={styles.thumbnail}
                 resizeMode={FastImage.resizeMode.cover}
-            />
+            /> */}
         </TouchableOpacity>
     );
 
     return (
         <View style={styles.galleryContainer}>
-            <FastImage
+            {/* <FastImage
                 style={styles.mainImage}
                 source={{
                     uri: Path.FTP_PATH + selectedImage.path,
@@ -41,7 +41,7 @@ const ImageViewer = ({ images }) => {
                     priority: FastImage.priority.normal,
                 }}
                 resizeMode={FastImage.resizeMode.contain}
-            />
+            /> */}
             <View style={styles.thumbnailView}>
                 <FlatList
                     data={images}
