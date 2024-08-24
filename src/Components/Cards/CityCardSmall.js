@@ -7,7 +7,7 @@ import ComingSoon from "../Common/ComingSoon";
 import Octicons from "react-native-vector-icons/Octicons";
 import COLOR from "../../Services/Constants/COLORS";
 import DIMENSIONS from "../../Services/Constants/DIMENSIONS";
-import StarRating from "react-native-star-rating";
+// import StarRating from "react-native-star-rating";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { comnPost } from "../../Services/Api/CommonServices";
 import { useTranslation } from "react-i18next";
@@ -171,14 +171,14 @@ const CityCardSmall = ({ data, reload, navigation, addComment, onClick }) => {
                             : styles.placeStarView
                     }
                 >
-                    <StarRating
+                    {/* <StarRating
                         disabled={false}
                         maxStars={5}
                         rating={rating}
                         selectedStar={(rating) => onStarRatingPress(rating)}
                         starSize={13}
                         starStyle={styles.starStyle}
-                    />
+                    /> */}
                 </View>
             </View>
             <ComingSoon message={t("COMING_SOON")} visible={isVisible} />

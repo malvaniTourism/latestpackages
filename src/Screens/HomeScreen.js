@@ -28,7 +28,7 @@ import {
     setLoader,
     setMode,
 } from "../Reducers/CommonActions";
-import SplashScreen from "react-native-splash-screen";
+// import SplashScreen from "react-native-splash-screen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import TextButton from "../Components/Customs/Buttons/TextButton";
 import { exitApp, navigateTo } from "../Services/CommonMethods";
@@ -150,7 +150,7 @@ const HomeScreen = ({ navigation, route, ...props }) => {
         }
         LogBox.ignoreAllLogs();
         saveToken();
-        SplashScreen.hide();
+        // SplashScreen.hide();
         const unsubscribe = NetInfo.addEventListener(async (state) => {
             setOffline(!state.isConnected);
             let mode = JSON.parse(await getFromStorage(t("STORAGE.MODE")));

@@ -8,7 +8,7 @@ import {
     Dimensions,
 } from "react-native";
 import { ResponsiveGrid } from "react-native-flexible-grid";
-import FastImage from "react-native-fast-image";
+// import FastImage from "react-native-fast-image";
 import ImageViewing from "react-native-image-viewing";
 import styles from "./Styles";
 import Path from "../../Services/Api/BaseUrl";
@@ -63,11 +63,11 @@ const ExploreGrid = ({ route, navigation, ...props }) => {
                     if (res) {
                         const newGallery = res;
                         setGallery(newGallery);
-                        FastImage.preload(
-                            newGallery.map((image) => ({
-                                uri: Path.FTP_PATH + image.path,
-                            }))
-                        );
+                        // FastImage.preload(
+                        //     newGallery.map((image) => ({
+                        //         uri: Path.FTP_PATH + image.path,
+                        //     }))
+                        // );
                     }
                     props.setLoader(false);
                     setLoading(false);
@@ -116,11 +116,11 @@ const ExploreGrid = ({ route, navigation, ...props }) => {
                         }
                         setCurrentPage(res.data.data.current_page);
                         setLastPage(res.data.data.last_page);
-                        FastImage.preload(
-                            newGallery.map((image) => ({
-                                uri: Path.FTP_PATH + image.path,
-                            }))
-                        );
+                        // FastImage.preload(
+                        //     newGallery.map((image) => ({
+                        //         uri: Path.FTP_PATH + image.path,
+                        //     }))
+                        // );
                     }
                     setLoading(false);
                     setRefreshing(false);
@@ -179,11 +179,11 @@ const ExploreGrid = ({ route, navigation, ...props }) => {
             activeOpacity={0.7} // Improved touch responsiveness
         >
             <View style={styles.imageGridBoxContainer}>
-                <FastImage
+                {/* <FastImage
                     source={{ uri: Path.FTP_PATH + item.path }}
                     style={styles.imageGridBox}
                     resizeMode={FastImage.resizeMode.cover}
-                />
+                /> */}
             </View>
         </TouchableOpacity>
     );
