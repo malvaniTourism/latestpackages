@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
-const LoginChoice = ({ selectOtp, selectPassword }) => {
-    return <></>;
+const LoginChoice = ({selectOtp, selectPassword}) => {
+  return <></>;
 };
 
 export default LoginChoice;

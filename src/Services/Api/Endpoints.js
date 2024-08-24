@@ -1,6 +1,6 @@
 const Endpoint = {
-    login: "",
-    product: "",
+  login: '',
+  product: '',
 };
 
 export default Endpoint;
