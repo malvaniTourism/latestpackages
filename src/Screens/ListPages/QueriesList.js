@@ -12,13 +12,12 @@ import {ListItem} from '@rneui/themed';
 import Header from '../../Components/Common/Header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
 import COLOR from '../../Services/Constants/COLORS';
 import {
   backPage,
   checkLogin,
   goBackHandler,
-  navigateTo,
 } from '../../Services/CommonMethods';
 import TextButton from '../../Components/Customs/Buttons/TextButton';
 import styles from './Styles';
@@ -35,8 +34,6 @@ import CheckNet from '../../Components/Common/CheckNet';
 import NetInfo from '@react-native-community/netinfo';
 import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
 import GlobalText from '../../Components/Customs/Text';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Entypo from 'react-native-vector-icons/Entypo';
 import ContactUs from '../ContactUs';
 import ComingSoon from '../../Components/Common/ComingSoon';
 
@@ -48,11 +45,11 @@ const QueriesList = ({navigation, route, ...props}) => {
   const [offline, setOffline] = useState(false);
   const [loading, setLoading] = useState(false);
   const [nextPage, setNextPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true); // New state to track if there's more data
+  const [hasMore, setHasMore] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [step, setStep] = useState(0);
   const [showOnlineMode, setShowOnlineMode] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const backHandler = goBackHandler(navigation);
@@ -60,20 +57,26 @@ const QueriesList = ({navigation, route, ...props}) => {
     props.setLoader(true);
     setData([]);
 
-    if (props.access_token) {
-      fetchData(1, true);
-    }
+    const fetchDataAsync = async () => {
+      if (props.access_token) {
+        await fetchData(1, true);
+      }
+    };
+
+    fetchDataAsync();
 
     const unsubscribe = NetInfo.addEventListener(state => {
       setOffline(!state.isConnected);
-      dataSync(t('STORAGE.QUERIES'), fetchData(1, true), props.mode).then(
-        resp => {
-          let res = JSON.parse(resp);
-          if (res) {
-            setData(res);
-          }
-        },
-      );
+      if (state.isConnected) {
+        dataSync(t('STORAGE.QUERIES'), fetchData(1, true), props.mode).then(
+          resp => {
+            let res = JSON.parse(resp);
+            if (res) {
+              setData(res);
+            }
+          },
+        );
+      }
       props.setLoader(false);
     });
 
@@ -82,13 +85,15 @@ const QueriesList = ({navigation, route, ...props}) => {
       unsubscribe();
       isMounted.current = false;
     };
-  }, []);
+  }, [navigation, props.access_token, props.mode, t]);
 
   useEffect(() => {
-    fetchData(1, true);
-  }, [step]);
+    if (step === 0) {
+      fetchData(nextPage, false);
+    }
+  }, [step, nextPage]);
 
-  const onRefresh = () => {
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
     if (props.mode) {
       fetchData(1, true);
@@ -97,56 +102,47 @@ const QueriesList = ({navigation, route, ...props}) => {
       setErrorMessage(t('ONLINE_MODE'));
       setRefreshing(false);
     }
-  };
+  }, [props.mode, t]);
 
-  const fetchData = (page, reset = false) => {
+  const fetchData = useCallback(async (page, reset = false) => {
     if (props.mode) {
-      // if (loading || !hasMore) {
-      //     setRefreshing(false);
-      //     return;
-      // }
-      props.setLoader(true);
+      if (loading || !hasMore) return;
       setLoading(true);
-      comnPost('v2/getQueries')
-        .then(res => {
-          if (res && res.data.data) {
-            if (reset) {
-              setData(res.data.data.data);
-            } else {
-              setData(prevData => [...prevData, ...res.data.data.data]);
-            }
-            setHasMore(!!res.data.data.next_page_url); // Check if there's more data
-            setNextPage(page + 1);
-            saveToStorage(
-              t('STORAGE.QUERIES'),
-              JSON.stringify(res.data.data.data),
-            );
-            props.setLoader(false);
+      try {
+        const res = await comnPost('v2/getQueries', {page});
+        if (res && res.data.data) {
+          if (reset) {
+            setData(res.data.data.data);
+          } else {
+            setData(prevData => [...prevData, ...res.data.data.data]);
           }
-          if (isMounted.current) {
-            setLoading(false);
-          }
+          setHasMore(!!res.data.data.next_page_url);
+          setNextPage(page + 1);
+          await saveToStorage(
+            t('STORAGE.QUERIES'),
+            JSON.stringify(res.data.data.data),
+          );
+        }
+      } catch (error) {
+        setErrorMessage(t('ERROR_OCCURRED'));
+      } finally {
+        if (isMounted.current) {
+          setLoading(false);
           setRefreshing(false);
-          props.setLoader(false);
-        })
-        .catch(error => {
-          if (isMounted.current) {
-            setLoading(false);
-            setRefreshing(false);
-            props.setLoader(false);
-          }
-        });
+        }
+        props.setLoader(false);
+      }
     }
-  };
+  }, [props.mode, loading, hasMore, t]);
 
-  const loadMoreData = () => {
+  const loadMoreData = useCallback(() => {
     if (!props.mode) {
       setErrorMessage(t('GET_MORE_DATA'));
       setShowOnlineMode(true);
     } else if (!loading && hasMore) {
       fetchData(nextPage);
     }
-  };
+  }, [props.mode, loading, hasMore, fetchData, nextPage, t]);
 
   const renderItem = ({item}) => {
     return (
@@ -164,13 +160,13 @@ const QueriesList = ({navigation, route, ...props}) => {
             flexDirection: 'row',
             justifyContent: 'flex-end',
           }}>
-          {item.status == 'unread' ? (
+          {item.status === 'unread' ? (
             <Entypo
               name="check"
               color={COLOR.grey}
               size={DIMENSIONS.iconSize}
             />
-          ) : item.status == 'read' ? (
+          ) : item.status === 'read' ? (
             <Entypo
               name="check"
               color={COLOR.themeComicBlue}
@@ -211,7 +207,7 @@ const QueriesList = ({navigation, route, ...props}) => {
           />
         }
         endIcon={
-          step == 0 && (
+          step === 0 && (
             <TouchableOpacity onPress={() => setStep(1)}>
               <GlobalText text={'Add Query'} />
             </TouchableOpacity>
@@ -225,8 +221,8 @@ const QueriesList = ({navigation, route, ...props}) => {
         }>
         <Loader />
         <CheckNet isOff={offline} />
-        {step == 0 ? (
-          data[0] ? (
+        {step === 0 ? (
+          data.length > 0 ? (
             <FlatList
               keyExtractor={item => item.id?.toString()}
               data={data}
@@ -265,6 +261,7 @@ const QueriesList = ({navigation, route, ...props}) => {
 const mapStateToProps = state => {
   return {
     mode: state.commonState.mode,
+    access_token: state.commonState.access_token, // Ensure access_token is mapped if used
   };
 };
 
