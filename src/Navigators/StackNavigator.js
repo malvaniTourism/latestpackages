@@ -159,6 +159,7 @@ const StackNavigator = () => {
               component={QueriesList}
             />
             <Stack.Screen name={t('SCREEN.CONTACT_US')} component={ContactUs} />
+
             <Stack.Screen name={t('SCREEN.STOP_LIST')} component={StopList} />
             <Stack.Screen
               name={t('SCREEN.CITY_DETAILS')}

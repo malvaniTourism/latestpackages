@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -10,30 +10,30 @@ import {
   Keyboard,
   Platform,
 } from 'react-native';
-import { SignUpFields } from '../../Services/Constants/FIELDS';
+import {SignUpFields} from '../../Services/Constants/FIELDS';
 import TextField from '../../Components/Customs/TextField';
 import TextButton from '../../Components/Customs/Buttons/TextButton';
 import styles from './Styles';
-import { comnGet, comnPost } from '../../Services/Api/CommonServices';
+import {comnGet, comnPost} from '../../Services/Api/CommonServices';
 import Loader from '../../Components/Customs/Loader';
-import { connect } from 'react-redux';
-import { setLoader, saveAccess_token } from '../../Reducers/CommonActions';
-import { navigateTo } from '../../Services/CommonMethods';
-import { launchImageLibrary } from 'react-native-image-picker';
+import {connect} from 'react-redux';
+import {setLoader, saveAccess_token} from '../../Reducers/CommonActions';
+import {navigateTo} from '../../Services/CommonMethods';
+import {launchImageLibrary} from 'react-native-image-picker';
 import GlobalText from '../../Components/Customs/Text';
 import COLOR from '../../Services/Constants/COLORS';
 import Popup from '../../Components/Common/Popup';
 import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
 import Feather from 'react-native-vector-icons/Feather';
 import Geolocation from '@react-native-community/geolocation';
-import { Dropdown } from 'react-native-element-dropdown';
-import { useTranslation } from 'react-i18next';
-import { CheckBox } from '@rneui/themed';
+import {Dropdown} from 'react-native-element-dropdown';
+import {useTranslation} from 'react-i18next';
+import {CheckBox} from '@rneui/themed';
 import PrivacyPolicy from '../../Components/Common/PrivacyPolicy';
 
-const SignUp = ({ navigation, ...props }) => {
+const SignUp = ({navigation, ...props}) => {
   const opacity = useRef(new Animated.Value(0)).current;
-  const { t, i18n } = useTranslation();
+  const {t, i18n} = useTranslation();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -68,8 +68,8 @@ const SignUp = ({ navigation, ...props }) => {
   const [noPrivacy, setNoPrivacy] = useState(false);
   const [fetchingText, setFetchingText] = useState('');
   const [list, setList] = useState([
-    { label: 'English', value: 'en' },
-    { label: 'मराठी', value: 'mr' },
+    {label: 'English', value: 'en'},
+    {label: 'मराठी', value: 'mr'},
   ]);
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [isPrivacyChecked, setIsPrivacyChecked] = useState(false);
@@ -227,7 +227,6 @@ const SignUp = ({ navigation, ...props }) => {
       errorMessage = t('PLEASE_ACCEPT_PRIVACY');
       valid = false;
     }
-  
 
     if (!valid) {
       setAlertMessage(t(errorMessage));
@@ -238,13 +237,12 @@ const SignUp = ({ navigation, ...props }) => {
     }
   };
 
-
-  const validateEmail = (email) => {
+  const validateEmail = email => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
   };
-  
-  const validateMobile = (mobile) => {
+
+  const validateMobile = mobile => {
     // Adjust the regex as per your mobile number requirements
     const re = /^[0-9]{10}$/;
     return re.test(String(mobile));
@@ -279,12 +277,12 @@ const SignUp = ({ navigation, ...props }) => {
             res.data.message.email
               ? res.data.message.email
               : res.data.message.mobile
-                ? res.data.message.mobile
-                : res.data.message.referral_code
-                  ? res.data.message.referral_code
-                  : res.data.message
-                    ? res.data.message
-                    : t('NETWORK'),
+              ? res.data.message.mobile
+              : res.data.message.referral_code
+              ? res.data.message.referral_code
+              : res.data.message
+              ? res.data.message
+              : t('NETWORK'),
           );
           setIsSuccess(false);
           setIsAlert(true);
@@ -303,7 +301,12 @@ const SignUp = ({ navigation, ...props }) => {
   };
 
   const closePopup = () => {
-    if ((alertMessage && alertMessage[0] && alertMessage[0].includes(t('TAKEN'))) || isSuccess) {
+    if (
+      (alertMessage &&
+        alertMessage[0] &&
+        alertMessage[0].includes(t('TAKEN'))) ||
+      isSuccess
+    ) {
       props.setLoader(true);
       const data = {
         email,
@@ -368,7 +371,7 @@ const SignUp = ({ navigation, ...props }) => {
         setLocationStatus(error.message);
         props.setLoader(false);
       },
-      { enableHighAccuracy: false, timeout: 30000, maximumAge: 1000 },
+      {enableHighAccuracy: false, timeout: 30000, maximumAge: 1000},
     );
   };
 
@@ -386,7 +389,7 @@ const SignUp = ({ navigation, ...props }) => {
         setLocationStatus(error.message);
         props.setLoader(false);
       },
-      { enableHighAccuracy: false, maximumAge: 1000 },
+      {enableHighAccuracy: false, maximumAge: 1000},
     );
     setWatchID(WatchID);
   };
@@ -407,13 +410,13 @@ const SignUp = ({ navigation, ...props }) => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: COLOR.white }}>
+    <View style={{flex: 1, backgroundColor: COLOR.white}}>
       <ImageBackground
         style={styles.loginImage}
         source={require('../../Assets/Images/Intro/login_background.png')}
       />
 
-      <View style={{ display: isKeyboardVisible ? 'none' : 'flex' }}>
+      <View style={{display: isKeyboardVisible ? 'none' : 'flex'}}>
         <Loader text={fetchingText} />
         <GlobalText text={t('WELCOME')} style={styles.welcomeText} />
         <GlobalText text={t('APPNAME')} style={styles.boldKokan} />
@@ -421,7 +424,7 @@ const SignUp = ({ navigation, ...props }) => {
 
       <View style={styles.middleFlex}>
         <GlobalText text={t('SIGN_UP')} style={styles.loginText} />
-        <View style={{ alignItems: 'center' }}>
+        <View style={{alignItems: 'center'}}>
           <View
             style={{
               flexDirection: 'row',
@@ -469,7 +472,7 @@ const SignUp = ({ navigation, ...props }) => {
               />
             );
           })}
-          
+
           <View
             style={{
               justifyContent: 'flex-start',
@@ -499,7 +502,7 @@ const SignUp = ({ navigation, ...props }) => {
 
       <KeyboardAvoidingView
         behavior="height"
-        style={{ flex: 1 }}></KeyboardAvoidingView>
+        style={{flex: 1}}></KeyboardAvoidingView>
       <Popup
         message={alertMessage}
         visible={isAlert}

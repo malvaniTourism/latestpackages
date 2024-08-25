@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {View} from 'react-native';
 import Header from '../Components/Common/Header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -29,12 +29,23 @@ const ContactUs = ({navigation, route, setStep, ...props}) => {
   const [isAlert, setIsAlert] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
 
-  useEffect(async () => {
-    setEmail(await AsyncStorage.getItem(t('STORAGE.USER_EMAIL')));
-    const backHandler = goBackHandler(navigation);
-    checkLogin(navigation);
+  const isMounted = useRef(true); // Initialize ref to track component mount state
+
+  useEffect(() => {
+    const init = async () => {
+      setEmail(await AsyncStorage.getItem(t('STORAGE.USER_EMAIL')));
+      const backHandler = goBackHandler(navigation);
+      checkLogin(navigation);
+
+      return () => {
+        isMounted.current = false; // Update ref to false on component unmount
+        backHandler.remove();
+      };
+    };
+    init();
+
     return () => {
-      backHandler.remove();
+      isMounted.current = false; // Ensure ref is set to false on component unmount
     };
   }, []);
 
@@ -75,30 +86,38 @@ const ContactUs = ({navigation, route, setStep, ...props}) => {
 
     comnPost('v2/addQuery', data)
       .then(res => {
-        setIsAlert(true);
-        setAlertMessage(
-          res.data.message.email
-            ? res.data.message.email
-            : res.data.message.phone
-            ? res.data.message.phone
-            : res.data.message.message
-            ? res.data.message.message
-            : res.data.message,
-        );
-        props.setLoader(false);
-        setPhone('');
-        setMessage('');
+        if (isMounted.current) {
+          setIsAlert(true);
+          setAlertMessage(
+            res.data.message.email
+              ? res.data.message.email
+              : res.data.message.phone
+              ? res.data.message.phone
+              : res.data.message.message
+              ? res.data.message.message
+              : res.data.message,
+          );
+          props.setLoader(false);
+          setPhone('');
+          setMessage('');
+        }
       })
       .catch(err => {
-        setIsAlert(true);
-        setAlertMessage(t('ALERT.FAILED'));
-        props.setLoader(false);
+        if (isMounted.current) {
+          setIsAlert(true);
+          setAlertMessage(t('ALERT.FAILED'));
+          props.setLoader(false);
+        }
       });
   };
 
   const closePopup = () => {
+    console.log('closePopup called');
+    console.log('setStep:', setStep);
     setIsAlert(false);
-    setStep(0);
+    if (isMounted.current && typeof setStep === 'function') {
+      setStep(0);
+    }
   };
 
   const selectFile = async () => {
@@ -128,7 +147,7 @@ const ContactUs = ({navigation, route, setStep, ...props}) => {
         }}>
         {ContactUsFields.map((field, index) => {
           return (
-            <View>
+            <View key={index}>
               <GlobalText text={field.placeholder} style={styles.fieldTitle} />
               <TextField
                 name={field.name}
@@ -137,7 +156,7 @@ const ContactUs = ({navigation, route, setStep, ...props}) => {
                 fieldType={field.type}
                 length={field.length}
                 required={field.required}
-                disabled={index == 0}
+                disabled={index === 0}
                 value={getValue(index)}
                 setChild={(v, i) => setValue(v, i, index)}
                 style={styles.containerStyle}
