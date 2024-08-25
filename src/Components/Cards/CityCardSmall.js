@@ -7,7 +7,7 @@ import ComingSoon from '../Common/ComingSoon';
 import Octicons from 'react-native-vector-icons/Octicons';
 import COLOR from '../../Services/Constants/COLORS';
 import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
-// import StarRating from "react-native-star-rating";
+import StarRating from 'react-native-star-rating-widget'; // Updated import
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {comnPost} from '../../Services/Api/CommonServices';
 import {useTranslation} from 'react-i18next';
@@ -43,7 +43,7 @@ const CityCardSmall = ({data, reload, navigation, addComment, onClick}) => {
 
   const onShareClick = async () => {
     try {
-      const deepLink = `awesomeapp://citydetails?id=${data.id}`; // Replace with your custom scheme and path
+      const deepLink = `awesomeapp://citydetails?id=${data.id}`;
       const shareMessage = `Explore the details of this amazing city in TourKokan! 🌍🏙️ Check out what makes it unique and discover more about its culture, attractions, and hidden gems. Open the link to dive into the City Details now! 📱👀`;
       const shareUrl = deepLink;
       const result = await Share.share({
@@ -124,12 +124,6 @@ const CityCardSmall = ({data, reload, navigation, addComment, onClick}) => {
             size={DIMENSIONS.iconSize}
           />
         </TouchableOpacity>
-        {/* <TouchableOpacity style={styles.citySmallLikeView}>
-                    {rating > 0 &&
-                        <GlobalText text={rating.slice(0, 3)} style={styles.avgRating} />
-                    }
-                    <Octicons name="star" color={COLOR.yellow} size={DIMENSIONS.iconSize} />
-                </TouchableOpacity> */}
       </View>
 
       <View
@@ -141,9 +135,7 @@ const CityCardSmall = ({data, reload, navigation, addComment, onClick}) => {
         <View>
           <GlobalText text={data.name} style={styles.citySmallName} />
           <GlobalText
-            text={`${data.tag_line.slice(0, 50)}${
-              data.tag_line.length > 50 ? '...' : ''
-            }`}
+            text={`${data.tag_line.slice(0, 50)}${data.tag_line.length > 50 ? '...' : ''}`}
             style={styles.citySmallTagLine}
           />
         </View>
@@ -151,14 +143,12 @@ const CityCardSmall = ({data, reload, navigation, addComment, onClick}) => {
           style={
             cardType == 'city' ? styles.citySmallStarView : styles.placeStarView
           }>
-          {/* <StarRating
-                        disabled={false}
-                        maxStars={5}
-                        rating={rating}
-                        selectedStar={(rating) => onStarRatingPress(rating)}
-                        starSize={13}
-                        starStyle={styles.starStyle}
-                    /> */}
+          <StarRating
+            rating={rating}
+            onChange={onStarRatingPress}
+            starSize={14}
+            starStyle={styles.starStyle}
+          />
         </View>
       </View>
       <ComingSoon message={t('COMING_SOON')} visible={isVisible} />

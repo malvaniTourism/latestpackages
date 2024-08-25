@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     fontWeight: 600,
   },
   starStyle: {
-    // width: "50%"
+    width: 2,
     color: COLOR.yellow,
   },
   placeMetaView: {

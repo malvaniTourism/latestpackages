@@ -16,9 +16,6 @@ export const backPage = navigation => {
 };
 
 export const navigateTo = (navigation, page, params) => {
-  console.log('nav- - - ', page, '  ', params);
-  console.log('nav111- - - ', navigation);
-
   navigation.navigate(page, params);
   return true;
 };

@@ -150,12 +150,8 @@ const Email = ({navigation, route, ...props}) => {
     };
     comnPost('v2/auth/sendOtp', data)
       .then(res => {
-        console.log(res);
-
         if (res.data?.success) {
           props.setLoader(false);
-          console.log('res.data - - ', res.data);
-
           navigateTo(navigation, t('SCREEN.VERIFY_OTP'), {email});
         } else {
           setIsAlert(true);

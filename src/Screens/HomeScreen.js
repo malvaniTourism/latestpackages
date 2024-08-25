@@ -24,7 +24,7 @@ import {
 } from '../Services/Api/CommonServices';
 import {connect} from 'react-redux';
 import {saveAccess_token, setLoader, setMode} from '../Reducers/CommonActions';
-// import SplashScreen from "react-native-splash-screen";
+// import * as SplashScreen from 'expo-splash-screen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import TextButton from '../Components/Customs/Buttons/TextButton';
 import {exitApp, navigateTo} from '../Services/CommonMethods';
@@ -47,6 +47,8 @@ import Loader from '../Components/Customs/Loader';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import DIMENSIONS from '../Services/Constants/DIMENSIONS';
 import ComingSoon from '../Components/Common/ComingSoon';
+
+// SplashScreen.preventAutoHideAsync();
 
 const HomeScreen = ({navigation, route, ...props}) => {
   const {t, i18n} = useTranslation();
@@ -149,7 +151,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
     }
     LogBox.ignoreAllLogs();
     saveToken();
-    // SplashScreen.hide();
+    // SplashScreen.hideAsync();
     const unsubscribe = NetInfo.addEventListener(async state => {
       setOffline(!state.isConnected);
       let mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
@@ -225,8 +227,6 @@ const HomeScreen = ({navigation, route, ...props}) => {
   };
 
   const callLandingPageAPI = async site_id => {
-    console.log('cleed');
-
     let isFirstTime = await AsyncStorage.getItem(t('STORAGE.IS_FIRST_TIME'));
     let mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
     if (mode) {

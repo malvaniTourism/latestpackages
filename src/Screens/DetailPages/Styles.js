@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   starStyle: {
-    // width: "50%"
+    width: 10,
     color: COLOR.yellow,
     bottom: 0,
     justifyContent: 'flex-end',

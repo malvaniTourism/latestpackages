@@ -28,7 +28,7 @@ import Path from '../../Services/Api/BaseUrl';
 import Octicons from 'react-native-vector-icons/Octicons';
 import CommentsSheet from '../../Components/Common/CommentsSheet';
 import BottomSheet from '../../Components/Customs/BottomSheet';
-// import StarRating from "react-native-star-rating";
+import StarRating from 'react-native-star-rating-widget'; // Changed import
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import ReadMore from 'react-native-read-more-text';
 import TextButton from '../../Components/Customs/Buttons/TextButton';
@@ -356,20 +356,14 @@ const CityDetails = ({navigation, route, ...props}) => {
                   ) : (
                     <>
                       <View style={styles.cityStarView}>
-                        {/* <StarRating
-                                                    disabled={false}
-                                                    maxStars={5}
-                                                    rating={rating}
-                                                    selectedStar={(rating) =>
-                                                        onStarRatingPress(
-                                                            rating
-                                                        )
-                                                    }
-                                                    starSize={14}
-                                                    starStyle={styles.starStyle}
-                                                    halfStarEnabled
-                                                    emptyStarColor={COLOR.grey}
-                                                /> */}
+                        <StarRating
+                          rating={rating}
+                          onChange={onStarRatingPress} // Modified function name
+                          enableHalfStar={false}
+                          starSize={DIMENSIONS.iconMedium}
+                          color={COLOR.yellow}
+                          starStyle={styles.starStyle}
+                        />
                         {rating > 0 && (
                           <GlobalText text={rating} style={styles.avgRating} />
                         )}

@@ -20,7 +20,7 @@ class AnimationStyle extends Component {
     }).start();
   };
 
-  onLoadError = (error) => {
+  onLoadError = error => {
     console.error('Image load error:', error.nativeEvent.error);
   };
 
@@ -40,8 +40,7 @@ class AnimationStyle extends Component {
             ],
           },
           this.props.style,
-        ]}
-      >
+        ]}>
         <ProgressImage
           {...this.props}
           // indicator={Progress.Circle} // Optional: Add a progress indicator
@@ -61,7 +60,7 @@ class AnimationStyle extends Component {
 }
 
 const Banner = ({style, bannerImages}) => {
-  const handleImagePath = (imageUri) => {
+  const handleImagePath = imageUri => {
     console.log('Image path:', imageUri);
   };
 
@@ -81,10 +80,12 @@ const Banner = ({style, bannerImages}) => {
           // Fallback to standard Image component if needed
           return (
             <AnimationStyle
-              source={{ uri: imageUri }}
+              source={{uri: imageUri}}
               style={styles.bannerImage}
               onLoad={() => console.log(`Image ${imageUri} loaded`)}
-              onError={(error) => console.error(`Image ${imageUri} failed to load`, error)}
+              onError={error =>
+                console.error(`Image ${imageUri} failed to load`, error)
+              }
             />
           );
         }}

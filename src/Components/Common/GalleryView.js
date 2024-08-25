@@ -1,28 +1,28 @@
-import React, { useState } from 'react';
-import { View, FlatList, TouchableOpacity, Image, Text } from 'react-native';
+import React, {useState} from 'react';
+import {View, FlatList, TouchableOpacity, Image, Text} from 'react-native';
 import ProgressImage from 'react-native-image-progress';
 import * as Progress from 'react-native-progress';
 import ImageViewing from 'react-native-image-viewing';
 import styles from './Styles';
 import Path from '../../Services/Api/BaseUrl';
 
-const ImageViewer = ({ images }) => {
+const ImageViewer = ({images}) => {
   const [selectedImage, setSelectedImage] = useState(images[0]);
   const [isVisible, setIsVisible] = useState(false);
 
-  const openImageViewer = (image) => {
+  const openImageViewer = image => {
     setSelectedImage(image);
     setIsVisible(true);
   };
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({item}) => {
     const imageUri = Path.FTP_PATH + item.path;
     console.log('Thumbnail Image URL:', imageUri); // Debugging: Log URL
 
     return (
       <TouchableOpacity onPress={() => openImageViewer(item)}>
         <ProgressImage
-          source={{ uri: imageUri }}
+          source={{uri: imageUri}}
           style={styles.thumbnail}
           indicator={Progress.Circle}
           indicatorProps={{
@@ -32,7 +32,7 @@ const ImageViewer = ({ images }) => {
             unfilledColor: 'rgba(200, 200, 200, 0.2)',
           }}
           resizeMode="cover"
-          onError={(error) => console.error('Thumbnail image load error:', error)}
+          onError={error => console.error('Thumbnail image load error:', error)}
         />
       </TouchableOpacity>
     );
@@ -42,7 +42,7 @@ const ImageViewer = ({ images }) => {
     <View style={styles.galleryContainer}>
       <ProgressImage
         style={styles.mainImage}
-        source={{ uri: Path.FTP_PATH + selectedImage.path }}
+        source={{uri: Path.FTP_PATH + selectedImage.path}}
         indicator={Progress.Bar}
         indicatorProps={{
           size: 80,
@@ -51,13 +51,13 @@ const ImageViewer = ({ images }) => {
           unfilledColor: 'rgba(200, 200, 200, 0.2)',
         }}
         resizeMode="contain"
-        onError={(error) => console.error('Main image load error:', error)}
+        onError={error => console.error('Main image load error:', error)}
       />
       <View style={styles.thumbnailView}>
         <FlatList
           data={images}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={item => item.id.toString()}
           horizontal
           style={styles.thumbnailList}
         />
