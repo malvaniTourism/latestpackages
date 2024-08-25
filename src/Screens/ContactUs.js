@@ -80,10 +80,10 @@ const ContactUs = ({navigation, route, setStep, ...props}) => {
           res.data.message.email
             ? res.data.message.email
             : res.data.message.phone
-              ? res.data.message.phone
-              : res.data.message.message
-                ? res.data.message.message
-                : res.data.message,
+            ? res.data.message.phone
+            : res.data.message.message
+            ? res.data.message.message
+            : res.data.message,
         );
         props.setLoader(false);
         setPhone('');

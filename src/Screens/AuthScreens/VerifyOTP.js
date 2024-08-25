@@ -170,7 +170,10 @@ const VerifyOTP = ({navigation, route, ...props}) => {
         <View style={styles.haveAcc}>
           {sec >= 1 ? (
             <GlobalText
-              text={`${t('RESEND_WITHIN').replace('_', sec > 9 ? sec : '0' + sec)}`}
+              text={`${t('RESEND_WITHIN').replace(
+                '_',
+                sec > 9 ? sec : '0' + sec,
+              )}`}
             />
           ) : (
             <View style={{flexDirection: 'row'}}>

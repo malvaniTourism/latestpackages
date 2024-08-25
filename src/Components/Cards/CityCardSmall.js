@@ -135,7 +135,9 @@ const CityCardSmall = ({data, reload, navigation, addComment, onClick}) => {
         <View>
           <GlobalText text={data.name} style={styles.citySmallName} />
           <GlobalText
-            text={`${data.tag_line.slice(0, 50)}${data.tag_line.length > 50 ? '...' : ''}`}
+            text={`${data.tag_line.slice(0, 50)}${
+              data.tag_line.length > 50 ? '...' : ''
+            }`}
             style={styles.citySmallTagLine}
           />
         </View>

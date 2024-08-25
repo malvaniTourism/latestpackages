@@ -112,8 +112,9 @@ const EmailSignIn = ({navigation, route, ...props}) => {
         setOtp(val);
         break;
     }
-    if ((val !== '' || val !== null) && isVal) setIsButtonDisabled(false);
-    else setIsButtonDisabled(true);
+    setIsButtonDisabled(false);
+    // if ((val !== '' || val !== null) && isVal) setIsButtonDisabled(false);
+    // else setIsButtonDisabled(true);
   };
 
   const getValue = i => {
@@ -125,63 +126,63 @@ const EmailSignIn = ({navigation, route, ...props}) => {
     }
   };
 
-  const getOtpValue = i => {
-    switch (i) {
-      case 0:
-        return email;
-      case 1:
-        return otp;
-    }
-  };
+  // const getOtpValue = i => {
+  //   switch (i) {
+  //     case 0:
+  //       return email;
+  //     case 1:
+  //       return otp;
+  //   }
+  // };
 
-  const verifyOtp = () => {
-    props.setLoader(true);
-    const data = {
-      email,
-      otp,
-    };
-    comnPost('v2/auth/verifyOtp', data)
-      .then(res => {
-        if (res.data.success) {
-          // setIsAlert(true);
-          // setAlertMessage(res.data.message);
-          AsyncStorage.setItem(
-            t('STORAGE.ACCESS_TOKEN'),
-            res.data.data.access_token,
-          );
-          AsyncStorage.setItem(
-            t('STORAGE.USER_ID'),
-            JSON.stringify(res.data.data.user.id),
-          );
-          props.saveAccess_token(res.data.data.access_token);
-          props.setLoader(false);
-          // setIsSuccess(true)
-          AsyncStorage.setItem(
-            t('STORAGE.IS_FIRST_TIME'),
-            JSON.stringify(true),
-          );
-          navigation.dispatch(
-            CommonActions.reset({
-              index: 0,
-              routes: [{name: t('SCREEN.HOME')}],
-            }),
-          );
-        } else {
-          setIsAlert(true);
-          setAlertMessage(
-            res.data.message.email ? res.data.message.email : res.data.message,
-          );
-          props.setLoader(false);
-          setIsSuccess(false);
-        }
-      })
-      .catch(err => {
-        setIsAlert(true);
-        setIsSuccess(false);
-        setAlertMessage(t('ALERT.WENT_WRONG'));
-        props.setLoader(false);
-      });
-  };
+  // const verifyOtp = () => {
+  //   props.setLoader(true);
+  //   const data = {
+  //     email,
+  //     otp,
+  //   };
+  //   comnPost('v2/auth/verifyOtp', data)
+  //     .then(res => {
+  //       if (res.data.success) {
+  //         // setIsAlert(true);
+  //         // setAlertMessage(res.data.message);
+  //         AsyncStorage.setItem(
+  //           t('STORAGE.ACCESS_TOKEN'),
+  //           res.data.data.access_token,
+  //         );
+  //         AsyncStorage.setItem(
+  //           t('STORAGE.USER_ID'),
+  //           JSON.stringify(res.data.data.user.id),
+  //         );
+  //         props.saveAccess_token(res.data.data.access_token);
+  //         props.setLoader(false);
+  //         // setIsSuccess(true)
+  //         AsyncStorage.setItem(
+  //           t('STORAGE.IS_FIRST_TIME'),
+  //           JSON.stringify(true),
+  //         );
+  //         navigation.dispatch(
+  //           CommonActions.reset({
+  //             index: 0,
+  //             routes: [{name: t('SCREEN.HOME')}],
+  //           }),
+  //         );
+  //       } else {
+  //         setIsAlert(true);
+  //         setAlertMessage(
+  //           res.data.message.email ? res.data.message.email : res.data.message,
+  //         );
+  //         props.setLoader(false);
+  //         setIsSuccess(false);
+  //       }
+  //     })
+  //     .catch(err => {
+  //       setIsAlert(true);
+  //       setIsSuccess(false);
+  //       setAlertMessage(t('ALERT.WENT_WRONG'));
+  //       props.setLoader(false);
+  //     });
+  // };
 
   const closePopup = () => {
     if (isSuccess) {
@@ -200,8 +201,32 @@ const EmailSignIn = ({navigation, route, ...props}) => {
     navigateTo(navigation, t('SCREEN.SIGN_UP'));
   };
 
+  const validateEmail = email => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePassword = password => {
+    return password.length >= 6;
+  };
+
   const login = () => {
     props.setLoader(true);
+
+    if (!validateEmail(email)) {
+      setIsAlert(true);
+      setAlertMessage(t('ALERT.INVALID_EMAIL'));
+      props.setLoader(false);
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      setIsAlert(true);
+      setAlertMessage(t('ALERT.INVALID_PASSWORD'));
+      props.setLoader(false);
+      return;
+    }
+
     const data = {
       email,
       password,
@@ -239,8 +264,8 @@ const EmailSignIn = ({navigation, route, ...props}) => {
             res.data.message.email
               ? res.data.message.email
               : res.data.message.password
-                ? res.data.message.password
-                : res.data.message,
+              ? res.data.message.password
+              : res.data.message,
           );
           props.setLoader(false);
           setIsSuccess(false);

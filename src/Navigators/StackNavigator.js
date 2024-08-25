@@ -24,16 +24,16 @@ const Categories = lazy(() => import('../Screens/ListPages/Categories'));
 const ExploreGrid = lazy(() => import('../Screens/ListPages/ExploreGrid'));
 const ProjectList = lazy(() => import('../Screens/ListPages/ProjectList'));
 const QueriesList = lazy(() => import('../Screens/ListPages/QueriesList'));
-const CityPlaceSearch = lazy(
-  () => import('../Screens/ListPages/CityPlaceSearch'),
+const CityPlaceSearch = lazy(() =>
+  import('../Screens/ListPages/CityPlaceSearch'),
 );
 const StopList = lazy(() => import('../Screens/ListPages/StopList'));
 const EmailSignIn = lazy(() => import('../Screens/AuthScreens/EmailSignIn'));
 const AuthScreen = lazy(() => import('../Screens/AuthScreens/AuthScreen'));
 const VerifyOTP = lazy(() => import('../Screens/AuthScreens/VerifyOTP'));
 const PlaceDetails = lazy(() => import('../Screens/DetailPages/PlaceDetails'));
-const ProjectDetails = lazy(
-  () => import('../Screens/DetailPages/ProjectDetails'),
+const ProjectDetails = lazy(() =>
+  import('../Screens/DetailPages/ProjectDetails'),
 );
 const StopDetails = lazy(() => import('../Screens/DetailPages/StopDetails'));
 const SearchPlace = lazy(() => import('../Screens/SearchPlace'));

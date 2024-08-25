@@ -147,6 +147,10 @@ const STRING = {
     ERROR_CURRENT_LOCATION: 'Error getting current location: ',
     FETCHING_TEXT: 'We are getting your location please wait',
     LOGOUT_ALERT: 'Do you real want to Logout?',
+    INVALID_EMAIL: 'Invalid Email',
+    INVALID_PASSWORD: 'Invalid password pattern',
+    REQUIRED_FIELDS: 'All fields are required',
+    INVALID_MOBILE: 'Invalid mobile number',
   },
   TABLE: {
     CITY: 'City',

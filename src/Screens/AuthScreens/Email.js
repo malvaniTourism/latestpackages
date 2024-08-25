@@ -108,13 +108,9 @@ const Email = ({navigation, route, ...props}) => {
       case 0:
         setEmail(val.trim());
         break;
-      case 1:
-        setPassword(val);
-        setOtp(val);
-        break;
     }
-    if ((val !== '' || val !== null) && isVal) setIsButtonDisabled(false);
-    else setIsButtonDisabled(true);
+
+    setIsButtonDisabled(false);
   };
 
   const getValue = i => {
@@ -143,8 +139,19 @@ const Email = ({navigation, route, ...props}) => {
     navigateTo(navigation, t('SCREEN.SIGN_UP'));
   };
 
+  const validateEmail = email => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const generateOtp = () => {
     props.setLoader(true);
+    if (!validateEmail(email)) {
+      setIsAlert(true);
+      setAlertMessage(t('ALERT.INVALID_EMAIL'));
+      props.setLoader(false);
+      return;
+    }
     const data = {
       email,
     };
@@ -160,8 +167,8 @@ const Email = ({navigation, route, ...props}) => {
             res.data?.message.email
               ? res.data?.message.email
               : res.data?.message
-                ? res.data?.message
-                : t('NETWORK'),
+              ? res.data?.message
+              : t('NETWORK'),
           );
           props.setLoader(false);
         }

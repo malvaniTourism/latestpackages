@@ -127,8 +127,8 @@ const PasswordLogin = ({navigation, route, ...props}) => {
             res.data.message.email
               ? res.data.message.email
               : res.data.message.password
-                ? res.data.message.password
-                : res.data.message,
+              ? res.data.message.password
+              : res.data.message,
           );
           props.setLoader(false);
           setIsSuccess(false);

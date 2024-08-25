@@ -43,7 +43,7 @@ class AnimationStyle extends Component {
         ]}>
         <ProgressImage
           {...this.props}
-          // indicator={Progress.Circle} // Optional: Add a progress indicator
+          indicator={Progress.Circle} // Optional: Add a progress indicator
           indicatorProps={{
             size: 30,
             borderWidth: 0,

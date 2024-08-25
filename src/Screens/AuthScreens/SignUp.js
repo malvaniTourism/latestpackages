@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -8,31 +8,32 @@ import {
   PermissionsAndroid,
   KeyboardAvoidingView,
   Keyboard,
+  Platform,
 } from 'react-native';
-import {SignUpFields} from '../../Services/Constants/FIELDS';
+import { SignUpFields } from '../../Services/Constants/FIELDS';
 import TextField from '../../Components/Customs/TextField';
 import TextButton from '../../Components/Customs/Buttons/TextButton';
 import styles from './Styles';
-import {comnGet, comnPost} from '../../Services/Api/CommonServices';
+import { comnGet, comnPost } from '../../Services/Api/CommonServices';
 import Loader from '../../Components/Customs/Loader';
-import {connect} from 'react-redux';
-import {setLoader, saveAccess_token} from '../../Reducers/CommonActions';
-import {navigateTo} from '../../Services/CommonMethods';
-import {launchImageLibrary} from 'react-native-image-picker';
+import { connect } from 'react-redux';
+import { setLoader, saveAccess_token } from '../../Reducers/CommonActions';
+import { navigateTo } from '../../Services/CommonMethods';
+import { launchImageLibrary } from 'react-native-image-picker';
 import GlobalText from '../../Components/Customs/Text';
 import COLOR from '../../Services/Constants/COLORS';
 import Popup from '../../Components/Common/Popup';
 import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
 import Feather from 'react-native-vector-icons/Feather';
 import Geolocation from '@react-native-community/geolocation';
-import {Dropdown} from 'react-native-element-dropdown';
-import {useTranslation} from 'react-i18next';
-import {CheckBox} from '@rneui/themed';
+import { Dropdown } from 'react-native-element-dropdown';
+import { useTranslation } from 'react-i18next';
+import { CheckBox } from '@rneui/themed';
 import PrivacyPolicy from '../../Components/Common/PrivacyPolicy';
 
-const SignUp = ({navigation, ...props}) => {
+const SignUp = ({ navigation, ...props }) => {
   const opacity = useRef(new Animated.Value(0)).current;
-  const {t, i18n} = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -67,8 +68,8 @@ const SignUp = ({navigation, ...props}) => {
   const [noPrivacy, setNoPrivacy] = useState(false);
   const [fetchingText, setFetchingText] = useState('');
   const [list, setList] = useState([
-    {label: 'English', value: 'en'},
-    {label: 'मराठी', value: 'mr'},
+    { label: 'English', value: 'en' },
+    { label: 'मराठी', value: 'mr' },
   ]);
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [isPrivacyChecked, setIsPrivacyChecked] = useState(false);
@@ -204,19 +205,54 @@ const SignUp = ({navigation, ...props}) => {
   };
 
   const checkValidation = () => {
-    if (name == '' || nameErr || email == '' || emailErr) {
-      setNotValid(true);
+    let valid = true;
+    let errorMessage = '';
+
+    // Validate name
+    if (name.trim() === '') {
+      errorMessage = t('PLEASE_ENTER_NAME');
+      valid = false;
+    } else if (email.trim() === '' || !validateEmail(email)) {
+      errorMessage = t('PLEASE_ENTER_VALID_EMAIL');
+      valid = false;
+    } else if (mobile.trim() !== '' && !validateMobile(mobile)) {
+      // Only validate mobile if it has a value
+      errorMessage = t('PLEASE_ENTER_VALID_MOBILE');
+      valid = false;
+    } else if (referral.trim() !== '' && !validateReferral(referral)) {
+      // Only validate referral if it has a value
+      errorMessage = t('PLEASE_ENTER_VALID_REFERRAL');
+      valid = false;
     } else if (!isPrivacyChecked) {
-      setNotValid(false);
-      setNoPrivacy(true);
+      errorMessage = t('PLEASE_ACCEPT_PRIVACY');
+      valid = false;
+    }
+  
+
+    if (!valid) {
+      setAlertMessage(t(errorMessage));
+      setIsAlert(true); // Show popup with error message
     } else {
       setNotValid(false);
       myLocationPress();
     }
   };
 
+
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+  
+  const validateMobile = (mobile) => {
+    // Adjust the regex as per your mobile number requirements
+    const re = /^[0-9]{10}$/;
+    return re.test(String(mobile));
+  };
+
   const Register = (lat, long) => {
     props.setLoader(true);
+
     const data = {
       name: name,
       email: email,
@@ -267,7 +303,7 @@ const SignUp = ({navigation, ...props}) => {
   };
 
   const closePopup = () => {
-    if (alertMessage[0].includes(t('TAKEN')) || isSuccess) {
+    if ((alertMessage && alertMessage[0] && alertMessage[0].includes(t('TAKEN'))) || isSuccess) {
       props.setLoader(true);
       const data = {
         email,
@@ -301,7 +337,7 @@ const SignUp = ({navigation, ...props}) => {
           },
         );
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          //To Check, If Permission is granted
+          // To Check, If Permission is granted
           getOneTimeLocation();
           subscribeLocation();
         } else {
@@ -332,7 +368,7 @@ const SignUp = ({navigation, ...props}) => {
         setLocationStatus(error.message);
         props.setLoader(false);
       },
-      {enableHighAccuracy: false, timeout: 30000, maximumAge: 1000},
+      { enableHighAccuracy: false, timeout: 30000, maximumAge: 1000 },
     );
   };
 
@@ -350,7 +386,7 @@ const SignUp = ({navigation, ...props}) => {
         setLocationStatus(error.message);
         props.setLoader(false);
       },
-      {enableHighAccuracy: false, maximumAge: 1000},
+      { enableHighAccuracy: false, maximumAge: 1000 },
     );
     setWatchID(WatchID);
   };
@@ -371,13 +407,13 @@ const SignUp = ({navigation, ...props}) => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: COLOR.white}}>
+    <View style={{ flex: 1, backgroundColor: COLOR.white }}>
       <ImageBackground
         style={styles.loginImage}
         source={require('../../Assets/Images/Intro/login_background.png')}
       />
 
-      <View style={{display: isKeyboardVisible ? 'none' : 'flex'}}>
+      <View style={{ display: isKeyboardVisible ? 'none' : 'flex' }}>
         <Loader text={fetchingText} />
         <GlobalText text={t('WELCOME')} style={styles.welcomeText} />
         <GlobalText text={t('APPNAME')} style={styles.boldKokan} />
@@ -385,7 +421,7 @@ const SignUp = ({navigation, ...props}) => {
 
       <View style={styles.middleFlex}>
         <GlobalText text={t('SIGN_UP')} style={styles.loginText} />
-        <View style={{alignItems: 'center'}}>
+        <View style={{ alignItems: 'center' }}>
           <View
             style={{
               flexDirection: 'row',
@@ -396,6 +432,7 @@ const SignUp = ({navigation, ...props}) => {
           {SignUpFields.map((field, index) => {
             return (
               <TextField
+                key={index}
                 name={field.name}
                 label={field.name}
                 leftIcon={
@@ -415,9 +452,8 @@ const SignUp = ({navigation, ...props}) => {
                 style={styles.signUpContainerStyle}
                 inputContainerStyle={styles.inputContainerStyle}
                 isSecure={field.isSecure}
-                isError={emailErr}
                 rightIcon={
-                  field.type == `${t('TYPE.PASSWORD')}` && (
+                  field.type === `${t('TYPE.PASSWORD')}` && (
                     <Feather
                       name={field.isSecure ? 'eye' : 'eye-off'}
                       size={24}
@@ -433,13 +469,7 @@ const SignUp = ({navigation, ...props}) => {
               />
             );
           })}
-          {notValid ? (
-            <GlobalText text={t('PLEASE_FILL')} style={{color: 'red'}} />
-          ) : (
-            noPrivacy && (
-              <GlobalText text={t('PLEASE_FILL')} style={{color: 'red'}} />
-            )
-          )}
+          
           <View
             style={{
               justifyContent: 'flex-start',
@@ -458,7 +488,6 @@ const SignUp = ({navigation, ...props}) => {
             raised={true}
             onPress={() => checkValidation()}
           />
-          <GlobalText text={errMsg} />
           <View style={styles.haveAcc}>
             <GlobalText text={t('HAVE_ACC')} />
             <TouchableOpacity onPress={() => signInScreen()}>
@@ -470,7 +499,7 @@ const SignUp = ({navigation, ...props}) => {
 
       <KeyboardAvoidingView
         behavior="height"
-        style={{flex: 1}}></KeyboardAvoidingView>
+        style={{ flex: 1 }}></KeyboardAvoidingView>
       <Popup
         message={alertMessage}
         visible={isAlert}

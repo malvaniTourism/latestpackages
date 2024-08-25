@@ -153,7 +153,11 @@
     "FETCHING_TEXT": "We are getting your location please wait",
     "LOGOUT_ALERT": "Do you real want to Logout?",
     "MODE_CHOICE": "Would you like to use app in Online or Offline mode?",
-    "APP_VERSION": "To continue using app please update!"
+    "APP_VERSION": "To continue using app please update!",
+    "INVALID_EMAIL": "Invalid Email",
+    "INVALID_PASSWORD": "Invalid password pattern",
+    "REQUIRED_FIELDS": "All fields are required",
+    "INVALID_MOBILE": "Invalid mobile number"
   },
   "TABLE": {
     "CITY": "City",

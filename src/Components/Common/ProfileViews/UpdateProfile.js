@@ -75,10 +75,10 @@ const UpdateProfile = ({
               res.data.message.email
                 ? res.data.message.email
                 : res.data.message.mobile
-                  ? res.data.message.mobile
-                  : res.data?.message
-                    ? res.data?.message
-                    : t('NETWORK'),
+                ? res.data.message.mobile
+                : res.data?.message
+                ? res.data?.message
+                : t('NETWORK'),
             );
             setLoader(false);
           }
