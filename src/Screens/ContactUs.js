@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useRef} from 'react';
-import {View} from 'react-native';
+import {BackHandler, View} from 'react-native';
 import Header from '../Components/Common/Header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import COLOR from '../Services/Constants/COLORS';
@@ -18,8 +18,9 @@ import {connect} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import GlobalText from '../Components/Customs/Text';
 import DocumentPicker from 'react-native-document-picker';
+import STRING from '../Services/Constants/STRINGS';
 
-const ContactUs = ({navigation, route, setStep, ...props}) => {
+const ContactUs = ({navigation, route, step, setStep, ...props}) => {
   const {t} = useTranslation();
 
   const [email, setEmail] = useState('');
@@ -32,9 +33,11 @@ const ContactUs = ({navigation, route, setStep, ...props}) => {
   const isMounted = useRef(true); // Initialize ref to track component mount state
 
   useEffect(() => {
+    let backHandler = BackHandler.addEventListener(STRING.EVENT.HARDWARE_BACK_PRESS, () =>
+      goBackStep()
+  );
     const init = async () => {
       setEmail(await AsyncStorage.getItem(t('STORAGE.USER_EMAIL')));
-      const backHandler = goBackHandler(navigation);
       checkLogin(navigation);
 
       return () => {
@@ -48,6 +51,14 @@ const ContactUs = ({navigation, route, setStep, ...props}) => {
       isMounted.current = false; // Ensure ref is set to false on component unmount
     };
   }, []);
+
+  const goBackStep = () => {
+    if (step == 0) {
+      backPage(navigation);
+    } else {
+      setStep(0);
+    }
+  }
 
   const setValue = (val, isVal, index) => {
     switch (index) {

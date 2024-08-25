@@ -7,6 +7,7 @@ import {
   ScrollView,
   RefreshControl,
   TouchableOpacity,
+  BackHandler,
 } from 'react-native';
 import {ListItem} from '@rneui/themed';
 import Header from '../../Components/Common/Header';
@@ -36,6 +37,7 @@ import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
 import GlobalText from '../../Components/Customs/Text';
 import ContactUs from '../ContactUs';
 import ComingSoon from '../../Components/Common/ComingSoon';
+import STRING from '../../Services/Constants/STRINGS';
 
 const QueriesList = ({navigation, route, ...props}) => {
   const {t} = useTranslation();
@@ -52,7 +54,9 @@ const QueriesList = ({navigation, route, ...props}) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    const backHandler = goBackHandler(navigation);
+    let backHandler = BackHandler.addEventListener(STRING.EVENT.HARDWARE_BACK_PRESS, () =>
+      goBackStep()
+  );
     checkLogin(navigation);
     props.setLoader(true);
     setData([]);
@@ -92,6 +96,14 @@ const QueriesList = ({navigation, route, ...props}) => {
       fetchData(nextPage, false);
     }
   }, [step, nextPage]);
+
+  const goBackStep = () => {
+    if (step == 0) {
+      backPage(navigation);
+    } else {
+      setStep(0);
+    }
+  }
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -197,7 +209,7 @@ const QueriesList = ({navigation, route, ...props}) => {
     <>
       <Header
         name={t('HEADER.CONTACT_US')}
-        goBack={() => backPage(navigation)}
+        goBack={() => goBackStep()}
         startIcon={
           <Ionicons
             name="chevron-back-outline"
@@ -246,7 +258,7 @@ const QueriesList = ({navigation, route, ...props}) => {
             </View>
           )
         ) : (
-          <ContactUs setStep={setStep} />
+          <ContactUs step={step} setStep={setStep} />
         )}
         <ComingSoon
           message={errorMessage}
@@ -261,7 +273,6 @@ const QueriesList = ({navigation, route, ...props}) => {
 const mapStateToProps = state => {
   return {
     mode: state.commonState.mode,
-    access_token: state.commonState.access_token, // Ensure access_token is mapped if used
   };
 };
 
