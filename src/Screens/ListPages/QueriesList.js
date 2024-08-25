@@ -92,8 +92,10 @@ const QueriesList = ({navigation, route, ...props}) => {
   }, [navigation, props.access_token, props.mode, t]);
 
   useEffect(() => {
-    if (step === 0) {
-      fetchData(nextPage, false);
+    
+    if (step == 0) {
+      console.log('step---', step);
+      fetchData(1, true);
     }
   }, [step, nextPage]);
 
@@ -116,9 +118,9 @@ const QueriesList = ({navigation, route, ...props}) => {
     }
   }, [props.mode, t]);
 
-  const fetchData = useCallback(async (page, reset = false) => {
+  const fetchData = useCallback(async (page, reset) => {
     if (props.mode) {
-      if (loading || !hasMore) return;
+      if (loading) return;
       setLoading(true);
       try {
         const res = await comnPost('v2/getQueries', {page});
@@ -135,14 +137,17 @@ const QueriesList = ({navigation, route, ...props}) => {
             JSON.stringify(res.data.data.data),
           );
         }
+        setLoading(false);
       } catch (error) {
         setErrorMessage(t('ERROR_OCCURRED'));
+        setLoading(false);
       } finally {
         if (isMounted.current) {
           setLoading(false);
           setRefreshing(false);
         }
         props.setLoader(false);
+        setLoading(false);
       }
     }
   }, [props.mode, loading, hasMore, t]);
@@ -220,7 +225,10 @@ const QueriesList = ({navigation, route, ...props}) => {
         }
         endIcon={
           step === 0 && (
-            <TouchableOpacity onPress={() => setStep(1)}>
+            <TouchableOpacity onPress={() => {
+              setStep(1)
+              setLoading(false);
+              }}>
               <GlobalText text={'Add Query'} />
             </TouchableOpacity>
           )
