@@ -154,7 +154,6 @@ const ContactUs = ({navigation, route, step, setStep, ...props}) => {
           alignItems: 'center',
           height: DIMENSIONS.screenHeight,
           backgroundColor: COLOR.white,
-          marginTop: -19,
         }}>
         {ContactUsFields.map((field, index) => {
           return (
