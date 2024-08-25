@@ -243,6 +243,7 @@ const ProfileView = ({navigation, route, ...props}) => {
       .then(res => {
         if (res.data.success) {
           props.setLoader(false);
+          setIsAlert(false);
           AsyncStorage.clear();
           navigateTo(navigation, t('SCREEN.LANG_SELECTION'));
         }

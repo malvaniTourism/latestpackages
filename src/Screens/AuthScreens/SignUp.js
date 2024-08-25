@@ -268,12 +268,14 @@ const SignUp = ({navigation, ...props}) => {
 
   const closePopup = () => {
     if (alertMessage[0].includes(t('TAKEN')) || isSuccess) {
+      props.setLoader(true);
       const data = {
         email,
       };
       comnPost('v2/auth/sendOtp', data)
         .then(res => {
           if (res.data?.success) {
+            props.setLoader(false);
             navigateTo(navigation, t('SCREEN.VERIFY_OTP'), {
               email,
             });
@@ -285,6 +287,7 @@ const SignUp = ({navigation, ...props}) => {
   };
 
   const myLocationPress = async () => {
+    props.setLoader(true);
     if (Platform.OS === 'ios') {
       getOneTimeLocation();
       subscribeLocation();
@@ -323,7 +326,6 @@ const SignUp = ({navigation, ...props}) => {
         setCurrentLongitude(currentLongitude);
         setShowPrivacy(false);
         Register(currentLatitude, currentLongitude);
-        props.setLoader(false);
         setFetchingText('');
       },
       error => {
