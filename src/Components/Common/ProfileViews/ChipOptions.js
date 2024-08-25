@@ -34,7 +34,7 @@ const ChipOptions = ({
         clickChip={languageClick}
         meta={<GlobalText text={t('LANGUAGE')} />}
       />
-      <ProfileChip
+      {/* <ProfileChip
         name={t('CHIPS.UPDATE_LOCATION')}
         icon={
           <View style={styles.chipIcon}>
@@ -42,7 +42,7 @@ const ChipOptions = ({
           </View>
         }
         clickChip={locationClick}
-      />
+      /> */}
       <ProfileChip
         name={t('CHIPS.UPDATE_PROFILE')}
         icon={

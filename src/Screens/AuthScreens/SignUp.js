@@ -210,21 +210,21 @@ const SignUp = ({navigation, ...props}) => {
 
     // Validate name
     if (name.trim() === '') {
-      errorMessage = t('PLEASE_ENTER_NAME');
+      errorMessage = t('ALERT.PLEASE_ENTER_NAME'); 
       valid = false;
     } else if (email.trim() === '' || !validateEmail(email)) {
-      errorMessage = t('PLEASE_ENTER_VALID_EMAIL');
+      errorMessage = t('ALERT.PLEASE_ENTER_VALID_EMAIL');
       valid = false;
     } else if (mobile.trim() !== '' && !validateMobile(mobile)) {
       // Only validate mobile if it has a value
-      errorMessage = t('PLEASE_ENTER_VALID_MOBILE');
+      errorMessage = t('ALERT.PLEASE_ENTER_VALID_MOBILE');
       valid = false;
     } else if (referral.trim() !== '' && !validateReferral(referral)) {
       // Only validate referral if it has a value
-      errorMessage = t('PLEASE_ENTER_VALID_REFERRAL');
+      errorMessage = t('ALERT.PLEASE_ENTER_VALID_REFERRAL');
       valid = false;
     } else if (!isPrivacyChecked) {
-      errorMessage = t('PLEASE_ACCEPT_PRIVACY');
+      errorMessage = t('ALERT.PLEASE_ACCEPT_PRIVACY');
       valid = false;
     }
 

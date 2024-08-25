@@ -157,7 +157,12 @@
     "INVALID_EMAIL": "अवैध ईमेल पत्ता",
     "INVALID_PASSWORD": "पासवर्ड चुकीचा आहे",
     "REQUIRED_FIELDS": "सर्व फील्ड्स आवश्यक आहेत",
-    "INVALID_MOBILE": "अवैध मोबाइल नंबर"
+    "INVALID_MOBILE": "अवैध मोबाइल नंबर",
+    "PLEASE_ENTER_NAME": "कृपया वैध नाव प्रविष्ट करा",
+    "PLEASE_ENTER_VALID_EMAIL": "कृपया वैध ईमेल प्रविष्ट करा",
+    "PLEASE_ENTER_VALID_MOBILE": "कृपया वैध मोबाईल क्रमांक प्रविष्ट करा",
+    "PLEASE_ENTER_VALID_REFERRAL": "कृपया वैध रेफरल कोड प्रविष्ट करा",
+    "PLEASE_ACCEPT_PRIVACY": "कृपया गोपनीयता धोरण स्वीकारा"
   },
   "TABLE": {
     "CITY": "City",

@@ -151,6 +151,12 @@ const STRING = {
     INVALID_PASSWORD: 'Invalid password pattern',
     REQUIRED_FIELDS: 'All fields are required',
     INVALID_MOBILE: 'Invalid mobile number',
+    INVALID_MOBILE: "Invalid mobile number",
+    PLEASE_ENTER_NAME: "Please enter valid Name",
+    PLEASE_ENTER_VALID_EMAIL: "Please enter valid Email",
+    PLEASE_ENTER_VALID_MOBILE: "Please enter valid Mobile Number",
+    PLEASE_ENTER_VALID_REFERRAL: "Please enter valid Referral Code",
+    PLEASE_ACCEPT_PRIVACY: "Please accept Privacy Policy",
   },
   TABLE: {
     CITY: 'City',
