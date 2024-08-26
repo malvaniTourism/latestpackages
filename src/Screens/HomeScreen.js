@@ -103,6 +103,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
   const [showOffline, setShowOffline] = useState(false);
   const [showOnlineMode, setShowOnlineMode] = useState(false);
   const [updateApp, setUpdateApp] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -203,16 +204,30 @@ const HomeScreen = ({navigation, route, ...props}) => {
 
   useFocusEffect(
     React.useCallback(async () => {
-      if ((await AsyncStorage.getItem('isUpdated')) == 'true' && props.mode) {
-        setIsLoading(true);
+      const isUpdated = await AsyncStorage.getItem('isUpdated');
+      
+      if (isUpdated === 'true' && props.mode) {
+        // If it's an initial load, perform specific logic
+        // if (isInitialLoad) {
+        //   // Handle initial load logic
+        //   console.log('Initial page load');
+        // } else {
+        //   // Handle when navigating back from another page
+        //   console.log('Navigated back to page');
+        // }
+
+        setIsInitialLoad(false); // Update state to indicate that the initial load has occurred
+        
+        // Your existing logic
         setCities([]);
         setRoutes([]);
         setBannerObject([]);
         props.setLoader(true);
         callLandingPageAPI();
       }
-    }),
+    }, [props.mode, isInitialLoad]) // Dependencies include props.mode and isInitialLoad
   );
+
 
   const saveToken = async () => {
     props.saveAccess_token(

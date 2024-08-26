@@ -60,10 +60,6 @@ class AnimationStyle extends Component {
 }
 
 const Banner = ({style, bannerImages}) => {
-  const handleImagePath = imageUri => {
-    console.log('Image path:', imageUri);
-  };
-
   return (
     <View style={[styles.banner, style]}>
       <Carousel
@@ -75,7 +71,6 @@ const Banner = ({style, bannerImages}) => {
         scrollAnimationDuration={3000}
         renderItem={({index}) => {
           const imageUri = `${Path.FTP_PATH}${bannerImages[index].image}`;
-          handleImagePath(imageUri); // Log image path
 
           // Fallback to standard Image component if needed
           return (
