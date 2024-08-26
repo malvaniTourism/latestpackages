@@ -33,9 +33,10 @@ const ContactUs = ({navigation, route, step, setStep, ...props}) => {
   const isMounted = useRef(true); // Initialize ref to track component mount state
 
   useEffect(() => {
-    let backHandler = BackHandler.addEventListener(STRING.EVENT.HARDWARE_BACK_PRESS, () =>
-      goBackStep()
-  );
+    let backHandler = BackHandler.addEventListener(
+      STRING.EVENT.HARDWARE_BACK_PRESS,
+      () => goBackStep(),
+    );
     const init = async () => {
       setEmail(await AsyncStorage.getItem(t('STORAGE.USER_EMAIL')));
       checkLogin(navigation);
@@ -58,7 +59,7 @@ const ContactUs = ({navigation, route, step, setStep, ...props}) => {
     } else {
       setStep(0);
     }
-  }
+  };
 
   const setValue = (val, isVal, index) => {
     switch (index) {

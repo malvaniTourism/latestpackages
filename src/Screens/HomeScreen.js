@@ -205,19 +205,10 @@ const HomeScreen = ({navigation, route, ...props}) => {
   useFocusEffect(
     React.useCallback(async () => {
       const isUpdated = await AsyncStorage.getItem('isUpdated');
-      
-      if (isUpdated === 'true' && props.mode) {
-        // If it's an initial load, perform specific logic
-        // if (isInitialLoad) {
-        //   // Handle initial load logic
-        //   console.log('Initial page load');
-        // } else {
-        //   // Handle when navigating back from another page
-        //   console.log('Navigated back to page');
-        // }
 
-        setIsInitialLoad(false); // Update state to indicate that the initial load has occurred
-        
+      if (isUpdated === 'true' && props.mode) {
+        // setIsInitialLoad(false); // Update state to indicate that the initial load has occurred
+
         // Your existing logic
         setCities([]);
         setRoutes([]);
@@ -225,21 +216,8 @@ const HomeScreen = ({navigation, route, ...props}) => {
         props.setLoader(true);
         callLandingPageAPI();
       }
-    }, [props.mode, isInitialLoad]) // Dependencies include props.mode and isInitialLoad
+    }, [props.mode, isInitialLoad]), // Dependencies include props.mode and isInitialLoad
   );
-
-
-  const saveToken = async () => {
-    props.saveAccess_token(
-      await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN')),
-    );
-    if (
-      (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == null ||
-      (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == ''
-    ) {
-      navigateTo(navigation, t('SCREEN.LANG_SELECTION'));
-    }
-  };
 
   const callLandingPageAPI = async site_id => {
     let isFirstTime = await AsyncStorage.getItem(t('STORAGE.IS_FIRST_TIME'));
@@ -290,6 +268,17 @@ const HomeScreen = ({navigation, route, ...props}) => {
     }
   };
 
+  const saveToken = async () => {
+    props.saveAccess_token(
+      await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN')),
+    );
+    if (
+      (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == null ||
+      (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == ''
+    ) {
+      navigateTo(navigation, t('SCREEN.LANG_SELECTION'));
+    }
+  };
   const setOfflineData = resp => {
     saveToStorage(t('STORAGE.LANDING_RESPONSE'), JSON.stringify(resp));
     saveToStorage(
@@ -452,17 +441,20 @@ const HomeScreen = ({navigation, route, ...props}) => {
               )}
             </View>
             <View style={styles.cardsWrap}>
-              {isLoading ? (
+              {isLoading || routes.length === 0 ? (
+                // Show skeleton loader when loading or when there are no routes
                 <>
                   <RouteHeadCardSkeleton />
                   <RouteHeadCardSkeleton />
                   <RouteHeadCardSkeleton />
                 </>
               ) : (
+                // Show routes if available
                 routes.map(
                   (route, index) =>
                     route && (
                       <RouteHeadCard
+                        key={index} // Add key for list items
                         data={route}
                         bus={'Hirkani'}
                         cardClick={() => getRoutesList(route)}
@@ -493,16 +485,20 @@ const HomeScreen = ({navigation, route, ...props}) => {
                 </View>
               )}
             </View>
+
             <ScrollView horizontal style={{marginLeft: 5}}>
-              {isLoading ? (
+              {isLoading || cities.length === 0 ? (
+                // Show skeleton loader when loading or when there are no cities
                 <>
                   <CityCardSmallSkeleton />
                   <CityCardSmallSkeleton />
                   <CityCardSmallSkeleton />
                 </>
               ) : (
+                // Show cities if available
                 cities.map((city, index) => (
                   <CityCardSmall
+                    key={index} // Add key for list items
                     data={city}
                     reload={() => {
                       callLandingPageAPI();
@@ -513,7 +509,8 @@ const HomeScreen = ({navigation, route, ...props}) => {
                 ))
               )}
             </ScrollView>
-            {isLoading ? (
+
+            {isLoading || cities.length === 0 ? (
               <Skeleton
                 animation="pulse"
                 variant="text"

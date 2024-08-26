@@ -210,7 +210,7 @@ const SignUp = ({navigation, ...props}) => {
 
     // Validate name
     if (name.trim() === '') {
-      errorMessage = t('ALERT.PLEASE_ENTER_NAME'); 
+      errorMessage = t('ALERT.PLEASE_ENTER_NAME');
       valid = false;
     } else if (email.trim() === '' || !validateEmail(email)) {
       errorMessage = t('ALERT.PLEASE_ENTER_VALID_EMAIL');

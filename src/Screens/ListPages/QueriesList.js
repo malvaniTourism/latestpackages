@@ -54,9 +54,10 @@ const QueriesList = ({navigation, route, ...props}) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    let backHandler = BackHandler.addEventListener(STRING.EVENT.HARDWARE_BACK_PRESS, () =>
-      goBackStep()
-  );
+    let backHandler = BackHandler.addEventListener(
+      STRING.EVENT.HARDWARE_BACK_PRESS,
+      () => goBackStep(),
+    );
     checkLogin(navigation);
     props.setLoader(true);
     setData([]);
@@ -92,7 +93,6 @@ const QueriesList = ({navigation, route, ...props}) => {
   }, [navigation, props.access_token, props.mode, t]);
 
   useEffect(() => {
-    
     if (step == 0) {
       console.log('step---', step);
       fetchData(1, true);
@@ -105,7 +105,7 @@ const QueriesList = ({navigation, route, ...props}) => {
     } else {
       setStep(0);
     }
-  }
+  };
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -118,39 +118,42 @@ const QueriesList = ({navigation, route, ...props}) => {
     }
   }, [props.mode, t]);
 
-  const fetchData = useCallback(async (page, reset) => {
-    if (props.mode) {
-      if (loading) return;
-      setLoading(true);
-      try {
-        const res = await comnPost('v2/getQueries', {page});
-        if (res && res.data.data) {
-          if (reset) {
-            setData(res.data.data.data);
-          } else {
-            setData(prevData => [...prevData, ...res.data.data.data]);
+  const fetchData = useCallback(
+    async (page, reset) => {
+      if (props.mode) {
+        if (loading) return;
+        setLoading(true);
+        try {
+          const res = await comnPost('v2/getQueries', {page});
+          if (res && res.data.data) {
+            if (reset) {
+              setData(res.data.data.data);
+            } else {
+              setData(prevData => [...prevData, ...res.data.data.data]);
+            }
+            setHasMore(!!res.data.data.next_page_url);
+            setNextPage(page + 1);
+            await saveToStorage(
+              t('STORAGE.QUERIES'),
+              JSON.stringify(res.data.data.data),
+            );
           }
-          setHasMore(!!res.data.data.next_page_url);
-          setNextPage(page + 1);
-          await saveToStorage(
-            t('STORAGE.QUERIES'),
-            JSON.stringify(res.data.data.data),
-          );
-        }
-        setLoading(false);
-      } catch (error) {
-        setErrorMessage(t('ERROR_OCCURRED'));
-        setLoading(false);
-      } finally {
-        if (isMounted.current) {
           setLoading(false);
-          setRefreshing(false);
+        } catch (error) {
+          setErrorMessage(t('ERROR_OCCURRED'));
+          setLoading(false);
+        } finally {
+          if (isMounted.current) {
+            setLoading(false);
+            setRefreshing(false);
+          }
+          props.setLoader(false);
+          setLoading(false);
         }
-        props.setLoader(false);
-        setLoading(false);
       }
-    }
-  }, [props.mode, loading, hasMore, t]);
+    },
+    [props.mode, loading, hasMore, t],
+  );
 
   const loadMoreData = useCallback(() => {
     if (!props.mode) {
@@ -225,9 +228,10 @@ const QueriesList = ({navigation, route, ...props}) => {
         }
         endIcon={
           step === 0 && (
-            <TouchableOpacity onPress={() => {
-              setStep(1)
-              setLoading(false);
+            <TouchableOpacity
+              onPress={() => {
+                setStep(1);
+                setLoading(false);
               }}>
               <GlobalText text={'Add Query'} />
             </TouchableOpacity>
