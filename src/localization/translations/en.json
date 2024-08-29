@@ -53,7 +53,8 @@
     "SAVE": "Save",
     "ATTACHMENT": "+ Upload Attachment",
     "ONLINE": "Online",
-    "OFFLINE": "Offline"
+    "OFFLINE": "Offline",
+    "LOCATION": "Location"
   },
   "SCREEN": {
     "ROOT": "Root",

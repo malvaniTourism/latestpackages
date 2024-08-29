@@ -207,7 +207,7 @@ const SignUp = ({navigation, ...props}) => {
   const checkValidation = () => {
     let valid = true;
     let errorMessage = '';
-  
+
     // Validate name
     if (name.trim() === '') {
       errorMessage = t('ALERT.PLEASE_ENTER_NAME');
@@ -229,18 +229,19 @@ const SignUp = ({navigation, ...props}) => {
     } else if (!isPrivacyChecked) {
       errorMessage = t('ALERT.PLEASE_ACCEPT_PRIVACY');
       valid = false;
-    } 
-  
+    }
+
     if (!valid) {
-      setAlertMessage(t(errorMessage));
+      setAlertMessage(errorMessage);
       setIsAlert(true); // Show popup with error message
-      setAlertMessage('');
     } else {
+      setIsAlert(false);
+      setShowPrivacy(false);
+      setAlertMessage('');
       setNotValid(false);
       Register(latitude, longitude);
     }
   };
-  
 
   const validateEmail = email => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -282,12 +283,12 @@ const SignUp = ({navigation, ...props}) => {
             res.data.message.email
               ? res.data.message.email
               : res.data.message.mobile
-              ? res.data.message.mobile
-              : res.data.message.referral_code
-              ? res.data.message.referral_code
-              : res.data.message
-              ? res.data.message
-              : t('NETWORK'),
+                ? res.data.message.mobile
+                : res.data.message.referral_code
+                  ? res.data.message.referral_code
+                  : res.data.message
+                    ? res.data.message
+                    : t('NETWORK'),
           );
           setIsSuccess(false);
           setIsAlert(true);
@@ -330,7 +331,7 @@ const SignUp = ({navigation, ...props}) => {
     setIsAlert(false);
     setAlertMessage(''); // Reset the alert message here
   };
-  
+
   const myLocationPress = async () => {
     props.setLoader(true);
     if (Platform.OS === 'ios') {
@@ -351,9 +352,11 @@ const SignUp = ({navigation, ...props}) => {
           subscribeLocation();
         } else {
           setLocationStatus(t('PERMISSION_DENIED'));
+          props.setLoader(false);
         }
       } catch (err) {
         console.warn(err);
+        props.setLoader(false);
       }
     }
   };
@@ -477,7 +480,7 @@ const SignUp = ({navigation, ...props}) => {
               />
             );
           })}
- <TextButton
+          <TextButton
             title={t('BUTTON.LOCATION')}
             buttonView={styles.buttonView}
             isDisabled={false}
@@ -496,7 +499,7 @@ const SignUp = ({navigation, ...props}) => {
               checked={isPrivacyChecked}
             />
           </View>
-         
+
           <TextButton
             title={t('BUTTON.REGISTER')}
             buttonView={styles.buttonView}

@@ -167,8 +167,8 @@ const Email = ({navigation, route, ...props}) => {
             res.data?.message.email
               ? res.data?.message.email
               : res.data?.message
-              ? res.data?.message
-              : t('NETWORK'),
+                ? res.data?.message
+                : t('NETWORK'),
           );
           props.setLoader(false);
         }

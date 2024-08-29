@@ -1,9 +1,11 @@
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
+import {useTranslation} from 'react-i18next';
+
 import TabNavigator from './TabNavigator';
+
 import ContactUs from '../Screens/ContactUs';
 import Emergency from '../Screens/Emergency';
-import {useTranslation} from 'react-i18next';
 import QueriesList from '../Screens/ListPages/QueriesList';
 
 const Drawer = createDrawerNavigator();
