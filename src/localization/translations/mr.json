@@ -162,7 +162,8 @@
     "PLEASE_ENTER_VALID_EMAIL": "कृपया वैध ईमेल प्रविष्ट करा",
     "PLEASE_ENTER_VALID_MOBILE": "कृपया वैध मोबाईल क्रमांक प्रविष्ट करा",
     "PLEASE_ENTER_VALID_REFERRAL": "कृपया वैध रेफरल कोड प्रविष्ट करा",
-    "PLEASE_ACCEPT_PRIVACY": "कृपया गोपनीयता धोरण स्वीकारा"
+    "PLEASE_ACCEPT_PRIVACY": "कृपया गोपनीयता धोरण स्वीकारा",
+    "PLEASE_ENABLE_LOCATION": "कृपया स्थान सक्षम करा"
   },
   "TABLE": {
     "CITY": "City",

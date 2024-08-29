@@ -162,7 +162,8 @@
     "PLEASE_ENTER_VALID_EMAIL": "Please enter valid Email",
     "PLEASE_ENTER_VALID_MOBILE": "Please enter valid Mobile Number",
     "PLEASE_ENTER_VALID_REFERRAL": "Please enter valid Referral Code",
-    "PLEASE_ACCEPT_PRIVACY": "Please accept Privacy Policy"
+    "PLEASE_ACCEPT_PRIVACY": "Please accept Privacy Policy",
+    "PLEASE_ENABLE_LOCATION": "Please enable your location from settings"
   },
   "TABLE": {
     "CITY": "City",

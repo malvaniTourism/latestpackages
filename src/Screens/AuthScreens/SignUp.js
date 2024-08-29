@@ -207,7 +207,7 @@ const SignUp = ({navigation, ...props}) => {
   const checkValidation = () => {
     let valid = true;
     let errorMessage = '';
-
+  
     // Validate name
     if (name.trim() === '') {
       errorMessage = t('ALERT.PLEASE_ENTER_NAME');
@@ -223,19 +223,24 @@ const SignUp = ({navigation, ...props}) => {
       // Only validate referral if it has a value
       errorMessage = t('ALERT.PLEASE_ENTER_VALID_REFERRAL');
       valid = false;
+    } else if (latitude === null || longitude === null) {
+      errorMessage = t('ALERT.PLEASE_ENABLE_LOCATION'); // New validation message
+      valid = false;
     } else if (!isPrivacyChecked) {
       errorMessage = t('ALERT.PLEASE_ACCEPT_PRIVACY');
       valid = false;
-    }
-
+    } 
+  
     if (!valid) {
       setAlertMessage(t(errorMessage));
       setIsAlert(true); // Show popup with error message
+      setAlertMessage('');
     } else {
       setNotValid(false);
-      myLocationPress();
+      Register(latitude, longitude);
     }
   };
+  
 
   const validateEmail = email => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -323,8 +328,9 @@ const SignUp = ({navigation, ...props}) => {
         .catch(err => {});
     }
     setIsAlert(false);
+    setAlertMessage(''); // Reset the alert message here
   };
-
+  
   const myLocationPress = async () => {
     props.setLoader(true);
     if (Platform.OS === 'ios') {
@@ -364,7 +370,6 @@ const SignUp = ({navigation, ...props}) => {
         setCurrentLatitude(currentLatitude);
         setCurrentLongitude(currentLongitude);
         setShowPrivacy(false);
-        Register(currentLatitude, currentLongitude);
         setFetchingText('');
       },
       error => {
@@ -472,6 +477,13 @@ const SignUp = ({navigation, ...props}) => {
               />
             );
           })}
+ <TextButton
+            title={t('BUTTON.LOCATION')}
+            buttonView={styles.buttonView}
+            isDisabled={false}
+            raised={true}
+            onPress={() => myLocationPress()}
+          />
 
           <View
             style={{
@@ -484,6 +496,7 @@ const SignUp = ({navigation, ...props}) => {
               checked={isPrivacyChecked}
             />
           </View>
+         
           <TextButton
             title={t('BUTTON.REGISTER')}
             buttonView={styles.buttonView}
