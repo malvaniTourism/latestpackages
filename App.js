@@ -17,13 +17,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import TextButton from './src/Components/Customs/Buttons/TextButton';
 import Feather from 'react-native-vector-icons/Feather';
 import styles from './src/Screens/Styles';
-// import analytics from "@react-native-firebase/analytics";
+import analytics from "@react-native-firebase/analytics";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import './src/localization/i18n';
+import firebase from '@react-native-firebase/app';
 
 LogBox.ignoreAllLogs();
 LogBox.ignoreLogs(['Warning: ...', 'Possible Unhandled Promise Rejection']);
 const Stack = createNativeStackNavigator();
+
+
+// Initialize Firebase
+if (!firebase.apps.length) {
+  firebase.initializeApp();
+}
+
+analytics().setAnalyticsCollectionEnabled(true);
 
 // analytics().setAnalyticsCollectionEnabled(true);
 
