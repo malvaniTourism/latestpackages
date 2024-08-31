@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Platform,
+  ScrollView,
 } from 'react-native';
 import {SignUpFields} from '../../Services/Constants/FIELDS';
 import TextField from '../../Components/Customs/TextField';
@@ -233,7 +234,8 @@ const SignUp = ({navigation, ...props}) => {
 
     if (!valid) {
       setAlertMessage(errorMessage);
-      setIsAlert(true); // Show popup with error message
+      setIsAlert(true);
+      setShowPrivacy(false);
     } else {
       setIsAlert(false);
       setShowPrivacy(false);
@@ -283,12 +285,12 @@ const SignUp = ({navigation, ...props}) => {
             res.data.message.email
               ? res.data.message.email
               : res.data.message.mobile
-                ? res.data.message.mobile
-                : res.data.message.referral_code
-                  ? res.data.message.referral_code
-                  : res.data.message
-                    ? res.data.message
-                    : t('NETWORK'),
+              ? res.data.message.mobile
+              : res.data.message.referral_code
+              ? res.data.message.referral_code
+              : res.data.message
+              ? res.data.message
+              : t('NETWORK'),
           );
           setIsSuccess(false);
           setIsAlert(true);
@@ -430,7 +432,7 @@ const SignUp = ({navigation, ...props}) => {
         <GlobalText text={t('APPNAME')} style={styles.boldKokan} />
       </View>
 
-      <View style={styles.middleFlex}>
+      <ScrollView>
         <GlobalText text={t('SIGN_UP')} style={styles.loginText} />
         <View style={{alignItems: 'center'}}>
           <View
@@ -514,7 +516,7 @@ const SignUp = ({navigation, ...props}) => {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </ScrollView>
 
       <KeyboardAvoidingView
         behavior="height"

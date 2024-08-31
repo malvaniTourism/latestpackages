@@ -1,3 +1,4 @@
+// DrawerNavigator.js
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {useTranslation} from 'react-i18next';
@@ -15,8 +16,10 @@ const DrawerNavigator = () => {
 
   return (
     <Drawer.Navigator screenOptions={{headerShown: false}}>
-      <Drawer.Screen name={t('SCREEN.HOME')} component={TabNavigator} />
+      {/* Change screen name to avoid conflict */}
+      <Drawer.Screen name={t('SCREEN.DASHBOARD')} component={TabNavigator} />
       {/* <Drawer.Screen name={t("SCREEN.REQUEST_PAID_ADVERTISEMENT")} component={Pricing} /> */}
+      {/* Update other screens accordingly */}
       <Drawer.Screen name={t('SCREEN.EMERGENCY')} component={Emergency} />
       <Drawer.Screen name={t('SCREEN.CONTACT_US')} component={QueriesList} />
       {/* <Drawer.Screen name={t("SCREEN.WEATHER")} component={Weather} /> */}

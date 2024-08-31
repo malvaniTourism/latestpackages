@@ -19,7 +19,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import COLOR from '../../Services/Constants/COLORS';
 import {navigateTo} from '../../Services/CommonMethods';
 import GlobalText from '../../Components/Customs/Text';
-import SQLite from 'react-native-sqlite-storage';
+// import SQLite from 'react-native-sqlite-storage';
 import Popup from '../../Components/Common/Popup';
 import Feather from 'react-native-vector-icons/Feather';
 import {CommonActions} from '@react-navigation/native';
@@ -54,17 +54,17 @@ const EmailSignIn = ({navigation, route, ...props}) => {
     };
   }, []);
 
-  const openDB = () => {
-    const db = SQLite.openDatabase({
-      name: 'mydb.db',
-      createFromLocation: '~mydata.db',
-    });
-    if (db) {
-      // Database initialization successful, proceed with queries
-    } else {
-      console.error('Failed to initialize the database.');
-    }
-  };
+  // const openDB = () => {
+  //   const db = SQLite.openDatabase({
+  //     name: 'mydb.db',
+  //     createFromLocation: '~mydata.db',
+  //   });
+  //   if (db) {
+  //     // Database initialization successful, proceed with queries
+  //   } else {
+  //     console.error('Failed to initialize the database.');
+  //   }
+  // };
 
   const createUserTable = () => {
     db.transaction(tx => {
@@ -264,8 +264,8 @@ const EmailSignIn = ({navigation, route, ...props}) => {
             res.data.message.email
               ? res.data.message.email
               : res.data.message.password
-                ? res.data.message.password
-                : res.data.message,
+              ? res.data.message.password
+              : res.data.message,
           );
           props.setLoader(false);
           setIsSuccess(false);

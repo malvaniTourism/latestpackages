@@ -67,7 +67,7 @@ const StackNavigator = () => {
               cardStyle: {backgroundColor: '#fff'},
             }}>
             <Stack.Screen
-              name={t('SCREEN.ROOT')}
+              name={t('SCREEN.MAIN')}
               component={DrawerNavigator}
               options={{headerShown: false}}
             />

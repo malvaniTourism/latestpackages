@@ -58,7 +58,7 @@ const TabNavigator = () => {
         tabBarStyle: {},
       }}>
       <Tab.Screen
-        name={t('SCREEN.HOME')}
+        name={t('SCREEN.HOME_TAB')}
         component={HomeScreen}
         options={{
           tabBarLabel: `${t('SCREEN.HOME')}`,

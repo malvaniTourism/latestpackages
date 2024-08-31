@@ -59,6 +59,10 @@
   "SCREEN": {
     "ROOT": "Root",
     "HOME": "Home",
+    "DASHBOARD": "Dashboard",
+    "HOME_TAB": "HomeTab",
+    "MAIN": "Main",
+    "HOME_DRAWER": "HomeDrawer",
     "PRICING": "Pricing",
     "REQUEST_PAID_ADVERTISEMENT": "Request Paid Advertisement",
     "CONTACT_US": "Contact Us",
