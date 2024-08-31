@@ -82,7 +82,7 @@ android {
         applicationId "com.tourkokan"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 9
+        versionCode 11
         versionName "2.0.0"
     }
     signingConfigs {
@@ -108,6 +108,7 @@ android {
             // see https://reactnative.dev/docs/signed-apk-android.
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
+            minifyEnabled true // Ensures ProGuard/R8 is used
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
