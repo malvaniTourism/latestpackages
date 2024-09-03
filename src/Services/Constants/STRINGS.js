@@ -3,7 +3,7 @@ const STRING = {
   EXPLORE: 'Explore the Enchanting',
   KOKAN: 'KOKAN',
   COMPANION: "Your Ultimate Travel Companion for Maharashtra's Coastal Gem.",
-  WELCOME: 'Welcome back to',
+  WELCOME: 'Welcome to',
 
   BUTTON: {
     YES: 'Yes',
@@ -193,12 +193,12 @@ const STRING = {
     SOURCE: 'Source',
     DESTINATION: 'Destination',
     MOBILE: 'Mobile',
-    MOBILE_NO: 'Mobile Number',
+    MOBILE_NO: 'Mobile Number (optional)',
     PASSWORD: 'Password',
     SET_PASSWORD: 'Set Password',
     EMAIL: 'Email',
     REFERRAL: 'Referral',
-    REFERRAL_CODE: 'Referral Code',
+    REFERRAL_CODE: 'Referral Code (optional)',
     EMAIL_ID: 'Email ID',
     NAME: 'Name',
     OTP: 'OTP',

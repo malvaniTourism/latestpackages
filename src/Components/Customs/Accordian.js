@@ -50,7 +50,7 @@ const Accordion = ({data, navigation}) => {
   );
 
   const renderItem = ({item}) => {
-    return <SubCatCard data={item} onClick={() => goToSubCats(item.code)} />;
+    return <SubCatCard data={item} onClick={() => goToSubCats(item)} />;
   };
 
   const goToSubCats = subCat => {

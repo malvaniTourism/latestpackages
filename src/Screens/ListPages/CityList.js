@@ -101,7 +101,7 @@ const CityList = ({navigation, route, ...props}) => {
         data = {
           apitype: 'list',
           parent_id: route?.params?.parent_id,
-          category: route?.params?.subCat || '',
+          category: route?.params?.subCat?.code || '',
           per_page: 20,
           page: page,
         };
@@ -212,7 +212,7 @@ const CityList = ({navigation, route, ...props}) => {
             }}>
             <GlobalText
               style={{fontWeight: 'bold'}}
-              text={offline ? t('NO_INTERNET') : t('NO_DATA')}
+              text={offline ? t('NO_INTERNET') : !props.isLoading ? t('NO_DATA') : ""}
             />
           </View>
         )}
@@ -230,6 +230,7 @@ const mapStateToProps = state => {
   return {
     access_token: state.commonState.access_token,
     mode: state.commonState.mode,
+    isLoading: state.commonState.isLoading,
   };
 };
 

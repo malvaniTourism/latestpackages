@@ -115,7 +115,7 @@ const MapScreen = ({navigation, ...props}) => {
           }}>
           <GlobalText
             style={{fontWeight: 'bold'}}
-            text={offline ? t('NO_INTERNET_MAP') : t('NO_DATA')}
+            text={offline ? t('NO_INTERNET_MAP') : !props.isLoading ? t('NO_DATA') : ""}
           />
         </View>
       ) : (
@@ -155,6 +155,7 @@ const mapStateToProps = state => {
   return {
     access_token: state.commonState.access_token,
     mode: state.commonState.mode,
+    isLoading: state.commonState.isLoading,
   };
 };
 

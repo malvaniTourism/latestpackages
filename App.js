@@ -148,6 +148,7 @@ export default function App() {
         activeDotColor={COLOR.themeBlue}
         renderDoneButton={renderDoneButton}
         renderNextButton={renderNextButton}
+        activeDotStyle={{backgroundColor: COLOR.themeBlue}}
       />
     </>
   );

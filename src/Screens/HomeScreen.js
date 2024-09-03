@@ -380,7 +380,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
         }>
         <CheckNet isOff={offline} />
         {/* <MyAnimatedLoader isVisible={isLoading} /> */}
-        <Loader />
+        {!isLoading && <Loader /> }
         <View style={{flex: 1, alignItems: 'center'}}>
           {isLoading ? (
             <BannerSkeleton />
@@ -476,12 +476,12 @@ const HomeScreen = ({navigation, route, ...props}) => {
               ) : (
                 <View style={styles.flexAround}>
                   <GlobalText text={t('CITIES')} style={styles.sectionTitle} />
-                  <TextButton
+                  {/* <TextButton
                     title={t('BUTTON.SEE_ALL')}
                     onPress={() => showMore(t('SCREEN.CITY_LIST'), 'city')}
                     buttonView={styles.buttonView}
                     titleStyle={styles.titleStyle}
-                  />
+                  /> */}
                 </View>
               )}
             </View>

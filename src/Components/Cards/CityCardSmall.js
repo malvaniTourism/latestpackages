@@ -62,19 +62,19 @@ const CityCardSmall = ({data, reload, navigation, addComment, onClick}) => {
   };
 
   const onStarRatingPress = async rate => {
-    setRating(rate);
-    const placeData = {
-      user_id: await AsyncStorage.getItem(t('STORAGE.USER_ID')),
-      rateable_type: t('TABLE.SITE'),
-      rateable_id: data.id,
-      rate,
-    };
-    comnPost('v2/addUpdateRating', placeData)
-      .then(res => {
-        AsyncStorage.setItem('isUpdated', 'true');
-        reload();
-      })
-      .catch(err => {});
+    // setRating(rate);
+    // const placeData = {
+    //   user_id: await AsyncStorage.getItem(t('STORAGE.USER_ID')),
+    //   rateable_type: t('TABLE.SITE'),
+    //   rateable_id: data.id,
+    //   rate,
+    // };
+    // comnPost('v2/addUpdateRating', placeData)
+    //   .then(res => {
+    //     AsyncStorage.setItem('isUpdated', 'true');
+    //     reload();
+    //   })
+    //   .catch(err => {});
   };
 
   return (
@@ -98,7 +98,7 @@ const CityCardSmall = ({data, reload, navigation, addComment, onClick}) => {
         />
       )}
       <View style={{alignItems: 'flex-end'}}>
-        <TouchableOpacity
+        <View
           style={styles.citySmallLikeView}
           // onPress={() => onHeartClick()}
         >
@@ -115,15 +115,15 @@ const CityCardSmall = ({data, reload, navigation, addComment, onClick}) => {
               size={DIMENSIONS.iconSize}
             />
           )}
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.citySmallLikeView}>
+        </View>
+        <View style={styles.citySmallLikeView}>
           <GlobalText text={commentCount} style={styles.commentCount} />
           <Octicons
             name="comment"
             color={COLOR.black}
             size={DIMENSIONS.iconSize}
           />
-        </TouchableOpacity>
+        </View>
       </View>
 
       <View

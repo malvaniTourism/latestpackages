@@ -238,7 +238,7 @@ const ExploreGrid = ({route, navigation, ...props}) => {
             }}>
             <GlobalText
               style={{fontWeight: 'bold'}}
-              text={offline ? t('NO_INTERNET') : t('NO_DATA')}
+              text={offline ? t('NO_INTERNET') : !props.isLoading ? t('NO_DATA') : ""}
             />
           </View>
         )}
@@ -265,6 +265,7 @@ const ExploreGrid = ({route, navigation, ...props}) => {
 const mapStateToProps = state => ({
   source: state.commonState.source,
   mode: state.commonState.mode,
+  isLoading: state.commonState.isLoading,
 });
 
 const mapDispatchToProps = dispatch => ({

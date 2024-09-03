@@ -265,7 +265,7 @@ const QueriesList = ({navigation, route, ...props}) => {
               }}>
               <GlobalText
                 style={{fontWeight: 'bold'}}
-                text={offline ? t('NO_INTERNET') : t('NO_DATA')}
+                text={offline ? t('NO_INTERNET') : !props.isLoading ? t('NO_DATA') : ""}
               />
             </View>
           )
@@ -285,6 +285,7 @@ const QueriesList = ({navigation, route, ...props}) => {
 const mapStateToProps = state => {
   return {
     mode: state.commonState.mode,
+    isLoading: state.commonState.isLoading,
   };
 };
 
