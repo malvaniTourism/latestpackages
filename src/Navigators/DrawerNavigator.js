@@ -1,36 +1,42 @@
 import React from 'react';
-import {createDrawerNavigator, DrawerContentScrollView, DrawerItemList} from '@react-navigation/drawer';
-import {useTranslation} from 'react-i18next';
-import {View, Text, Linking, StyleSheet, TouchableOpacity, Image} from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';  // Correct import for Ionicons
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
+import { useTranslation } from 'react-i18next';
+import { View, Text, Linking, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons'; // Correct import for Ionicons
 
-import TabNavigator from './TabNavigator';
-import Emergency from '../Screens/Emergency';
-import QueriesList from '../Screens/ListPages/QueriesList';
+import TabNavigator from './TabNavigator'; // Ensure this is correctly imported
+import Emergency from '../Screens/Emergency'; // Ensure this is correctly imported
+import QueriesList from '../Screens/ListPages/QueriesList'; // Ensure this is correctly imported
 
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigator = () => {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   // Custom drawer content
   const CustomDrawerContent = (props) => {
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <DrawerContentScrollView {...props}>
           <DrawerItemList {...props} />
         </DrawerContentScrollView>
+
+        {/* Footer with social media icons */}
         <View style={styles.footerContainer}>
-          {/* Uncomment and adjust the logo path if you want to use a logo */}
+          {/* Uncomment and update the logo path if you're using a logo */}
           {/* <Image source={require('../Assets/Images/Logos/tourkokan.png')} style={styles.logo} /> */}
+          
+          {/* Social media links */}
           <View style={styles.socialMediaContainer}>
-          <TouchableOpacity onPress={() => Linking.openURL('https://www.facebook.com/people/Tourkokan/61560289596939/?mibextid=LQQJ4d')}>
-            <Ionicons name="logo-facebook" size={24} color="#3b5998" style={styles.icon} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => Linking.openURL('https://www.instagram.com/tour_kokan')}>
-            <Ionicons name="logo-instagram" size={24} color="#e1306c" style={styles.icon} />
-          </TouchableOpacity>
+            <TouchableOpacity onPress={() => Linking.openURL('https://www.facebook.com/people/Tourkokan/61560289596939/?mibextid=LQQJ4d')}>
+              <Ionicons name="logo-facebook" size={24} color="#3b5998" style={styles.icon} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => Linking.openURL('https://www.instagram.com/tour_kokan')}>
+              <Ionicons name="logo-instagram" size={24} color="#e1306c" style={styles.icon} />
+            </TouchableOpacity>
           </View>
+
+          {/* Footer text */}
           <Text style={styles.footerText}>Designed and Developed by Probyte Solution LLP.</Text>
         </View>
       </View>
@@ -38,17 +44,14 @@ const DrawerNavigator = () => {
   };
 
   return (
-    <Drawer.Navigator 
-      screenOptions={{headerShown: false}}
-      drawerContent={props => <CustomDrawerContent {...props} />}
+    <Drawer.Navigator
+      screenOptions={{ headerShown: false }}
+      drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
-      {/* Change screen name to avoid conflict */}
+      {/* Ensure all screen components are correctly imported */}
       <Drawer.Screen name={t('SCREEN.DASHBOARD')} component={TabNavigator} />
-      {/* <Drawer.Screen name={t("SCREEN.REQUEST_PAID_ADVERTISEMENT")} component={Pricing} /> */}
-      {/* Update other screens accordingly */}
       <Drawer.Screen name={t('SCREEN.EMERGENCY')} component={Emergency} />
       <Drawer.Screen name={t('SCREEN.CONTACT_US')} component={QueriesList} />
-      {/* <Drawer.Screen name={t("SCREEN.WEATHER")} component={Weather} /> */}
     </Drawer.Navigator>
   );
 };
@@ -67,13 +70,13 @@ const styles = StyleSheet.create({
   //   marginBottom: 20,
   // },
   socialMediaContainer: {
-    flexDirection: 'row',  // Change to row for horizontal alignment
-    justifyContent: 'space-around',
-    width: '30%',  // Adjust width to ensure icons are side by side
+    flexDirection: 'row', // Align icons in a row
+    justifyContent: 'space-between',
+    width: '30%', // Adjust width for icon spacing
     marginBottom: 20,
   },
   icon: {
-    marginHorizontal: 10, // Adjust the value as needed for spacing
+    marginHorizontal: 10, // Add spacing between icons
   },
   footerText: {
     textAlign: 'center',
