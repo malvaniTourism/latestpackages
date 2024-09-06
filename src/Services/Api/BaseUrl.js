@@ -1,8 +1,10 @@
+import Config from 'react-native-config';
+
 const Path = {
-  API_PATH: 'https://dev.tourkokan.com/api/',
-  API_PATH_ADMIN: 'https://dev.tourkokan.com/admin/',
-  FTP_PATH: 'https://ftp.dev.tourkokan.com/',
-  FTP_PATH1: 'https://dev.tourkokan.com',
+  API_PATH: Config.API_PATH,
+  API_PATH_ADMIN: Config.API_PATH_ADMIN,
+  FTP_PATH: Config.FTP_PATH,
+  FTP_PATH1: Config.FTP_PATH1,
 };
 
 export default Path;

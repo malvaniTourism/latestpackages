@@ -111,10 +111,10 @@ const StackNavigator = () => {
           />
           <Stack.Screen name={t('SCREEN.AUTH_SCREEN')} component={AuthScreen} />
           <Stack.Screen name={t('SCREEN.LOGIN')} component={SignIn} />
-          {/* <Stack.Screen
+          <Stack.Screen
             name={t('SCREEN.EMAIL_SIGN_IN')}
             component={EmailSignIn}
-          /> */}
+          />
           <Stack.Screen name={t('SCREEN.EMAIL')} component={Email} />
           <Stack.Screen
             name={t('SCREEN.PASSWORD_LOGIN')}

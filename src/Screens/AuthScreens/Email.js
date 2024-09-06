@@ -139,6 +139,10 @@ const Email = ({navigation, route, ...props}) => {
     navigateTo(navigation, t('SCREEN.SIGN_UP'));
   };
 
+  const loginWithPassScreen = () => {
+    navigateTo(navigation, t('SCREEN.EMAIL_SIGN_IN'));
+  };
+
   const validateEmail = email => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -238,7 +242,7 @@ const Email = ({navigation, route, ...props}) => {
           );
         })}
         <TouchableOpacity
-          onPress={() => navigateTo(navigation, t('SCREEN.EMAIL_SIGN_IN'))}>
+          onPress={() => loginWithPassScreen()}>
           <GlobalText
             text={t('BUTTON.LOGIN_WITH_PASSWORD')}
             style={styles.loginSubText}
