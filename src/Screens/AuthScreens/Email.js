@@ -38,7 +38,7 @@ const Email = ({navigation, route, ...props}) => {
   const [isOtp, setIsOtp] = useState(route.params?.isOtp || false);
   const [isPassword, setIsPassword] = useState(false);
   const [isOtpSent, setIsOtpSent] = useState(false);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {

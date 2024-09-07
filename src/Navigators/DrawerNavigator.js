@@ -1,7 +1,7 @@
 import React from 'react';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { useTranslation } from 'react-i18next';
-import { View, Text, Linking, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, Linking, StyleSheet, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import TabNavigator from './TabNavigator';
@@ -9,6 +9,11 @@ import Emergency from '../Screens/Emergency';
 import QueriesList from '../Screens/ListPages/QueriesList';
 
 const Drawer = createDrawerNavigator();
+
+const socialLinks = [
+  { name: 'logo-facebook', url: 'https://www.facebook.com/...', color: '#3b5998' },
+  { name: 'logo-instagram', url: 'https://www.instagram.com/tour_kokan', color: '#e1306c' }
+];
 
 const DrawerNavigator = () => {
   const { t, i18n } = useTranslation();
@@ -25,23 +30,33 @@ const DrawerNavigator = () => {
     }
   };
 
+  // Reusable component for social media links
+  const SocialMediaLinks = () => (
+    <View style={styles.socialMediaContainer}>
+      {socialLinks.map((link, index) => (
+        <TouchableOpacity key={index} onPress={() => handleLinkPress(link.url)}>
+          <Ionicons name={link.name} size={24} color={link.color} style={styles.icon} />
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
+
+  // Footer component for social media and credits
+  const Footer = () => (
+    <View style={styles.footerContainer}>
+      <SocialMediaLinks />
+      <Text style={styles.footerText}>Designed and Developed by Probyte Solution LLP.</Text>
+    </View>
+  );
+
+  // Custom drawer content with conditional footer rendering
   const CustomDrawerContent = (props) => (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
-
-      <View style={styles.footerContainer}>
-        <View style={styles.socialMediaContainer}>
-          <TouchableOpacity onPress={() => handleLinkPress('https://www.facebook.com/...')}>
-            <Ionicons name="logo-facebook" size={24} color="#3b5998" style={styles.icon} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleLinkPress('https://www.instagram.com/tour_kokan')}>
-            <Ionicons name="logo-instagram" size={24} color="#e1306c" style={styles.icon} />
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.footerText}>Designed and Developed by Probyte Solution LLP.</Text>
-      </View>
+      {/* Conditionally render footer based on screen */}
+      {props.state.routeNames.includes('QueriesList') && <Footer />}
     </View>
   );
 

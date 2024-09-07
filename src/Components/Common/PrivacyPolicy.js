@@ -7,13 +7,14 @@ import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
 import TextButton from '../Customs/Buttons/TextButton';
 import GlobalText from '../Customs/Text';
 
+
 const PrivacyPolicy = ({cancelClick, acceptClick}) => {
   const {t} = useTranslation();
 
   return (
     <View
       style={{
-        height: DIMENSIONS.screenHeight - 300,
+        height: DIMENSIONS.screenHeight - 200,
         width: DIMENSIONS.bannerWidth,
       }}>
       <ScrollView style={styles.container}>

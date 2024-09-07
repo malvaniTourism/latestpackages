@@ -146,9 +146,20 @@ export default function App() {
         onDone={onDone}
         // renderNextButton={_renderNextButton}
         activeDotColor={COLOR.themeBlue}
+        dotStyle={{
+          width: 15,  // Increase the width of the inactive dots
+          height: 15, // Increase the height of the inactive dots
+          borderRadius: 7.5, // Make them circular
+          backgroundColor: '#C0C0C0', // Inactive dot color
+        }}
+        activeDotStyle={{
+          width: 20,  // Increase the width of the active dot
+          height: 20, // Increase the height of the active dot
+          borderRadius: 10, // Make it circular
+          backgroundColor: COLOR.themeBlue, // Active dot color
+        }}
         renderDoneButton={renderDoneButton}
         renderNextButton={renderNextButton}
-        activeDotStyle={{backgroundColor: COLOR.themeBlue}}
       />
     </>
   );
