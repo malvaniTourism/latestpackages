@@ -3,7 +3,6 @@ import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '
 import { useTranslation } from 'react-i18next';
 import { View, Text, Linking, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
 import TabNavigator from './TabNavigator';
 import Emergency from '../Screens/Emergency';
 import QueriesList from '../Screens/ListPages/QueriesList';
@@ -14,7 +13,7 @@ const DrawerNavigator = () => {
   const { t, i18n } = useTranslation();
 
   if (!i18n.isInitialized) {
-    return null; // Ensure translations are loaded
+    return null;
   }
 
   const handleLinkPress = async (url) => {
@@ -30,7 +29,6 @@ const DrawerNavigator = () => {
       <DrawerContentScrollView {...props}>
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
-
       <View style={styles.footerContainer}>
         <View style={styles.socialMediaContainer}>
           <TouchableOpacity onPress={() => handleLinkPress('https://www.facebook.com/...')}>
