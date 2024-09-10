@@ -61,8 +61,8 @@ const ExploreGrid = ({route, navigation, ...props}) => {
       setOffline(!state.isConnected);
       dataSync(t('STORAGE.GALLERY'), fetchData(1, true), props.mode).then(
         resp => {
-          let res = JSON.parse(resp);
-          if (res) {
+          if (resp) {
+            let res = JSON.parse(resp);
             const newGallery = res;
             setGallery(newGallery);
           }

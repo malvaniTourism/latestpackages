@@ -30,8 +30,15 @@ const Accordion = ({data, navigation}) => {
             backgroundColor: isExpanded ? COLOR.transparent : COLOR.white,
           },
         ]}>
-        <Image source={{uri: item.icon}} style={styles.catCardIcon} />
-        <GlobalText style={styles.accordHeaderText} text={item.name} />
+        <Image
+          source={
+            item.icon && typeof item.icon === 'string' && item.icon !== '0'
+              ? { uri: item.icon }
+              : require('../../Assets/Icons/1-PNG.png') // Fallback image
+          }
+          style={styles.catCardIcon}
+        />       
+ <GlobalText style={styles.accordHeaderText} text={item.name} />
         <Ionicons
           name="chevron-down"
           color={COLOR.black}

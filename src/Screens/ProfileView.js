@@ -84,8 +84,8 @@ const ProfileView = ({navigation, route, ...props}) => {
         getUserProfile(),
         props.mode,
       ).then(resp => {
-        let res = JSON.parse(resp);
-        if (res) {
+        if (resp) {
+          let res = JSON.parse(resp);
           setProfile(res);
           setOption(0);
           setLocationMap(res.addresses[0].latitude, res.addresses[0].longitude);

@@ -31,8 +31,8 @@ const MapScreen = ({navigation, ...props}) => {
 
       dataSync(t('STORAGE.CITIES_RESPONSE'), getCities(), props.mode).then(
         resp => {
-          let res = JSON.parse(resp);
-          if (res) {
+          if (resp) {
+            let res = JSON.parse(resp);
             setCities(res);
             if (mapRef.current) {
               const coordinates = res.map(marker => {

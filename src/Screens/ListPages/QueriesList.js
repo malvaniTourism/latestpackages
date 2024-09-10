@@ -75,8 +75,8 @@ const QueriesList = ({navigation, route, ...props}) => {
       if (state.isConnected) {
         dataSync(t('STORAGE.QUERIES'), fetchData(1, true), props.mode).then(
           resp => {
-            let res = JSON.parse(resp);
-            if (res) {
+            if (resp) {
+              let res = JSON.parse(resp);
               setData(res);
             }
           },

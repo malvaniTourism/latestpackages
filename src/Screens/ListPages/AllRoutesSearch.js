@@ -55,8 +55,8 @@ const AllRoutesSearch = ({navigation, route, ...props}) => {
     const unsubscribe = NetInfo.addEventListener(async state => {
       dataSync(t('STORAGE.ROUTES_RESPONSE'), searchRoute(), props.mode).then(
         resp => {
-          let res = JSON.parse(resp);
-          if (res) {
+          if (resp) {
+            let res = JSON.parse(resp);
             setList(res);
           } else if (resp) {
             setOffline(true);

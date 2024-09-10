@@ -62,8 +62,8 @@ const CityList = ({navigation, route, ...props}) => {
         fetchCities(1, true),
         props.mode,
       ).then(resp => {
-        let res = JSON.parse(resp);
-        if (res) {
+        if (resp) {
+          let res = JSON.parse(resp);
           setCities(res);
         } else if (resp) {
           setOffline(true);

@@ -150,35 +150,43 @@ const HomeScreen = ({navigation, route, ...props}) => {
         setIsLandingDataFetched(true);
       }
     }
-    LogBox.ignoreAllLogs();
+    // LogBox.ignoreAllLogs();
     saveToken();
     // SplashScreen.hideAsync();
     const unsubscribe = NetInfo.addEventListener(async state => {
       setOffline(!state.isConnected);
       let mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
 
-      dataSync(t('STORAGE.LANDING_RESPONSE'), callLandingPageAPI(), mode).then(
-        resp => {
-          let res = JSON.parse(resp);
-          if (res) {
-            setCities(res.cities);
-            setRoutes(res.routes);
-            setBannerObject(res.banners);
-            setIsFetching(false);
+      dataSync(t('STORAGE.LANDING_RESPONSE'), callLandingPageAPI, mode).then(resp => {
+        try {
+          if (resp) {
+            // Attempt to parse only if `resp` is a valid string or object
+            let res = JSON.parse(resp);
+            if (res) {
+              setCities(res.cities);
+              setRoutes(res.routes);
+              setBannerObject(res.banners);
+              setIsFetching(false);
             setIsLoading(false);
-            // setCategories(res.categories);
+  // setCategories(res.categories);
             // setProjects(res.projects);
             // setStops(res.stops);
             // setPlace_category(res.place_category);
             // setPlaces(res.places);
-          } else if (resp) {
+            }
+          } else {
             setOffline(true);
             setIsFetching(false);
             setIsLoading(false);
           }
-          props.setLoader(false);
-        },
-      );
+        } catch (error) {
+          console.error('Error parsing response:', error);
+          setIsFetching(false);
+          setIsLoading(false);
+          setOffline(true);
+        }
+        props.setLoader(false);
+      });      
       // removeFromStorage(t("STORAGE.LANDING_RESPONSE"))
     });
 
