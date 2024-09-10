@@ -234,7 +234,13 @@ const AllRoutesSearch = ({navigation, route, ...props}) => {
           <View style={{alignItems: 'center', padding: 50}}>
             <GlobalText
               style={{fontWeight: 'bold'}}
-              text={offline ? t('NO_INTERNET') : !props.isLoading ? t('NO_DATA') : ""}
+              text={
+                offline
+                  ? t('NO_INTERNET')
+                  : !props.isLoading
+                  ? t('NO_DATA')
+                  : ''
+              }
             />
           </View>
         )}

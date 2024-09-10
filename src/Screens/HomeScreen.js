@@ -380,7 +380,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
         }>
         <CheckNet isOff={offline} />
         {/* <MyAnimatedLoader isVisible={isLoading} /> */}
-        {!isLoading && <Loader /> }
+        {!isLoading && <Loader />}
         <View style={{flex: 1, alignItems: 'center'}}>
           {isLoading ? (
             <BannerSkeleton />

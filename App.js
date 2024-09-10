@@ -22,8 +22,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import './src/localization/i18n';
 import firebase from '@react-native-firebase/app';
 
-LogBox.ignoreAllLogs();
-LogBox.ignoreLogs(['Warning: ...', 'Possible Unhandled Promise Rejection']);
+// LogBox.ignoreAllLogs();
+// LogBox.ignoreLogs(['Warning: ...', 'Possible Unhandled Promise Rejection']);
 const Stack = createNativeStackNavigator();
 
 
@@ -40,7 +40,7 @@ export default function App() {
   const [isFirstTime, setIsFirstTime] = useState(null); // Set initial state to null
   const [loading, setLoading] = useState(true); // Add loading state
 
-  useEffect(async () => {
+  const doSomething = async() =>{
     try {
       const isFirstTimeValue = await AsyncStorage.getItem(
         STRING.STORAGE.IS_FIRST_TIME,
@@ -51,7 +51,10 @@ export default function App() {
       console.error('Error fetching isFirstTime value:', error);
       setLoading(false);
     }
-  }, []);
+    }
+    useEffect(() =>{
+      doSomething();
+     },[])
 
   const slides = [
     {

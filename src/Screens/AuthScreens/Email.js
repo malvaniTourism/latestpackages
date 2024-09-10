@@ -241,8 +241,7 @@ const Email = ({navigation, route, ...props}) => {
             />
           );
         })}
-        <TouchableOpacity
-          onPress={() => loginWithPassScreen()}>
+        <TouchableOpacity onPress={() => loginWithPassScreen()}>
           <GlobalText
             text={t('BUTTON.LOGIN_WITH_PASSWORD')}
             style={styles.loginSubText}

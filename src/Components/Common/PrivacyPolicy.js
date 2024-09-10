@@ -7,7 +7,6 @@ import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
 import TextButton from '../Customs/Buttons/TextButton';
 import GlobalText from '../Customs/Text';
 
-
 const PrivacyPolicy = ({cancelClick, acceptClick}) => {
   const {t} = useTranslation();
 

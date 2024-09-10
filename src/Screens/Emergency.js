@@ -230,7 +230,13 @@ const Emergency = ({navigation, route, ...props}) => {
             }}>
             <GlobalText
               style={{fontWeight: 'bold'}}
-              text={offline ? t('NO_INTERNET') : !props.isLoading ? t('NO_DATA') : ""}
+              text={
+                offline
+                  ? t('NO_INTERNET')
+                  : !props.isLoading
+                  ? t('NO_DATA')
+                  : ''
+              }
             />
           </View>
         )}

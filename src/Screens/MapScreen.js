@@ -115,7 +115,13 @@ const MapScreen = ({navigation, ...props}) => {
           }}>
           <GlobalText
             style={{fontWeight: 'bold'}}
-            text={offline ? t('NO_INTERNET_MAP') : !props.isLoading ? t('NO_DATA') : ""}
+            text={
+              offline
+                ? t('NO_INTERNET_MAP')
+                : !props.isLoading
+                ? t('NO_DATA')
+                : ''
+            }
           />
         </View>
       ) : (
