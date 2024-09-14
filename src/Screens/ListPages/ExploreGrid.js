@@ -164,8 +164,9 @@ const ExploreGrid = ({route, navigation, ...props}) => {
     return (
       <TouchableOpacity
         onPress={() => openImageViewer(item)}
+        style={styles.imageGridBoxContainer} // Ensure touchable covers full area
         activeOpacity={0.7}>
-        <View style={styles.imageGridBoxContainer}>
+        <View>
           <ProgressImage
             source={{uri: imageUri}}
             style={styles.imageGridBox}
@@ -183,7 +184,7 @@ const ExploreGrid = ({route, navigation, ...props}) => {
       </TouchableOpacity>
     );
   };
-
+  
   const renderFooter = () => {
     if (loading && gallery.length) {
       return (
@@ -231,22 +232,22 @@ const ExploreGrid = ({route, navigation, ...props}) => {
           />
         ) : (
           <View
-            style={{
-              height: screenHeight,
-              alignItems: 'center',
-              padding: 50,
-            }}>
+          style={{
+            height: screenHeight,
+            justifyContent: 'center', // Vertically center content
+            alignItems: 'center', // Horizontally center content
+            padding: 10,
+          }}>
+          {offline ? (
             <GlobalText
               style={{fontWeight: 'bold'}}
-              text={
-                offline
-                  ? t('NO_INTERNET')
-                  : !props.isLoading
-                  ? t('NO_DATA')
-                  : ''
-              }
+              text={t('NO_INTERNET')}
             />
-          </View>
+          ) : (
+            <ExploreGridSkeleton />
+          )}
+        </View>
+        
         )}
         {selectedImage && (
           <ImageViewing

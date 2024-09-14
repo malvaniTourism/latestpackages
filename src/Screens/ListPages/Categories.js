@@ -63,10 +63,13 @@ const Categories = ({route, navigation, ...props}) => {
         getCategories(),
         props.mode,
       ).then(resp => {
-        if (resp) {
-          setCategories(cats);
-          setSelectedCategory(cats[0].name);
-          setSelectedSubCategory(cats[0].sub_categories);
+        if (!props.mode) {
+          let resp = JSON.parse(resp);
+        }
+            if (resp) {          
+          setCategories(resp);
+          setSelectedCategory(resp[0].name);
+          setSelectedSubCategory(resp[0].sub_categories);
         } else if (resp) {
           setOffline(true);
         }
