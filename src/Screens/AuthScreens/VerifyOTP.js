@@ -28,7 +28,7 @@ import {
   useBlurOnFulfill,
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
-import {navigateTo} from '../../Services/CommonMethods';
+import {backPage, navigateTo} from '../../Services/CommonMethods';
 import GlobalText from '../../Components/Customs/Text';
 import Popup from '../../Components/Common/Popup';
 import {useTranslation} from 'react-i18next';
@@ -46,12 +46,18 @@ const VerifyOTP = ({navigation, route, ...props}) => {
   const ref = useRef(null);
 
   useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      t('EVENT.HARDWARE_BACK_PRESS'),
-      () => navigateTo(navigation, t('SCREEN.EMAIL')),
-    );
+    // const backHandler = BackHandler.addEventListener(
+    //   'hardwareBackPress', // This should be the event name
+    //   () => {
+    //     backPage(navigation);
+    //     return true; // This is important to prevent the default back action
+    //   },
+    // );
+  
     return () => {
-      backHandler.remove();
+      // if (backHandler && typeof backHandler.remove === 'function') {
+      //   backHandler.remove(); // Check if remove is a function before calling it
+      // }
       setIsAlert(false);
       setAlertMessage('');
     };
@@ -82,7 +88,7 @@ const VerifyOTP = ({navigation, route, ...props}) => {
             t('STORAGE.USER_ID'),
             JSON.stringify(res.data.data.user.id),
           );
-          props.saveAccess_token(res.data.data.access_token);
+          // props.saveAccess_token(res.data.data.access_token);
           props.setLoader(false);
           AsyncStorage.setItem(
             t('STORAGE.IS_FIRST_TIME'),
@@ -90,12 +96,13 @@ const VerifyOTP = ({navigation, route, ...props}) => {
           );
           saveToStorage(t('STORAGE.MODE'), JSON.stringify(true));
           props.setMode(true);
-          navigation.dispatch(
-            CommonActions.reset({
-              index: 0,
-              routes: [{name: t('SCREEN.HOME')}],
-            }),
-          );
+          navigateTo(navigation, t('SCREEN.HOME'))
+          // navigation.dispatch(
+          //   CommonActions.reset({
+          //     index: 0,
+          //     routes: [{name: t('SCREEN.HOME')}],
+          //   }),
+          // );
         } else {
           setIsAlert(true);
           setAlertMessage(res.data.message?.otp || res.data.message);

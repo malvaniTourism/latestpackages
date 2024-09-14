@@ -277,9 +277,9 @@ const HomeScreen = ({navigation, route, ...props}) => {
   };
 
   const saveToken = async () => {
-    props.saveAccess_token(
-      await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN')),
-    );
+    // props.saveAccess_token(
+    //   await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN')),
+    // );
     if (
       (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == null ||
       (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == ''

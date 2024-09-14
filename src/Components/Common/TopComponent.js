@@ -36,7 +36,7 @@ const TopComponent = ({
   useEffect(async () => {
     let mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
     setIsOnline(mode);
-    props.setMode(mode);
+    // props.setMode(mode);
   }, []);
 
   const openDrawer = () => {
@@ -59,7 +59,7 @@ const TopComponent = ({
   const changeMode = () => {
     saveToStorage(t('STORAGE.MODE'), JSON.stringify(!isOnline));
     setIsOnline(!isOnline);
-    props.setMode(!isOnline);
+    // props.setMode(!isOnline);
   };
 
   // const openMobileDataSettings = () => {
@@ -100,17 +100,17 @@ const TopComponent = ({
         </View>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <GlobalText
-            text={props.mode ? t('BUTTON.ONLINE') : t('BUTTON.OFFLINE')}
+            text={isOnline ? t('BUTTON.ONLINE') : t('BUTTON.OFFLINE')}
             style={{fontSize: DIMENSIONS.textSizeSmall}}
           />
           <Switch
-            thumbColor={props.mode ? COLOR.green : COLOR.red}
+            thumbColor={isOnline ? COLOR.green : COLOR.red}
             trackColor={{
               false: COLOR.lightRed,
               true: COLOR.lightGreen,
             }}
             onChange={() => changeMode()}
-            value={props.mode}
+            value={isOnline}
           />
         </View>
         <TouchableOpacity
@@ -144,22 +144,22 @@ const TopComponent = ({
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    access_token: state.commonState.access_token,
-    mode: state.commonState.mode,
-  };
-};
+// const mapStateToProps = state => {
+//   return {
+//     access_token: state.commonState.access_token,
+//     mode: state.commonState.mode,
+//   };
+// };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    setLoader: data => {
-      dispatch(setLoader(data));
-    },
-    setMode: data => {
-      dispatch(setMode(data));
-    },
-  };
-};
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     setLoader: data => {
+//       dispatch(setLoader(data));
+//     },
+//     setMode: data => {
+//       dispatch(setMode(data));
+//     },
+//   };
+// };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TopComponent);
+export default TopComponent;
