@@ -66,7 +66,7 @@ const Categories = ({route, navigation, ...props}) => {
         if (!props.mode) {
           let resp = JSON.parse(resp);
         }
-            if (resp) {          
+        if (resp) {
           setCategories(resp);
           setSelectedCategory(resp[0].name);
           setSelectedSubCategory(resp[0].sub_categories);
@@ -96,7 +96,7 @@ const Categories = ({route, navigation, ...props}) => {
   const getCategories = async () => {
     setIsLoading(true);
     let cat = await getFromStorage(t('STORAGE.CATEGORIES_RESPONSE'));
-    let cats = JSON.parse(cat);    
+    let cats = JSON.parse(cat);
     setCategories(cats);
     setSelectedCategory(cats[0].name);
     setSelectedSubCategory(cats[0].sub_categories);

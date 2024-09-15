@@ -154,39 +154,43 @@ const HomeScreen = ({navigation, route, ...props}) => {
     saveToken();
     // SplashScreen.hideAsync();
     const unsubscribe = NetInfo.addEventListener(async state => {
+      setIsLoading(true);
+
       setOffline(!state.isConnected);
       let mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
 
-      dataSync(t('STORAGE.LANDING_RESPONSE'), callLandingPageAPI, mode).then(resp => {
-        try {
-          if (resp) {
-            // Attempt to parse only if `resp` is a valid string or object
-            let res = JSON.parse(resp);
-            if (res) {
-              setCities(res.cities);
-              setRoutes(res.routes);
-              setBannerObject(res.banners);
+      dataSync(t('STORAGE.LANDING_RESPONSE'), callLandingPageAPI, mode).then(
+        resp => {
+          try {
+            if (resp) {
+              // Attempt to parse only if `resp` is a valid string or object
+              let res = JSON.parse(resp);
+              if (res) {
+                setCities(res.cities);
+                setRoutes(res.routes);
+                setBannerObject(res.banners);
+                setIsFetching(false);
+                // setIsLoading(false);
+                // setCategories(res.categories);
+                // setProjects(res.projects);
+                // setStops(res.stops);
+                // setPlace_category(res.place_category);
+                // setPlaces(res.places);
+              }
+            } else {
+              setOffline(true);
               setIsFetching(false);
-            setIsLoading(false);
-  // setCategories(res.categories);
-            // setProjects(res.projects);
-            // setStops(res.stops);
-            // setPlace_category(res.place_category);
-            // setPlaces(res.places);
+              setIsLoading(false);
             }
-          } else {
-            setOffline(true);
+          } catch (error) {
+            console.error('Error parsing response:', error);
             setIsFetching(false);
             setIsLoading(false);
+            setOffline(true);
           }
-        } catch (error) {
-          console.error('Error parsing response:', error);
-          setIsFetching(false);
-          setIsLoading(false);
-          setOffline(true);
-        }
-        props.setLoader(false);
-      });      
+          props.setLoader(false);
+        },
+      );
       // removeFromStorage(t("STORAGE.LANDING_RESPONSE"))
     });
 
@@ -206,8 +210,8 @@ const HomeScreen = ({navigation, route, ...props}) => {
       callLandingPageAPI();
     } else {
       setShowOnlineMode(true);
-      setRefreshing(false);
     }
+    setRefreshing(false);
   };
 
   useFocusEffect(
@@ -365,19 +369,15 @@ const HomeScreen = ({navigation, route, ...props}) => {
 
   return (
     <>
-      {isLoading ? (
-        <TopComponentSkeleton />
-      ) : (
-        <TopComponent
-          cities={[sindhudurg, ...cities]}
-          currentCity={currentCity}
-          setCurrentCity={v => onCitySelect(v)}
-          navigation={navigation}
-          openLocationSheet={() => openLocationSheet()}
-          gotoProfile={() => openProfile()}
-          profilePhoto={profilePhoto}
-        />
-      )}
+      <TopComponent
+        cities={[sindhudurg, ...cities]}
+        currentCity={currentCity}
+        setCurrentCity={v => onCitySelect(v)}
+        navigation={navigation}
+        openLocationSheet={() => openLocationSheet()}
+        gotoProfile={() => openProfile()}
+        profilePhoto={profilePhoto}
+      />
       <KeyboardAwareScrollView
         extraHeight={DIMENSIONS.halfHeight}
         enableOnAndroid={true}
@@ -390,7 +390,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
         {/* <MyAnimatedLoader isVisible={isLoading} /> */}
         {!isLoading && <Loader />}
         <View style={{flex: 1, alignItems: 'center'}}>
-          {isLoading ? (
+          {isLoading || routes.length === 0 ? (
             <BannerSkeleton />
           ) : bannerObject[0] ? (
             <Banner bannerImages={bannerObject} />
@@ -411,7 +411,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
             style={{marginTop: 25, zIndex: 10}}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             keyboardVerticalOffset={keyboardOffset}>
-            {isLoading ? (
+            {isLoading || routes.length === 0 ? (
               <SearchPanelSkeleton />
             ) : (
               <SearchPanel
@@ -423,7 +423,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
           </KeyboardAvoidingView>
           <View style={styles.headerContainer}>
             <View>
-              {isLoading ? (
+              {isLoading || routes.length === 0 ? (
                 <View style={styles.flexAroundSkeleton}>
                   <Skeleton
                     animation="pulse"

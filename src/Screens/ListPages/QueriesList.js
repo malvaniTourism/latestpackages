@@ -54,13 +54,35 @@ const QueriesList = ({navigation, route, ...props}) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    let backHandler = BackHandler.addEventListener(
+    const backHandler = BackHandler.addEventListener(
       STRING.EVENT.HARDWARE_BACK_PRESS,
       () => goBackStep(),
     );
+
     checkLogin(navigation);
     props.setLoader(true);
     setData([]);
+
+    // Function to check if data exists in storage and fetch if not
+    const checkStoredData = async () => {
+      try {
+        const storedData = await dataSync(
+          t('STORAGE.QUERIES'),
+          null,
+          props.mode,
+        );
+        if (storedData) {
+          setData(JSON.parse(storedData));
+          props.setLoader(false);
+        } else {
+          // Data is not in storage, fetch it from the API
+          fetchData(1, true);
+        }
+      } catch (error) {
+        console.error('Error checking stored data:', error);
+        fetchData(1, true);
+      }
+    };
 
     const fetchDataAsync = async () => {
       if (props.access_token) {
@@ -68,21 +90,16 @@ const QueriesList = ({navigation, route, ...props}) => {
       }
     };
 
-    fetchDataAsync();
+    // Check stored data and then fetch if needed
+    checkStoredData();
 
     const unsubscribe = NetInfo.addEventListener(state => {
       setOffline(!state.isConnected);
       if (state.isConnected) {
-        dataSync(t('STORAGE.QUERIES'), fetchData(1, true), props.mode).then(
-          resp => {
-            if (resp) {
-              let res = JSON.parse(resp);
-              setData(res);
-            }
-          },
-        );
+        checkStoredData(); // Recheck storage and possibly fetch data
+      } else {
+        props.setLoader(false);
       }
-      props.setLoader(false);
     });
 
     return () => {

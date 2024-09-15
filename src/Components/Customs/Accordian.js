@@ -33,12 +33,12 @@ const Accordion = ({data, navigation}) => {
         <Image
           source={
             item.icon && typeof item.icon === 'string' && item.icon !== '0'
-              ? { uri: item.icon }
+              ? {uri: item.icon}
               : require('../../Assets/Icons/1-PNG.png') // Fallback image
           }
           style={styles.catCardIcon}
-        />       
- <GlobalText style={styles.accordHeaderText} text={item.name} />
+        />
+        <GlobalText style={styles.accordHeaderText} text={item.name} />
         <Ionicons
           name="chevron-down"
           color={COLOR.black}

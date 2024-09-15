@@ -53,7 +53,7 @@ const VerifyOTP = ({navigation, route, ...props}) => {
     //     return true; // This is important to prevent the default back action
     //   },
     // );
-  
+
     return () => {
       // if (backHandler && typeof backHandler.remove === 'function') {
       //   backHandler.remove(); // Check if remove is a function before calling it
@@ -96,7 +96,7 @@ const VerifyOTP = ({navigation, route, ...props}) => {
           );
           saveToStorage(t('STORAGE.MODE'), JSON.stringify(true));
           props.setMode(true);
-          navigateTo(navigation, t('SCREEN.HOME'))
+          navigateTo(navigation, t('SCREEN.HOME'));
           // navigation.dispatch(
           //   CommonActions.reset({
           //     index: 0,

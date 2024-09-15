@@ -78,7 +78,7 @@ export const comnDel = async (url, data, navigation) => {
   };
   console.log(myUrl);
   try {
-    const res = await axios.delete(myUrl, { data, ...config });
+    const res = await axios.delete(myUrl, {data, ...config});
     return res;
   } catch (err) {
     if (err.response?.status == 401) {
@@ -138,7 +138,14 @@ export const removeFromStorage = async name => {
 };
 
 export const dataSync = async (name, callBack, online) => {
-  console.log(' = = = ', (await isOffline()) || !online, '  ', await isOffline(), '  ', !online);
+  console.log(
+    ' = = = ',
+    (await isOffline()) || !online,
+    '  ',
+    await isOffline(),
+    '  ',
+    !online,
+  );
 
   if ((await isOffline()) || !online) {
     console.log('name, ', name);

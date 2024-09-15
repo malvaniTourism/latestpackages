@@ -140,8 +140,7 @@ const STRING = {
     WENT_WRONG: 'Something went wrong...',
     OTP_SENT: 'OTP is sent on your email, verify otp to register!',
     REGI_SUCCESS: 'Registration Successful, now login to continue...',
-    SOURCE_DESTINATION_REQUIRED:
-      'Source & Destination are required for a Search',
+    SOURCE_DESTINATION_REQUIRED: 'Source & Destination are required..!',
     ADDING_SOON: 'We are adding new places inside this category soon..!',
     LOADING: 'Loading...',
     ERROR_CURRENT_LOCATION: 'Error getting current location: ',

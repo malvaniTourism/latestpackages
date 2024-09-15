@@ -16,6 +16,7 @@ import GlobalText from '../Customs/Text';
 import SearchDropdown from './SearchDropdown';
 import {useTranslation} from 'react-i18next';
 import STRING from '../../Services/Constants/STRINGS';
+import Popup from './Popup';
 
 const SearchPanel = ({navigation, from, onSwap, ...props}) => {
   const {t} = useTranslation();
@@ -28,6 +29,8 @@ const SearchPanel = ({navigation, from, onSwap, ...props}) => {
   const [fieldType, setFieldType] = useState('');
   const [source, setSource] = useState({});
   const [destination, setDestination] = useState({});
+  const [isAlert, setIsAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
   useEffect(() => {
     // setSource(props.source?.name || "");
@@ -72,7 +75,11 @@ const SearchPanel = ({navigation, from, onSwap, ...props}) => {
         source,
         destination,
       });
-    } else setErrorText(t('ALERT.SOURCE_DESTINATION_REQUIRED'));
+    } else {
+      setIsAlert(true);
+      setAlertMessage(t('ALERT.SOURCE_DESTINATION_REQUIRED'));
+      return;
+    }
     setSource({});
     setDestination({});
   };
@@ -166,6 +173,10 @@ const SearchPanel = ({navigation, from, onSwap, ...props}) => {
     }
   };
 
+  const closePopup = () => {
+    setIsAlert(false);
+  };
+
   return (
     <KeyboardAvoidingView
       enabled
@@ -221,9 +232,8 @@ const SearchPanel = ({navigation, from, onSwap, ...props}) => {
         </View>
       </View>
 
-      <View style={{minHeight: 20}}>
-        {!isValid && <GlobalText text={errorText} style={styles.errorText} />}
-      </View>
+      <Popup message={alertMessage} onPress={closePopup} visible={isAlert} />
+
       <TextButton
         title={t('BUTTON.SEARCH')}
         buttonView={styles.searchButtonStyle}

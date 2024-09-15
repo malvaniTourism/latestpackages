@@ -17,7 +17,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import TextButton from './src/Components/Customs/Buttons/TextButton';
 import Feather from 'react-native-vector-icons/Feather';
 import styles from './src/Screens/Styles';
-import analytics from "@react-native-firebase/analytics";
+import analytics from '@react-native-firebase/analytics';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import './src/localization/i18n';
 import firebase from '@react-native-firebase/app';
@@ -25,7 +25,6 @@ import firebase from '@react-native-firebase/app';
 // LogBox.ignoreAllLogs();
 // LogBox.ignoreLogs(['Warning: ...', 'Possible Unhandled Promise Rejection']);
 const Stack = createNativeStackNavigator();
-
 
 // Initialize Firebase
 if (!firebase.apps.length) {
@@ -40,7 +39,7 @@ export default function App() {
   const [isFirstTime, setIsFirstTime] = useState(null); // Set initial state to null
   const [loading, setLoading] = useState(true); // Add loading state
 
-  const doSomething = async() =>{
+  const doSomething = async () => {
     try {
       const isFirstTimeValue = await AsyncStorage.getItem(
         STRING.STORAGE.IS_FIRST_TIME,
@@ -51,10 +50,10 @@ export default function App() {
       console.error('Error fetching isFirstTime value:', error);
       setLoading(false);
     }
-    }
-    useEffect(() =>{
-      doSomething();
-     },[])
+  };
+  useEffect(() => {
+    doSomething();
+  }, []);
 
   const slides = [
     {
@@ -150,13 +149,13 @@ export default function App() {
         // renderNextButton={_renderNextButton}
         activeDotColor={COLOR.themeBlue}
         dotStyle={{
-          width: 10,  // Increase the width of the inactive dots
+          width: 10, // Increase the width of the inactive dots
           height: 10, // Increase the height of the inactive dots
           borderRadius: 7.5, // Make them circular
           backgroundColor: '#C0C0C0', // Inactive dot color
         }}
         activeDotStyle={{
-          width: 15,  // Increase the width of the active dot
+          width: 15, // Increase the width of the active dot
           height: 15, // Increase the height of the active dot
           borderRadius: 10, // Make it circular
           backgroundColor: COLOR.themeBlue, // Active dot color

@@ -184,7 +184,7 @@ const ExploreGrid = ({route, navigation, ...props}) => {
       </TouchableOpacity>
     );
   };
-  
+
   const renderFooter = () => {
     if (loading && gallery.length) {
       return (
@@ -232,22 +232,21 @@ const ExploreGrid = ({route, navigation, ...props}) => {
           />
         ) : (
           <View
-          style={{
-            height: screenHeight,
-            justifyContent: 'center', // Vertically center content
-            alignItems: 'center', // Horizontally center content
-            padding: 10,
-          }}>
-          {offline ? (
-            <GlobalText
-              style={{fontWeight: 'bold'}}
-              text={t('NO_INTERNET')}
-            />
-          ) : (
-            <ExploreGridSkeleton />
-          )}
-        </View>
-        
+            style={{
+              height: screenHeight,
+              justifyContent: 'center', // Vertically center content
+              alignItems: 'center', // Horizontally center content
+              padding: 10,
+            }}>
+            {offline ? (
+              <GlobalText
+                style={{fontWeight: 'bold'}}
+                text={t('NO_INTERNET')}
+              />
+            ) : (
+              <ExploreGridSkeleton />
+            )}
+          </View>
         )}
         {selectedImage && (
           <ImageViewing

@@ -48,23 +48,38 @@ const Emergency = ({navigation, route, ...props}) => {
     const backHandler = goBackHandler(navigation);
     checkLogin(navigation);
     props.setLoader(true);
-    setData([]);
+
+    // Function to check if data exists in storage
+    const checkStoredData = async () => {
+      try {
+        const storedData = await dataSync(
+          t('STORAGE.EMERGENCY'),
+          null,
+          props.mode,
+        );
+        if (storedData) {
+          setData(JSON.parse(storedData));
+          props.setLoader(false);
+        } else {
+          fetchData(1, true);
+        }
+      } catch (error) {
+        console.error('Error checking stored data:', error);
+        fetchData(1, true);
+      }
+    };
 
     if (props.access_token) {
-      fetchData(1, true);
+      checkStoredData();
     }
 
     const unsubscribe = NetInfo.addEventListener(state => {
       setOffline(!state.isConnected);
-      dataSync(t('STORAGE.EMERGENCY'), fetchData(1, true), props.mode).then(
-        resp => {
-          if (resp) {
-            let res = JSON.parse(resp);
-            setData(res);
-          }
-        },
-      );
-      props.setLoader(false);
+      if (state.isConnected) {
+        checkStoredData();
+      } else {
+        props.setLoader(false);
+      }
     });
 
     return () => {
@@ -87,7 +102,6 @@ const Emergency = ({navigation, route, ...props}) => {
 
   const fetchData = (page, reset = false) => {
     if (props.mode) {
-      props.setLoader(true);
       if (loading || !hasMore) {
         setRefreshing(false);
         return;
@@ -128,7 +142,7 @@ const Emergency = ({navigation, route, ...props}) => {
             props.setLoader(false);
           }
         });
-    }
+    } else props.setLoader(false);
   };
 
   const loadMoreData = () => {
