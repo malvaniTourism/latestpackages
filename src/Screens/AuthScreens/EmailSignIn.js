@@ -11,9 +11,17 @@ import TextField from '../../Components/Customs/TextField';
 import {SignInFields} from '../../Services/Constants/FIELDS';
 import TextButton from '../../Components/Customs/Buttons/TextButton';
 import styles from './Styles';
-import {comnPost} from '../../Services/Api/CommonServices';
+import {
+  comnPost,
+  saveToStorage,
+  getFromStorage,
+} from '../../Services/Api/CommonServices';
 import {connect} from 'react-redux';
-import {saveAccess_token, setLoader} from '../../Reducers/CommonActions';
+import {
+  saveAccess_token,
+  setLoader,
+  setMode,
+} from '../../Reducers/CommonActions';
 import Loader from '../../Components/Customs/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import COLOR from '../../Services/Constants/COLORS';
@@ -235,8 +243,6 @@ const EmailSignIn = ({navigation, route, ...props}) => {
     comnPost('v2/auth/login', data)
       .then(res => {
         if (res.data.success) {
-          // setIsAlert(true);
-          // setAlertMessage(res.data.message);
           AsyncStorage.setItem(
             t('STORAGE.ACCESS_TOKEN'),
             res.data.data.access_token,
@@ -245,19 +251,21 @@ const EmailSignIn = ({navigation, route, ...props}) => {
             t('STORAGE.USER_ID'),
             JSON.stringify(res.data.data.user.id),
           );
-          props.saveAccess_token(res.data.data.access_token);
+          // props.saveAccess_token(res.data.data.access_token);
           props.setLoader(false);
-          // setIsSuccess(true)
           AsyncStorage.setItem(
             t('STORAGE.IS_FIRST_TIME'),
             JSON.stringify(true),
           );
-          navigation.dispatch(
-            CommonActions.reset({
-              index: 0,
-              routes: [{name: t('SCREEN.HOME')}],
-            }),
-          );
+          saveToStorage(t('STORAGE.MODE'), JSON.stringify(true));
+          props.setMode(true);
+          navigateTo(navigation, t('SCREEN.HOME'));
+          // navigation.dispatch(
+          //   CommonActions.reset({
+          //     index: 0,
+          //     routes: [{name: t('SCREEN.HOME')}],
+          //   }),
+          // );
         } else {
           setIsAlert(true);
           setAlertMessage(
@@ -268,12 +276,12 @@ const EmailSignIn = ({navigation, route, ...props}) => {
               : res.data.message,
           );
           props.setLoader(false);
-          setIsSuccess(false);
+          // setIsSuccess(false);
         }
       })
       .catch(err => {
         setIsAlert(true);
-        setIsSuccess(false);
+        // setIsSuccess(false);
         setAlertMessage(t('ALERT.WENT_WRONG'));
         props.setLoader(false);
       });
@@ -369,17 +377,15 @@ const EmailSignIn = ({navigation, route, ...props}) => {
 const mapStateToProps = state => {
   return {
     access_token: state.commonState.access_token,
+    loader: state.commonState.loader,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    saveAccess_token: data => {
-      dispatch(saveAccess_token(data));
-    },
-    setLoader: data => {
-      dispatch(setLoader(data));
-    },
+    saveAccess_token: data => dispatch(saveAccess_token(data)),
+    setLoader: data => dispatch(setLoader(data)),
+    setMode: data => dispatch(setMode(data)),
   };
 };
 

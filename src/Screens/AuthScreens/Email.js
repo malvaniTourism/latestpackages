@@ -241,12 +241,14 @@ const Email = ({navigation, route, ...props}) => {
             />
           );
         })}
-        <TouchableOpacity onPress={() => loginWithPassScreen()}>
+
+        {/* login with passowrd commented for the time need to fix functionality as soon as possible */}
+        {/* <TouchableOpacity onPress={() => loginWithPassScreen()}>
           <GlobalText
             text={t('BUTTON.LOGIN_WITH_PASSWORD')}
             style={styles.loginSubText}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <View style={{alignItems: 'center'}}>
           <TextButton
             title={t('BUTTON.GENERATE_OTP')}

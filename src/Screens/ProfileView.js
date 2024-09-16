@@ -6,6 +6,7 @@ import {
   Platform,
   RefreshControl,
   Share,
+  Alert,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import Header from '../Components/Common/Header';
@@ -16,6 +17,7 @@ import {
   comnPost,
   dataSync,
   saveToStorage,
+  getFromStorage,
 } from '../Services/Api/CommonServices';
 import {connect} from 'react-redux';
 import Loader from '../Components/Customs/Loader';
@@ -237,20 +239,39 @@ const ProfileView = ({navigation, route, ...props}) => {
     }
   };
 
-  const handleLogout = () => {
-    props.setLoader(true);
-    comnPost('v2/logout')
-      .then(res => {
-        if (res.data.success) {
-          props.setLoader(false);
-          setIsAlert(false);
-          AsyncStorage.clear();
-          navigateTo(navigation, t('SCREEN.LANG_SELECTION'));
-        }
-      })
-      .catch(error => {
-        props.setLoader(false);
-      });
+  const handleLogout = async () => {
+    try {
+      props.setLoader(true);
+
+      const res = await comnPost('v2/logout');
+
+      if (res.data.success) {
+        await AsyncStorage.clear();
+        setIsAlert(false);
+        // loggedOut(t('SCREEN.LANG_SELECTION'));
+        // Show a thank you message
+        Alert.alert(
+          'Thank You',
+          'Thank you for using the Tourkokan...!  Please visit again...',
+          [
+            {
+              text: 'OK',
+              onPress: () => {
+                // Proceed to exit the app after the user acknowledges the message
+                BackHandler.exitApp();
+              },
+            },
+          ],
+          {cancelable: false},
+        );
+      } else {
+        console.error('Logout failed:', res.data.message); // Log API response message
+      }
+    } catch (error) {
+      console.error('Logout error:', error); // Log any errors
+    } finally {
+      props.setLoader(false); // Ensure loader is stopped regardless of success or failure
+    }
   };
 
   const referralClick = async () => {

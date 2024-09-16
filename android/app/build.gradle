@@ -82,8 +82,8 @@ android {
         applicationId "com.tourkokan"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 19
-        versionName "2.0.0"
+        versionCode 22
+        versionName "1.0.0"
     }
     signingConfigs {
         debug {
@@ -93,7 +93,7 @@ android {
             keyPassword 'android'
         }
         release {
-            storeFile file('/Users/balkrushnawalke/Documents/malvani/react_native/More_Latest/tourkokan/tourkokan-release.keystore')
+            storeFile file('/var/www/html/latestpackages/android/app/keystore/tourkokan-release.keystore')
             storePassword 'tourkokan'
             keyAlias 'my-key-alias'
             keyPassword 'tourkokan'
@@ -109,6 +109,7 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             minifyEnabled true // Ensures ProGuard/R8 is used
+            shrinkResources true // Enable resource shrinking
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }

@@ -131,7 +131,7 @@ export const ProfileFields = [
     type: STRING.TYPE.TEXT,
     length: DIMENSIONS.fieldLength,
     required: true,
-    disabled: false,
+    disabled: true,
     leftIcon: STRING.ICON.EMAIL,
   },
   {
