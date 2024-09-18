@@ -115,6 +115,8 @@ const STRING = {
     EMERGENCY: 'Emergency',
     QUERIES: 'Queries',
     GALLERY: 'Gallery',
+    SELECTED_CITY_ID: 'selectedCityId',
+    SELECTED_CITY_NAME: 'selectedCityName'
   },
   HEADER: {
     BUS_TIMINGS: 'Bus Timings',

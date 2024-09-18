@@ -63,9 +63,9 @@ const Categories = ({route, navigation, ...props}) => {
         getCategories(),
         props.mode,
       ).then(resp => {
-        if (!props.mode) {
-          let resp = JSON.parse(resp);
-        }
+        // if (!props.mode) {
+        //   let resp = JSON.parse(resp);
+        // }
         if (resp) {
           setCategories(resp);
           setSelectedCategory(resp[0].name);

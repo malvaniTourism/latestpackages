@@ -130,79 +130,113 @@ const HomeScreen = ({navigation, route, ...props}) => {
   //     props.setMode(mode)
   // }
 
-  useEffect(() => {
-    // setAppMode();
-    setIsLoading(true);
-    setSindh({
-      id: 0,
-      name: t('CITY.SINDHUDURG'),
-    });
-    setCurrentCity(t('CITY.SINDHUDURG'));
-    props.setLoader(true);
-    AsyncStorage.setItem('isUpdated', 'false');
-    const backHandler = BackHandler.addEventListener(
-      t('EVENT.HARDWARE_BACK_PRESS'),
-      () => exitApp(),
-    );
-    if (props.access_token) {
+  const getSelectedCity = async () => {
+    try {
+      // Retrieve and parse the selected city ID and city name from storage
+      const selectedCityId = JSON.parse(await getFromStorage(t('STORAGE.SELECTED_CITY_ID')));
+      const selectedCityName = JSON.parse(await getFromStorage(t('STORAGE.SELECTED_CITY_NAME')));
+      
+      // If both city ID and name are present, return them as an object
+      if (selectedCityId && selectedCityName) {
+        return { id: selectedCityId, name: selectedCityName };
+      }
+    
+      return null;
+    
+    } catch (error) {
+      return null;
+    }
+  };
+  
+
+  useEffect(() => { 
+    let isMounted = true; // flag to track if the component is mounted
+    
+    const init = async () => {
+      setIsLoading(true);
+      const selectedCity = await getSelectedCity();
+        if (selectedCity) {
+          setSindh({
+            id: 0,
+            name: t('CITY.SINDHUDURG'),
+          });
+          setCurrentCity(selectedCity.name);
+        } else {
+          setSindh({
+            id: 0,
+            name: t('CITY.SINDHUDURG'),
+          });
+          setCurrentCity(t('CITY.SINDHUDURG'));
+        }
+      
+      props.setLoader(true);
+      await AsyncStorage.setItem('isUpdated', 'false'); // Ensure await here
+      saveToken(); // Ensure saveToken is a promise or add await if it's async
+  
+      // Only call landing page API once if data isn't fetched
       if (!isLandingDataFetched && props.access_token) {
-        // callLandingPageAPI();
+        // await callLandingPageAPI();
         setIsLandingDataFetched(true);
       }
-    }
-    // LogBox.ignoreAllLogs();
-    saveToken();
-    // SplashScreen.hideAsync();
-    const unsubscribe = NetInfo.addEventListener(async state => {
-      setIsLoading(true);
+  
+      // Subscribe to back button and network info changes
+      const backHandler = BackHandler.addEventListener(
+        t('EVENT.HARDWARE_BACK_PRESS'),
+        exitApp,
+      );
+  
+      const unsubscribe = NetInfo.addEventListener(async state => {
+        if (!isMounted) return; // Prevents updating state after component unmount
+  
+        setOffline(!state.isConnected);
+        // Avoid setting loading on every network change unless needed
+        if (!state.isConnected) {
+          setIsLoading(false); // No loading if offline
+          return;
+        }
 
-      setOffline(!state.isConnected);
-      let mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
-
-      dataSync(t('STORAGE.LANDING_RESPONSE'), callLandingPageAPI, mode).then(
-        resp => {
-          try {
-            if (resp) {
-              // Attempt to parse only if `resp` is a valid string or object
-              let res = JSON.parse(resp);
-              if (res) {
-                setCities(res.cities);
-                setRoutes(res.routes);
-                setBannerObject(res.banners);
+        const mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
+  
+        dataSync(t('STORAGE.LANDING_RESPONSE'), callLandingPageAPI, mode).then(
+          resp => {
+            try {
+              if (resp) {
+                const res = JSON.parse(resp);
+                if (res) {
+                  setCities(res.cities);
+                  setRoutes(res.routes);
+                  setBannerObject(res.banners);
+                  setIsFetching(false);
+                  setIsLoading(false);
+                  props.setLoader(false);
+                }
+              } else {
+                setOffline(true);
                 setIsFetching(false);
-                // setIsLoading(false);
-                // setCategories(res.categories);
-                // setProjects(res.projects);
-                // setStops(res.stops);
-                // setPlace_category(res.place_category);
-                // setPlaces(res.places);
+                setIsLoading(false);
               }
-            } else {
-              setOffline(true);
+            } catch (error) {
+              console.error('Error parsing response:', error);
               setIsFetching(false);
               setIsLoading(false);
+              setOffline(true);
             }
-          } catch (error) {
-            console.error('Error parsing response:', error);
-            setIsFetching(false);
-            setIsLoading(false);
-            setOffline(true);
-          }
-          props.setLoader(false);
-        },
-      );
-      // removeFromStorage(t("STORAGE.LANDING_RESPONSE"))
-    });
-
-    return () => {
-      backHandler.remove();
-      // AsyncStorage.setItem(
-      //     t("STORAGE.IS_FIRST_TIME"),
-      //     JSON.stringify(false)
-      // );
-      unsubscribe();
+            props.setLoader(false);
+          },
+        );
+      });
+  
+      return () => {
+        // Clean up listeners and async operations
+        backHandler.remove();
+        unsubscribe();
+        isMounted = false; // Unmount flag
+      };
     };
-  }, [props.access_token]);
+  
+    init();
+  
+  }, [props.access_token]);  
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -231,54 +265,64 @@ const HomeScreen = ({navigation, route, ...props}) => {
     }, [props.mode, isInitialLoad]), // Dependencies include props.mode and isInitialLoad
   );
 
-  const callLandingPageAPI = async site_id => {
-    let isFirstTime = await AsyncStorage.getItem(t('STORAGE.IS_FIRST_TIME'));
-    let mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
-    if (mode) {
-      let data = {
-        site_id,
-      };
-      props.setLoader(true);
-      comnPost('v2/landingpage', data, navigation)
-        .then(res => {
-          if (res && res.data.data) {
-            setOfflineData(res.data.data);
-            i18n.changeLanguage(res.data.language);
-            setCities(res.data.data.cities);
-            setRoutes(res.data.data.routes);
-            setBannerObject(res.data.data.banners);
-            setIsFetching(false);
-            setIsLoading(false);
-            props.setLoader(false);
-            setRefreshing(false);
-            if (t('APP_VERSION') < res.data.data.version.version_number) {
-              setUpdateApp(true);
-            }
-            // setCategories(res.data.data.categories);
-            // setProjects(res.data.data.projects);
-            // setStops(res.data.data.stops);
-            // setPlace_category(res.data.data.place_category);
-            // setPlaces(res.data.data.places);
-          }
-          if (isFirstTime == 'true') {
-            // refRBSheet.current.open()
-            setModePopup(true);
-            AsyncStorage.setItem(
-              t('STORAGE.IS_FIRST_TIME'),
-              JSON.stringify(false),
-            );
-          }
-        })
-        .catch(error => {
+  const callLandingPageAPI = async site_id => {  
+    try {
+      let isFirstTime = await AsyncStorage.getItem(t('STORAGE.IS_FIRST_TIME'));
+      let mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
+  
+      if (mode) {
+        const selectedCity = await getSelectedCity();
+        let data;
+        if (selectedCity) {
+          data = {
+            site_id: selectedCity.id, // Use the selected city ID as site_id
+          };
+        } else {
+          data = {
+            site_id,  // Fallback to default site_id
+          };
+        }
+        props.setLoader(true);
+
+        const res = await comnPost('v2/landingpage', data, navigation);
+
+        if (res && res.data.data) {
+          setOfflineData(res.data.data);
+          i18n.changeLanguage(res.data.language);
+          setCities(res.data.data.cities);
+          setRoutes(res.data.data.routes);
+          setBannerObject(res.data.data.banners);
           setIsFetching(false);
           setIsLoading(false);
           props.setLoader(false);
           setRefreshing(false);
-          setError(error.message);
-        });
-      AsyncStorage.setItem('isUpdated', 'false');
+  
+          if (t('APP_VERSION') < res.data.data.version.version_number) {
+            setUpdateApp(true);
+          }
+  
+          if (isFirstTime == 'true') {  
+            // refRBSheet.current.open()
+            setModePopup(true);
+            await AsyncStorage.setItem(
+              t('STORAGE.IS_FIRST_TIME'),
+              JSON.stringify(false),
+            );
+          }
+        }
+  
+        await AsyncStorage.setItem('isUpdated', 'false');
+      }
+    } catch (error) {
+      setIsFetching(false);
+      setIsLoading(false);
+      props.setLoader(false);
+      setRefreshing(false);
+      setError(error.message);
+    } finally {
+      props.setLoader(false);
     }
-  };
+  };  
 
   const saveToken = async () => {
     // props.saveAccess_token(
@@ -293,10 +337,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
   };
   const setOfflineData = resp => {
     saveToStorage(t('STORAGE.LANDING_RESPONSE'), JSON.stringify(resp));
-    saveToStorage(
-      t('STORAGE.CATEGORIES_RESPONSE'),
-      JSON.stringify(resp.categories),
-    );
+    saveToStorage(t('STORAGE.CATEGORIES_RESPONSE'),JSON.stringify(resp.categories));
     saveToStorage(t('STORAGE.ROUTES_RESPONSE'), JSON.stringify(resp.routes));
     saveToStorage(t('STORAGE.CITIES_RESPONSE'), JSON.stringify(resp.cities));
     saveToStorage(t('STORAGE.EMERGENCY'), JSON.stringify(resp.emergencies));
@@ -341,6 +382,8 @@ const HomeScreen = ({navigation, route, ...props}) => {
 
   const onCitySelect = city => {
     setCurrentCity(city.name);
+    saveToStorage(t('STORAGE.SELECTED_CITY_ID'), JSON.stringify(city.id));
+    saveToStorage(t('STORAGE.SELECTED_CITY_NAME'), JSON.stringify(city.name));
     callLandingPageAPI(city.id);
   };
 
@@ -369,15 +412,19 @@ const HomeScreen = ({navigation, route, ...props}) => {
 
   return (
     <>
-      <TopComponent
-        cities={[sindhudurg, ...cities]}
-        currentCity={currentCity}
-        setCurrentCity={v => onCitySelect(v)}
-        navigation={navigation}
-        openLocationSheet={() => openLocationSheet()}
-        gotoProfile={() => openProfile()}
-        profilePhoto={profilePhoto}
-      />
+      {isLoading ? (
+        <TopComponentSkeleton />
+      ) : (
+        <TopComponent
+          cities={[sindhudurg, ...cities]}
+          currentCity={currentCity}
+          setCurrentCity={v => onCitySelect(v)}
+          navigation={navigation}
+          openLocationSheet={() => openLocationSheet()}
+          gotoProfile={() => openProfile()}
+          profilePhoto={profilePhoto}
+        />
+      )}
       <KeyboardAwareScrollView
         extraHeight={DIMENSIONS.halfHeight}
         enableOnAndroid={true}

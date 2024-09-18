@@ -200,8 +200,9 @@ const styles = StyleSheet.create({
     fontSize: DIMENSIONS.headerTextSize,
   },
   accordContent: {
-    padding: 10,
-    alignItems: 'center',
+    paddingVertical: 50, 
+    flex: 1,
+    justifyContent: 'center',
   },
   catCardIcon: {
     height: DIMENSIONS.iconX,
@@ -211,6 +212,11 @@ const styles = StyleSheet.create({
     borderColor: COLOR.grey,
     borderWidth: 0.5,
   },
+  titleStyle: {
+    textAlign: 'center', // Center the text
+    fontSize: 16,
+    color: 'black', // Default color
+  }
 });
 
 export default styles;
