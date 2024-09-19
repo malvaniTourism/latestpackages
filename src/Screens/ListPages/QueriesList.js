@@ -137,6 +137,9 @@ const QueriesList = ({navigation, route, ...props}) => {
 
   const fetchData = useCallback(
     async (page, reset) => {
+      if (offline) {
+        return;
+      }
       if (props.mode) {
         if (loading) return;
         setLoading(true);

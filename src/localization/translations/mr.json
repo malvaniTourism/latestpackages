@@ -168,7 +168,11 @@
     "PLEASE_ENTER_VALID_MOBILE": "कृपया वैध मोबाईल क्रमांक प्रविष्ट करा",
     "PLEASE_ENTER_VALID_REFERRAL": "कृपया वैध रेफरल कोड प्रविष्ट करा",
     "PLEASE_ACCEPT_PRIVACY": "कृपया गोपनीयता धोरण स्वीकारा",
-    "PLEASE_ENABLE_LOCATION": "कृपया स्थान सक्षम करा"
+    "PLEASE_ENABLE_LOCATION": "कृपया स्थान सक्षम करा",
+    "LOCATION_SERVICES_DISABLED": "लोकेशन सक्षम करण्यासाठी कृपया सेटिंगमधून आपली लोकेशन चालू करा.",
+    "LOCATION_REQUIRED": "स्थान आवश्यक आहे",
+    "ENABLE_LOCATION_SERVICES": "कृपया या अ‍ॅपचा वापर चालू ठेवण्यासाठी स्थान सेवा चालू करा.",
+    "OPEN_SETTINGS:": "सेटिंग्ज उघडा"
   },
   "TABLE": {
     "CITY": "City",

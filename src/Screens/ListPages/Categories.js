@@ -57,16 +57,18 @@ const Categories = ({route, navigation, ...props}) => {
 
     const unsubscribe = NetInfo.addEventListener(state => {
       setOffline(false);
-
+      let resp;
       dataSync(
         t('STORAGE.CATEGORIES_RESPONSE'),
         getCategories(),
         props.mode,
-      ).then(resp => {
-        // if (!props.mode) {
-        //   let resp = JSON.parse(resp);
-        // }
+      ).then(res => {
+        if (!props.mode) {
+          resp = JSON.parse(res);
+        }
         if (resp) {
+          console.log(resp);
+
           setCategories(resp);
           setSelectedCategory(resp[0].name);
           setSelectedSubCategory(resp[0].sub_categories);

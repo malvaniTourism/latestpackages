@@ -1,12 +1,16 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Skeleton } from '@rneui/themed';
+import {View, StyleSheet} from 'react-native';
+import {Skeleton} from '@rneui/themed';
 
 const SkeletonAccordion = () => {
   return (
     <View style={styles.container}>
       <Skeleton animation="pulse" variant="text" style={styles.skeletonTitle} />
-      <Skeleton animation="pulse" variant="rect" style={styles.skeletonContent} />
+      <Skeleton
+        animation="pulse"
+        variant="rect"
+        style={styles.skeletonContent}
+      />
     </View>
   );
 };

@@ -10,6 +10,8 @@ import {
   Keyboard,
   Platform,
   ScrollView,
+  Linking,
+  Alert,
 } from 'react-native';
 import {SignUpFields} from '../../Services/Constants/FIELDS';
 import TextField from '../../Components/Customs/TextField';
@@ -31,6 +33,7 @@ import {Dropdown} from 'react-native-element-dropdown';
 import {useTranslation} from 'react-i18next';
 import {CheckBox} from '@rneui/themed';
 import PrivacyPolicy from '../../Components/Common/PrivacyPolicy';
+import DeviceInfo from 'react-native-device-info';
 
 const SignUp = ({navigation, ...props}) => {
   const opacity = useRef(new Animated.Value(0)).current;
@@ -76,12 +79,60 @@ const SignUp = ({navigation, ...props}) => {
   const [isPrivacyChecked, setIsPrivacyChecked] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
 
+  const openLocationSettings = () => {
+    if (Platform.OS === 'ios') {
+      Linking.openURL('App-Prefs:root=LOCATION_SERVICES'); // iOS location settings
+    } else {
+      Linking.openSettings(); // Android general settings (location can be found here)
+    }
+  };
+
   useEffect(() => {
+    let valid = true;
+    let errorMessage = '';
+
+    // Inner async function to handle async logic
+    const checkLocationAndSetupListeners = async () => {
+      const locationEnabled = await checkLocationServices();
+
+      // If location services are disabled, show an alert
+      if (!locationEnabled) {
+        errorMessage = t('ALERT.LOCATION_SERVICES_DISABLED');
+        valid = false;
+      }
+
+      if (!valid) {
+        // Prompt the user to enable location services
+        Alert.alert(
+          t('ALERT.LOCATION_REQUIRED'), // Title of the alert
+          t('ALERT.ENABLE_LOCATION_SERVICES'), // Message to user
+          [
+            // { text: t('ALERT.CANCEL'), style: 'cancel' }, // Cancel option
+            {
+              text: t('ALERT.OPEN_SETTINGS'),
+              onPress: () => openLocationSettings(), // Open location settings
+            },
+          ],
+        );
+
+        setAlertMessage(errorMessage);
+        setIsAlert(true);
+        setShowPrivacy(false);
+      }
+    };
+
+    // Call the async function
+    checkLocationAndSetupListeners();
+
+    // Set up event listeners for hardware back button and keyboard visibility
     const backHandler = BackHandler.addEventListener(
-      t('EVENT.HARDWARE_BACK_PRESS'),
-      () => navigateTo(navigation, t('SCREEN.EMAIL')),
+      'hardwareBackPress',
+      () => {
+        navigateTo(navigation, t('SCREEN.EMAIL'));
+        return true; // Return true to prevent default behavior
+      },
     );
-    // getRoles()
+
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
       () => {
@@ -96,12 +147,13 @@ const SignUp = ({navigation, ...props}) => {
       },
     );
 
+    // Cleanup function to remove listeners when the component unmounts
     return () => {
       backHandler.remove();
       keyboardDidShowListener.remove();
       keyboardDidHideListener.remove();
     };
-  }, []);
+  }, [navigation, t]);
 
   useEffect(() => {
     const animateRipple = () => {
@@ -334,8 +386,51 @@ const SignUp = ({navigation, ...props}) => {
     setAlertMessage(''); // Reset the alert message here
   };
 
+  const checkLocationServices = async () => {
+    const enabled = await DeviceInfo.isLocationEnabled();
+    setIsLocationEnabled(enabled);
+    return enabled;
+  };
+
   const myLocationPress = async () => {
     props.setLoader(true);
+
+    let valid = true;
+    let errorMessage = '';
+
+    // Inner async function to handle async logic
+    const checkLocationAndSetupListeners = async () => {
+      const locationEnabled = await checkLocationServices();
+
+      // If location services are disabled, show an alert
+      if (!locationEnabled) {
+        errorMessage = t('ALERT.LOCATION_SERVICES_DISABLED');
+        valid = false;
+      }
+
+      if (!valid) {
+        // Prompt the user to enable location services
+        Alert.alert(
+          t('ALERT.LOCATION_REQUIRED'), // Title of the alert
+          t('ALERT.ENABLE_LOCATION_SERVICES'), // Message to user
+          [
+            // { text: t('ALERT.CANCEL'), style: 'cancel' }, // Cancel option
+            {
+              text: t('ALERT.OPEN_SETTINGS'),
+              onPress: () => openLocationSettings(), // Open location settings
+            },
+          ],
+        );
+
+        setAlertMessage(errorMessage);
+        setIsAlert(true);
+        setShowPrivacy(false);
+      }
+    };
+
+    // Call the async function
+    checkLocationAndSetupListeners();
+
     if (Platform.OS === 'ios') {
       getOneTimeLocation();
       subscribeLocation();

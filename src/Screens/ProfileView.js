@@ -241,6 +241,18 @@ const ProfileView = ({navigation, route, ...props}) => {
 
   const handleLogout = async () => {
     try {
+      const state = await NetInfo.fetch();
+
+      if (!state.isConnected) {
+        // Handle offline case
+        Alert.alert(
+          'No Internet Connection',
+          'You are offline. Please check your internet connection and try again.',
+          [{text: 'OK'}],
+          {cancelable: false},
+        );
+        return;
+      }
       props.setLoader(true);
 
       const res = await comnPost('v2/logout');
@@ -417,6 +429,7 @@ const ProfileView = ({navigation, route, ...props}) => {
               phone={profile.mobile}
               uploadImage={uploadImage}
               refreshOption={() => getUserProfile()}
+              isConnected={offline}
               setLoader={v => props.setLoader(v)}
             />
           ) : (

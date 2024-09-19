@@ -116,7 +116,7 @@ const STRING = {
     QUERIES: 'Queries',
     GALLERY: 'Gallery',
     SELECTED_CITY_ID: 'selectedCityId',
-    SELECTED_CITY_NAME: 'selectedCityName'
+    SELECTED_CITY_NAME: 'selectedCityName',
   },
   HEADER: {
     BUS_TIMINGS: 'Bus Timings',
@@ -157,6 +157,11 @@ const STRING = {
     PLEASE_ENTER_VALID_MOBILE: 'Please enter valid mobile number',
     PLEASE_ENTER_VALID_REFERRAL: 'Please enter valid Referral code',
     PLEASE_ACCEPT_PRIVACY: 'Please accept privacy policy',
+    LOCATION_SERVICES_DISABLED: 'Please enable your loaction from settings',
+    LOCATION_REQUIRED: 'Location Required',
+    ENABLE_LOCATION_SERVICES:
+      'Please enable location services to continue using this app.',
+    OPEN_SETTINGS: 'Open Settings',
   },
   TABLE: {
     CITY: 'City',

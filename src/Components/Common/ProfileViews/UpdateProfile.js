@@ -18,6 +18,7 @@ const UpdateProfile = ({
   uploadImage,
   refreshOption,
   setLoader,
+  offline,
   ...props
 }) => {
   const {t} = useTranslation();
@@ -49,6 +50,9 @@ const UpdateProfile = ({
   };
 
   const save = () => {
+    if (offline) {
+      return;
+    }
     if (props.mode) {
       setLoader(true);
       let data = {};

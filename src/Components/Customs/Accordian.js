@@ -1,16 +1,16 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Image, FlatList, ScrollView } from 'react-native';
-import { List } from 'react-native-paper';
+import React, {useState, useRef, useEffect} from 'react';
+import {View, Image, FlatList, ScrollView} from 'react-native';
+import {List} from 'react-native-paper';
 import styles from './Styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import COLOR from '../../Services/Constants/COLORS';
 import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
 import SubCatCard from '../Cards/SubCatCard';
-import { navigateTo } from '../../Services/CommonMethods';
-import { useTranslation } from 'react-i18next';
+import {navigateTo} from '../../Services/CommonMethods';
+import {useTranslation} from 'react-i18next';
 
-const Accordion = ({ data, navigation }) => {
-  const { t } = useTranslation();
+const Accordion = ({data, navigation}) => {
+  const {t} = useTranslation();
   const [expandedIndex, setExpandedIndex] = useState(0); // Default to the first item
   const scrollViewRef = useRef(null);
 
@@ -42,7 +42,7 @@ const Accordion = ({ data, navigation }) => {
     <FlatList
       data={subCategories}
       keyExtractor={item => item.id.toString()}
-      renderItem={({ item }) => (
+      renderItem={({item}) => (
         <SubCatCard data={item} onClick={() => goToSubCats(item)} />
       )}
       numColumns={3} // Display 3 columns
@@ -51,11 +51,11 @@ const Accordion = ({ data, navigation }) => {
   );
 
   const goToSubCats = subCat => {
-    navigateTo(navigation, t('SCREEN.CITY_LIST'), { subCat });
+    navigateTo(navigation, t('SCREEN.CITY_LIST'), {subCat});
   };
 
   // Accordion item with centered title and subcategories in 3 columns
-  const AccordionItem = ({ item, index }) => (
+  const AccordionItem = ({item, index}) => (
     <List.Accordion
       title={item.name}
       titleStyle={styles.titleStyle} // Apply title styles here
@@ -65,10 +65,13 @@ const Accordion = ({ data, navigation }) => {
         <Image
           source={
             item.icon && typeof item.icon === 'string' && item.icon !== '0'
-              ? { uri: item.icon }
+              ? {uri: item.icon}
               : require('../../Assets/Icons/1-PNG.png') // Fallback image
           }
-          style={[styles.catCardIcon, expandedIndex === index && styles.selectedIcon]}
+          style={[
+            styles.catCardIcon,
+            expandedIndex === index && styles.selectedIcon,
+          ]}
         />
       )}
       right={() => (
@@ -79,7 +82,10 @@ const Accordion = ({ data, navigation }) => {
         />
       )}
       contentStyle={styles.accordContent} // Ensure the accordion content is centered
-      style={[styles.accordHeader, expandedIndex === index && styles.selectedHeader]} // Highlight selected item
+      style={[
+        styles.accordHeader,
+        expandedIndex === index && styles.selectedHeader,
+      ]} // Highlight selected item
     >
       <View style={styles.accordContent}>
         {renderSubCategories(item.sub_categories)}

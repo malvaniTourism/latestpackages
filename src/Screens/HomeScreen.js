@@ -133,70 +133,75 @@ const HomeScreen = ({navigation, route, ...props}) => {
   const getSelectedCity = async () => {
     try {
       // Retrieve and parse the selected city ID and city name from storage
-      const selectedCityId = JSON.parse(await getFromStorage(t('STORAGE.SELECTED_CITY_ID')));
-      const selectedCityName = JSON.parse(await getFromStorage(t('STORAGE.SELECTED_CITY_NAME')));
-      
+      const selectedCityId = JSON.parse(
+        await getFromStorage(t('STORAGE.SELECTED_CITY_ID')),
+      );
+      const selectedCityName = JSON.parse(
+        await getFromStorage(t('STORAGE.SELECTED_CITY_NAME')),
+      );
+
       // If both city ID and name are present, return them as an object
       if (selectedCityId && selectedCityName) {
-        return { id: selectedCityId, name: selectedCityName };
+        return {id: selectedCityId, name: selectedCityName};
       }
-    
+
       return null;
-    
     } catch (error) {
       return null;
     }
   };
-  
 
-  useEffect(() => { 
+  useEffect(() => {
     let isMounted = true; // flag to track if the component is mounted
-    
+
     const init = async () => {
       setIsLoading(true);
       const selectedCity = await getSelectedCity();
-        if (selectedCity) {
-          setSindh({
-            id: 0,
-            name: t('CITY.SINDHUDURG'),
-          });
-          setCurrentCity(selectedCity.name);
-        } else {
-          setSindh({
-            id: 0,
-            name: t('CITY.SINDHUDURG'),
-          });
-          setCurrentCity(t('CITY.SINDHUDURG'));
-        }
-      
+      if (selectedCity) {
+        setSindh({
+          id: 0,
+          name: t('CITY.SINDHUDURG'),
+        });
+        setCurrentCity(selectedCity.name);
+      } else {
+        setSindh({
+          id: 0,
+          name: t('CITY.SINDHUDURG'),
+        });
+        setCurrentCity(t('CITY.SINDHUDURG'));
+      }
+
       props.setLoader(true);
       await AsyncStorage.setItem('isUpdated', 'false'); // Ensure await here
       saveToken(); // Ensure saveToken is a promise or add await if it's async
-  
+
       // Only call landing page API once if data isn't fetched
       if (!isLandingDataFetched && props.access_token) {
         // await callLandingPageAPI();
         setIsLandingDataFetched(true);
       }
-  
+
       // Subscribe to back button and network info changes
       const backHandler = BackHandler.addEventListener(
         t('EVENT.HARDWARE_BACK_PRESS'),
         exitApp,
       );
-  
+
       const unsubscribe = NetInfo.addEventListener(async state => {
         if (!isMounted) return; // Prevents updating state after component unmount
-  
+
         setOffline(!state.isConnected);
         // Avoid setting loading on every network change unless needed
-        if (!state.isConnected) {
-          setIsLoading(false); // No loading if offline
-          return;
-        }
 
         const mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
-  
+
+        if (!state.isConnected) {
+          if (mode) {
+            await offlineClick();
+          }
+          setIsLoading(false); // No loading if offline
+        }
+
         dataSync(t('STORAGE.LANDING_RESPONSE'), callLandingPageAPI, mode).then(
           resp => {
             try {
@@ -225,7 +230,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
           },
         );
       });
-  
+
       return () => {
         // Clean up listeners and async operations
         backHandler.remove();
@@ -233,10 +238,9 @@ const HomeScreen = ({navigation, route, ...props}) => {
         isMounted = false; // Unmount flag
       };
     };
-  
+
     init();
-  
-  }, [props.access_token]);  
+  }, [props.access_token]);
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -265,11 +269,15 @@ const HomeScreen = ({navigation, route, ...props}) => {
     }, [props.mode, isInitialLoad]), // Dependencies include props.mode and isInitialLoad
   );
 
-  const callLandingPageAPI = async site_id => {  
+  const callLandingPageAPI = async site_id => {
     try {
       let isFirstTime = await AsyncStorage.getItem(t('STORAGE.IS_FIRST_TIME'));
       let mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
-  
+
+      if (offline) {
+        return;
+      }
+
       if (mode) {
         const selectedCity = await getSelectedCity();
         let data;
@@ -279,7 +287,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
           };
         } else {
           data = {
-            site_id,  // Fallback to default site_id
+            site_id, // Fallback to default site_id
           };
         }
         props.setLoader(true);
@@ -296,12 +304,12 @@ const HomeScreen = ({navigation, route, ...props}) => {
           setIsLoading(false);
           props.setLoader(false);
           setRefreshing(false);
-  
+
           if (t('APP_VERSION') < res.data.data.version.version_number) {
             setUpdateApp(true);
           }
-  
-          if (isFirstTime == 'true') {  
+
+          if (isFirstTime == 'true') {
             // refRBSheet.current.open()
             setModePopup(true);
             await AsyncStorage.setItem(
@@ -310,7 +318,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
             );
           }
         }
-  
+
         await AsyncStorage.setItem('isUpdated', 'false');
       }
     } catch (error) {
@@ -322,7 +330,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
     } finally {
       props.setLoader(false);
     }
-  };  
+  };
 
   const saveToken = async () => {
     // props.saveAccess_token(
@@ -337,7 +345,10 @@ const HomeScreen = ({navigation, route, ...props}) => {
   };
   const setOfflineData = resp => {
     saveToStorage(t('STORAGE.LANDING_RESPONSE'), JSON.stringify(resp));
-    saveToStorage(t('STORAGE.CATEGORIES_RESPONSE'),JSON.stringify(resp.categories));
+    saveToStorage(
+      t('STORAGE.CATEGORIES_RESPONSE'),
+      JSON.stringify(resp.categories),
+    );
     saveToStorage(t('STORAGE.ROUTES_RESPONSE'), JSON.stringify(resp.routes));
     saveToStorage(t('STORAGE.CITIES_RESPONSE'), JSON.stringify(resp.cities));
     saveToStorage(t('STORAGE.EMERGENCY'), JSON.stringify(resp.emergencies));

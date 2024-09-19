@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
     fontSize: DIMENSIONS.headerTextSize,
   },
   accordContent: {
-    paddingVertical: 50, 
+    paddingVertical: 50,
     flex: 1,
     justifyContent: 'center',
   },
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
     textAlign: 'center', // Center the text
     fontSize: 16,
     color: 'black', // Default color
-  }
+  },
 });
 
 export default styles;

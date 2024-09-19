@@ -78,6 +78,8 @@ const Emergency = ({navigation, route, ...props}) => {
       if (state.isConnected) {
         checkStoredData();
       } else {
+        checkStoredData();
+
         props.setLoader(false);
       }
     });
@@ -101,6 +103,9 @@ const Emergency = ({navigation, route, ...props}) => {
   };
 
   const fetchData = (page, reset = false) => {
+    if (offline) {
+      return;
+    }
     if (props.mode) {
       if (loading || !hasMore) {
         setRefreshing(false);

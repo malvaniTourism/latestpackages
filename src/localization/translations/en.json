@@ -168,7 +168,8 @@
     "PLEASE_ENTER_VALID_MOBILE": "Please enter valid mobile number",
     "PLEASE_ENTER_VALID_REFERRAL": "Please enter valid referral code",
     "PLEASE_ACCEPT_PRIVACY": "Please accept privacy policy",
-    "PLEASE_ENABLE_LOCATION": "Please enable your location from settings"
+    "PLEASE_ENABLE_LOCATION": "Please enable your location from settings",
+    "LOCATION_SERVICES_DISABLED": "Please enable your loaction from settings"
   },
   "TABLE": {
     "CITY": "City",
