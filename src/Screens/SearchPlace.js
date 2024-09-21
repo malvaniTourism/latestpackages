@@ -82,7 +82,7 @@ const SearchPlace = ({navigation, route, ...props}) => {
       props.setDestination(place);
     }
     setSearchValue('');
-    navigateTo(navigation, t('SCREEN.HOME'));
+    navigateTo(navigation, t('SCREEN.HOME_TAB'), {from: 'SearchPlace'});
   };
 
   const goToNext = () => {
@@ -130,6 +130,7 @@ const SearchPlace = ({navigation, route, ...props}) => {
 const mapStateToProps = state => {
   return {
     source: state.commonState.source,
+    destination: state.commonState.destination,
   };
 };
 

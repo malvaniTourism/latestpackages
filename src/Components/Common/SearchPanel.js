@@ -11,12 +11,17 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import COLOR from '../../Services/Constants/COLORS';
 import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
 import {navigateTo} from '../../Services/CommonMethods';
-import {setLoader} from '../../Reducers/CommonActions';
+import {
+  setDestination,
+  setLoader,
+  setSource,
+} from '../../Reducers/CommonActions';
 import GlobalText from '../Customs/Text';
 import SearchDropdown from './SearchDropdown';
 import {useTranslation} from 'react-i18next';
 import STRING from '../../Services/Constants/STRINGS';
 import Popup from './Popup';
+import {useFocusEffect} from '@react-navigation/native';
 
 const SearchPanel = ({navigation, from, onSwap, ...props}) => {
   const {t} = useTranslation();
@@ -33,8 +38,8 @@ const SearchPanel = ({navigation, from, onSwap, ...props}) => {
   const [alertMessage, setAlertMessage] = useState('');
 
   useEffect(() => {
-    // setSource(props.source?.name || "");
-    // setDestination(props.destination.name || "");
+    setSource(props.source || '');
+    setDestination(props.destination || '');
     // checkIsValid()
     checkIsValid();
   }, [props]);
@@ -53,17 +58,29 @@ const SearchPanel = ({navigation, from, onSwap, ...props}) => {
     checkIsValid();
   };
 
+  useFocusEffect(
+    React.useCallback(async () => {
+      setSource(props.source || '');
+      setDestination(props.destination || '');
+      checkIsValid();
+    }, [props.source, props.destination]),
+  );
+
   const getValue = i => {
     switch (i) {
       case 0:
-        return source?.name;
+        return props.source?.name || source?.name;
       case 1:
-        return destination?.name;
+        return props.destination?.name || destination?.name;
     }
   };
 
   const checkIsValid = () => {
-    if (source?.name && destination?.name) setIsValid(true);
+    if (
+      (source?.name || props.source?.name) &&
+      (destination?.name || props.destination?.name)
+    )
+      setIsValid(true);
     else setIsValid(false);
   };
 
@@ -82,6 +99,8 @@ const SearchPanel = ({navigation, from, onSwap, ...props}) => {
     }
     setSource({});
     setDestination({});
+    props.setSource('');
+    props.setDestination('');
   };
 
   const swap = async () => {
@@ -89,6 +108,8 @@ const SearchPanel = ({navigation, from, onSwap, ...props}) => {
     let b = destination;
     setSource(b);
     setDestination(a);
+    props.setSource(b);
+    props.setDestination(a);
   };
 
   const refresh = async () => {
@@ -96,6 +117,8 @@ const SearchPanel = ({navigation, from, onSwap, ...props}) => {
     let b = '';
     setSource('');
     setDestination('');
+    props.setSource('');
+    props.setDestination('');
     onSwap(a, b);
   };
 
@@ -160,7 +183,7 @@ const SearchPanel = ({navigation, from, onSwap, ...props}) => {
   };
 
   const pressed = type => {
-    searchPlace(searchValue);
+    navigateTo(navigation, t('SCREEN.SEARCH_PLACE'), {type});
     setFieldType(type);
   };
 
@@ -263,13 +286,22 @@ const SearchPanel = ({navigation, from, onSwap, ...props}) => {
 };
 
 const mapStateToProps = state => {
-  return {};
+  return {
+    source: state.commonState.source,
+    destination: state.commonState.destination,
+  };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     setLoader: data => {
       dispatch(setLoader(data));
+    },
+    setSource: data => {
+      dispatch(setSource(data));
+    },
+    setDestination: data => {
+      dispatch(setDestination(data));
     },
   };
 };
