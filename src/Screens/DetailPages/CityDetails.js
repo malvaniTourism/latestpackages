@@ -10,7 +10,7 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import COLOR from '../../Services/Constants/COLORS';
 import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
-import {comnPost} from '../../Services/Api/CommonServices';
+import {comnPost, getFromStorage} from '../../Services/Api/CommonServices';
 import {connect} from 'react-redux';
 import {setLoader} from '../../Reducers/CommonActions';
 import Loader from '../../Components/Customs/Loader';
@@ -39,8 +39,10 @@ import MapSkeleton from '../../Components/Common/MapSkeleton';
 import {useTranslation} from 'react-i18next';
 import GalleryView from '../../Components/Common/GalleryView';
 import ComingSoon from '../../Components/Common/ComingSoon';
+import Popup from '../../Components/Common/Popup';
+import NetInfo from '@react-native-community/netinfo';
 
-const CityDetails = ({navigation, route, ...props}) => {
+const CityDetails = ({navigation, route, offline, ...props}) => {
   const {t} = useTranslation();
   const refRBSheet = useRef();
 
@@ -56,6 +58,9 @@ const CityDetails = ({navigation, route, ...props}) => {
   const [currentLongitude, setCurrentLongitude] = useState();
   const [errorMessage, setErrorMessage] = useState('');
   const [showOnlineMode, setShowOnlineMode] = useState(false);
+
+  const [isAlert, setIsAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
   useEffect(() => {
     const backHandler = goBackHandler(navigation);
@@ -119,6 +124,38 @@ const CityDetails = ({navigation, route, ...props}) => {
   };
 
   const onHeartClick = async () => {
+    const mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
+    // Check the internet connectivity state
+    const state = await NetInfo.fetch();
+    const isConnected = state.isConnected;
+      
+    // Combined condition for all three cases
+    if (
+      (
+        (isConnected && !mode) // Case 1: Internet is available but mode is offline
+      ) || 
+      (
+        (!isConnected && !mode) // Case 2: Internet is not available and mode is offline
+      ) ||
+      (
+        (!isConnected && mode) // Case 3: Internet is not available but mode is online
+      )                               
+    ) {        
+      // The user should be alerted based on their mode and connectivity status
+      setIsAlert(true);
+      setAlertMessage(
+        (!isConnected && !mode) 
+          ? t('ALERT.NETWORK') // Alert: Network is available but mode is offline
+          : (!isConnected && mode) 
+          ? t('ALERT.NO_INTERNET_AVAILABLE_MODE_ONLINE') // Alert: Mode is offline, you need to set it to online
+          : (isConnected && !mode)  
+          ? t('ALERT.INTERNET_AVAILABLE_MODE_OFFLINE') // Alert: No internet available but mode is online
+          : '' // Default case (optional), if none of the conditions match
+      );
+      
+      return;
+    }     
+
     if (props.mode) {
       props.setLoader(true);
       setIsFav(!isFav);
@@ -144,6 +181,38 @@ const CityDetails = ({navigation, route, ...props}) => {
   };
 
   const onStarRatingPress = async rate => {
+    const mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
+    // Check the internet connectivity state
+    const state = await NetInfo.fetch();
+    const isConnected = state.isConnected;
+      
+    // Combined condition for all three cases
+    if (
+      (
+        (isConnected && !mode) // Case 1: Internet is available but mode is offline
+      ) || 
+      (
+        (!isConnected && !mode) // Case 2: Internet is not available and mode is offline
+      ) ||
+      (
+        (!isConnected && mode) // Case 3: Internet is not available but mode is online
+      )                               
+    ) {        
+      // The user should be alerted based on their mode and connectivity status
+      setIsAlert(true);
+      setAlertMessage(
+        (!isConnected && !mode) 
+          ? t('ALERT.NETWORK') // Alert: Network is available but mode is offline
+          : (!isConnected && mode) 
+          ? t('ALERT.NO_INTERNET_AVAILABLE_MODE_ONLINE') // Alert: Mode is offline, you need to set it to online
+          : (isConnected && !mode)  
+          ? t('ALERT.INTERNET_AVAILABLE_MODE_OFFLINE') // Alert: No internet available but mode is online
+          : '' // Default case (optional), if none of the conditions match
+      );
+      
+      return;
+    }     
+
     if (props.mode) {
       setRating(rate);
       props.setLoader(true);
@@ -248,6 +317,10 @@ const CityDetails = ({navigation, route, ...props}) => {
     });
   };
 
+  const closePopup = () => {
+    setIsAlert(false);
+  };
+
   return (
     <>
       <Header
@@ -264,6 +337,8 @@ const CityDetails = ({navigation, route, ...props}) => {
         style={styles.cityHeader}
       />
       <ScrollView style={{backgroundColor: '#fff'}}>
+        <Popup message={alertMessage} onPress={closePopup} visible={isAlert} />
+
         <Loader />
 
         {city && (

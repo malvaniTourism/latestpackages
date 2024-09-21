@@ -47,6 +47,7 @@ import Loader from '../Components/Customs/Loader';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import DIMENSIONS from '../Services/Constants/DIMENSIONS';
 import ComingSoon from '../Components/Common/ComingSoon';
+import Popup from '../Components/Common/Popup';
 
 // SplashScreen.preventAutoHideAsync();
 
@@ -104,6 +105,9 @@ const HomeScreen = ({navigation, route, ...props}) => {
   const [showOnlineMode, setShowOnlineMode] = useState(false);
   const [updateApp, setUpdateApp] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  const [isAlert, setIsAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -207,7 +211,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
             try {
               if (resp) {
                 const res = JSON.parse(resp);
-                if (res) {
+                if (res && res.cities) {
                   setCities(res.cities);
                   setRoutes(res.routes);
                   setBannerObject(res.banners);
@@ -226,6 +230,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
               setIsLoading(false);
               setOffline(true);
             }
+
             props.setLoader(false);
           },
         );
@@ -260,9 +265,9 @@ const HomeScreen = ({navigation, route, ...props}) => {
         // setIsInitialLoad(false); // Update state to indicate that the initial load has occurred
 
         // Your existing logic
-        setCities([]);
-        setRoutes([]);
-        setBannerObject([]);
+        // setCities([]);
+        // setRoutes([]);
+        // setBannerObject([]);
         props.setLoader(true);
         callLandingPageAPI();
       }
@@ -391,7 +396,39 @@ const HomeScreen = ({navigation, route, ...props}) => {
     setIsLoading(false);
   };
 
-  const onCitySelect = city => {
+  const onCitySelect = async( city )=> {
+    const mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
+    // Check the internet connectivity state
+    const state = await NetInfo.fetch();
+    const isConnected = state.isConnected;
+      
+    // Combined condition for all three cases
+    if (
+      (
+        (isConnected && !mode) // Case 1: Internet is available but mode is offline
+      ) || 
+      (
+        (!isConnected && !mode) // Case 2: Internet is not available and mode is offline
+      ) ||
+      (
+        (!isConnected && mode) // Case 3: Internet is not available but mode is online
+      )                               
+    ) {        
+      // The user should be alerted based on their mode and connectivity status
+      setIsAlert(true);
+      setAlertMessage(
+        (!isConnected && !mode) 
+          ? t('ALERT.NETWORK') // Alert: Network is available but mode is offline
+          : (!isConnected && mode) 
+          ? t('ALERT.NO_INTERNET_AVAILABLE_MODE_ONLINE') // Alert: Mode is offline, you need to set it to online
+          : (isConnected && !mode)  
+          ? t('ALERT.INTERNET_AVAILABLE_MODE_OFFLINE') // Alert: No internet available but mode is online
+          : '' // Default case (optional), if none of the conditions match
+      );
+      
+      return;
+    }     
+
     setCurrentCity(city.name);
     saveToStorage(t('STORAGE.SELECTED_CITY_ID'), JSON.stringify(city.id));
     saveToStorage(t('STORAGE.SELECTED_CITY_NAME'), JSON.stringify(city.name));
@@ -420,10 +457,14 @@ const HomeScreen = ({navigation, route, ...props}) => {
     setUpdateApp(false);
     Linking.openURL(t('APP_URL'));
   };
+  
+  const closePopup = () => {
+    setIsAlert(false);
+  };
 
   return (
     <>
-      {isLoading ? (
+      {isLoading || routes.length === 0 ? (
         <TopComponentSkeleton />
       ) : (
         <TopComponent
@@ -436,6 +477,8 @@ const HomeScreen = ({navigation, route, ...props}) => {
           profilePhoto={profilePhoto}
         />
       )}
+      <Popup message={alertMessage} onPress={closePopup} visible={isAlert} />
+
       <KeyboardAwareScrollView
         extraHeight={DIMENSIONS.halfHeight}
         enableOnAndroid={true}
@@ -571,6 +614,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
                     }}
                     navigation={navigation}
                     onClick={() => getCityDetails(city)}
+                    isConnected={offline}
                   />
                 ))
               )}

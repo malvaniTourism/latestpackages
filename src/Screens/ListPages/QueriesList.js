@@ -290,7 +290,7 @@ const QueriesList = ({navigation, route, ...props}) => {
             </View>
           )
         ) : (
-          <ContactUs step={step} setStep={setStep} />
+          <ContactUs step={step} setStep={setStep} offline={offline} />
         )}
         <ComingSoon
           message={errorMessage}

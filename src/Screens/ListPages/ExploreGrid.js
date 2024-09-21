@@ -18,6 +18,7 @@ import {
   comnPost,
   dataSync,
   saveToStorage,
+  getFromStorage
 } from '../../Services/Api/CommonServices';
 import Loader from '../../Components/Customs/Loader';
 import {checkLogin, goBackHandler} from '../../Services/CommonMethods';
@@ -36,6 +37,7 @@ import GlobalText from '../../Components/Customs/Text';
 import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
 import ExploreGridSkeleton from './ExploreGridSkeleton';
 import ComingSoon from '../../Components/Common/ComingSoon';
+import Popup from '../../Components/Common/Popup';
 
 const {height: screenHeight} = Dimensions.get('window');
 
@@ -51,6 +53,9 @@ const ExploreGrid = ({route, navigation, ...props}) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const [showOnlineMode, setShowOnlineMode] = useState(false);
+
+  const [alertMessage, setAlertMessage] = useState('');
+  const [isAlert, setIsAlert] = useState(false);
 
   useEffect(() => {
     const backHandler = goBackHandler(navigation);
@@ -82,7 +87,21 @@ const ExploreGrid = ({route, navigation, ...props}) => {
     fetchData(1, true);
   }, [searchValue]);
 
-  const fetchData = (page, reset = false) => {
+  const fetchData = async (page, reset = false) => {
+    const mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
+    // Check the internet connectivity state
+    const state = await NetInfo.fetch();
+    const isConnected = state.isConnected;
+
+    if(!isConnected && !mode)
+    {
+      setIsAlert(true);
+      setAlertMessage(
+        (!isConnected && !mode) 
+          ? t('ALERT.NETWORK') : ''// Alert: Network is available but mode is offline
+      );
+    }
+
     if (props.mode) {
       if (loading || (page > currentPage && page > lastPage)) return;
 
@@ -157,6 +176,10 @@ const ExploreGrid = ({route, navigation, ...props}) => {
   const closeImageViewer = () => {
     setIsModalVisible(false);
     setSelectedImage(null);
+  };
+
+  const closePopup = () => {
+    setIsAlert(false);
   };
 
   const renderItem = ({item}) => {
@@ -263,6 +286,8 @@ const ExploreGrid = ({route, navigation, ...props}) => {
           visible={showOnlineMode}
           toggleOverlay={() => setShowOnlineMode(false)}
         />
+      <Popup message={alertMessage} onPress={closePopup} visible={isAlert} />
+
       </ScrollView>
     </>
   );

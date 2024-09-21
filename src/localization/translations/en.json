@@ -169,7 +169,11 @@
     "PLEASE_ENTER_VALID_REFERRAL": "Please enter valid referral code",
     "PLEASE_ACCEPT_PRIVACY": "Please accept privacy policy",
     "PLEASE_ENABLE_LOCATION": "Please enable your location from settings",
-    "LOCATION_SERVICES_DISABLED": "Please enable your loaction from settings"
+    "LOCATION_SERVICES_DISABLED": "Please enable your loaction from settings",
+    "MODE_OFFLINE": "The mode is set to offline; please switch to online to proceed.",
+    "NO_INTERNET_AVAILABLE_MODE_ONLINE":  "No internet connection available, but the mode is set to online. Please check your network.",
+    "INTERNET_AVAILABLE_MODE_OFFLINE": "Internet is available, but mode is set to offline, Please check your mode.",
+    "NETWORK": "No internet connection available."
   },
   "TABLE": {
     "CITY": "City",
@@ -277,7 +281,7 @@
   "ETD": "ETD: ",
   "NO_ROUTES": "No Routes Available",
   "SET_LOCATION": "Set Your Primary Location",
-  "NETWORK": "Network Error",
+  "NETWORK": "Internet Required",
   "NO_INTERNET": "Please check your connectivity... Once data is synced you can use offline.",
   "NO_INTERNET_MAP": "Please check your connectivity... Internet connection is mandatory to load Map.",
   "GET_MORE_DATA": "Please connect to internet to get more data.",
