@@ -38,7 +38,7 @@ analytics().setAnalyticsCollectionEnabled(true);
 // analytics().setAnalyticsCollectionEnabled(true);
 
 export default function App() {
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
 
   const [isFirstTime, setIsFirstTime] = useState(null); // Set initial state to null
   const [loading, setLoading] = useState(true); // Add loading state
@@ -61,7 +61,7 @@ export default function App() {
   }, []);
 
   const callAPI = () => {
-    dataSync(t('STORAGE.LANDING_RESPONSE'), callLandingPageAPI, mode).then(
+    dataSync("landingResponse", callLandingPageAPI, true).then(
       resp => {},
     );
   }
@@ -83,21 +83,17 @@ export default function App() {
   };
 
   const setOfflineData = resp => {
-    saveToStorage(t('STORAGE.LANDING_RESPONSE'), JSON.stringify(resp));
-    saveToStorage(
-      t('STORAGE.CATEGORIES_RESPONSE'),
-      JSON.stringify(resp.categories),
-    );
-    saveToStorage(t('STORAGE.ROUTES_RESPONSE'), JSON.stringify(resp.routes));
-    saveToStorage(t('STORAGE.CITIES_RESPONSE'), JSON.stringify(resp.cities));
-    saveToStorage(t('STORAGE.EMERGENCY'), JSON.stringify(resp.emergencies));
-    saveToStorage(t('STORAGE.QUERIES'), JSON.stringify(resp.queries));
-    saveToStorage(t('STORAGE.GALLERY'), JSON.stringify(resp.gallery));
-    saveToStorage(t('STORAGE.PROFILE_RESPONSE'), JSON.stringify(resp.user));
-    setProfilePhoto(resp.user.profile_picture);
-    AsyncStorage.setItem(t('STORAGE.USER_NAME'), resp.user.name);
-    AsyncStorage.setItem(t('STORAGE.USER_ID'), JSON.stringify(resp.user.id));
-    AsyncStorage.setItem(t('STORAGE.USER_EMAIL'), resp.user.email);
+    saveToStorage("landingResponse", JSON.stringify(resp));
+    saveToStorage("categoriesResponse", JSON.stringify(resp.categories));
+    saveToStorage("routesResponse", JSON.stringify(resp.routes));
+    saveToStorage("citiesResponse", JSON.stringify(resp.cities));
+    saveToStorage("emergency", JSON.stringify(resp.emergencies));
+    saveToStorage("queries", JSON.stringify(resp.queries));
+    saveToStorage("gallery", JSON.stringify(resp.gallery));
+    saveToStorage("profileResponse", JSON.stringify(resp.user));
+    saveToStorage("userName", resp.user.name);
+    saveToStorage("userId", JSON.stringify(resp.user.id));
+    saveToStorage("userEmail", resp.user.email);
   };
 
   const slides = [
