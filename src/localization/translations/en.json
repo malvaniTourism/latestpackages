@@ -171,7 +171,7 @@
     "PLEASE_ENABLE_LOCATION": "Please enable your location from settings",
     "LOCATION_SERVICES_DISABLED": "Please enable your loaction from settings",
     "MODE_OFFLINE": "The mode is set to offline; please switch to online to proceed.",
-    "NO_INTERNET_AVAILABLE_MODE_ONLINE":  "No internet connection available, but the mode is set to online. Please check your network.",
+    "NO_INTERNET_AVAILABLE_MODE_ONLINE": "No internet connection available, but the mode is set to online. Please check your network.",
     "INTERNET_AVAILABLE_MODE_OFFLINE": "Internet is available, but mode is set to offline, Please check your mode.",
     "NETWORK": "No internet connection available."
   },

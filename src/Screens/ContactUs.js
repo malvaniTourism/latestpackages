@@ -92,33 +92,27 @@ const ContactUs = ({navigation, route, step, setStep, offline, ...props}) => {
     // Check the internet connectivity state
     const state = await NetInfo.fetch();
     const isConnected = state.isConnected;
-      
+
     // Combined condition for all three cases
     if (
-      (
-        (isConnected && !mode) // Case 1: Internet is available but mode is offline
-      ) || 
-      (
-        (!isConnected && !mode) // Case 2: Internet is not available and mode is offline
-      ) ||
-      (
-        (!isConnected && mode) // Case 3: Internet is not available but mode is online
-      )                               
-    ) {        
+      (isConnected && !mode) || // Case 1: Internet is available but mode is offline
+      (!isConnected && !mode) || // Case 2: Internet is not available and mode is offline
+      (!isConnected && mode) // Case 3: Internet is not available but mode is online
+    ) {
       // The user should be alerted based on their mode and connectivity status
       setIsAlert(true);
       setAlertMessage(
-        (!isConnected && !mode) 
+        !isConnected && !mode
           ? t('ALERT.NETWORK') // Alert: Network is available but mode is offline
-          : (!isConnected && mode) 
+          : !isConnected && mode
           ? t('ALERT.NO_INTERNET_AVAILABLE_MODE_ONLINE') // Alert: Mode is offline, you need to set it to online
-          : (isConnected && !mode)  
+          : isConnected && !mode
           ? t('ALERT.INTERNET_AVAILABLE_MODE_OFFLINE') // Alert: No internet available but mode is online
-          : '' // Default case (optional), if none of the conditions match
+          : '', // Default case (optional), if none of the conditions match
       );
-      
+
       return;
-    }     
+    }
 
     props.setLoader(true);
     let data = {

@@ -21,8 +21,12 @@ import analytics from '@react-native-firebase/analytics';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import './src/localization/i18n';
 import firebase from '@react-native-firebase/app';
-import { comnPost, dataSync, saveToStorage } from './src/Services/Api/CommonServices';
-import { useTranslation } from 'react-i18next';
+import {
+  comnPost,
+  dataSync,
+  saveToStorage,
+} from './src/Services/Api/CommonServices';
+import {useTranslation} from 'react-i18next';
 
 // LogBox.ignoreAllLogs();
 // LogBox.ignoreLogs(['Warning: ...', 'Possible Unhandled Promise Rejection']);
@@ -61,39 +65,37 @@ export default function App() {
   }, []);
 
   const callAPI = () => {
-    dataSync("landingResponse", callLandingPageAPI, true).then(
-      resp => {},
-    );
-  }
+    dataSync('landingResponse', callLandingPageAPI, true).then(resp => {});
+  };
 
   const callLandingPageAPI = async site_id => {
     try {
-        let data = {
-            site_id,
-          };
-        const res = await comnPost('v2/landingpage', data);
-        if (res && res.data.data) {
-          setOfflineData(res.data.data);
-        }
+      let data = {
+        site_id,
+      };
+      const res = await comnPost('v2/landingpage', data);
+      if (res && res.data.data) {
+        setOfflineData(res.data.data);
+      }
     } catch (error) {
       console.log(error);
     } finally {
-      console.log("finally");
+      console.log('finally');
     }
   };
 
   const setOfflineData = resp => {
-    saveToStorage("landingResponse", JSON.stringify(resp));
-    saveToStorage("categoriesResponse", JSON.stringify(resp.categories));
-    saveToStorage("routesResponse", JSON.stringify(resp.routes));
-    saveToStorage("citiesResponse", JSON.stringify(resp.cities));
-    saveToStorage("emergency", JSON.stringify(resp.emergencies));
-    saveToStorage("queries", JSON.stringify(resp.queries));
-    saveToStorage("gallery", JSON.stringify(resp.gallery));
-    saveToStorage("profileResponse", JSON.stringify(resp.user));
-    saveToStorage("userName", resp.user.name);
-    saveToStorage("userId", JSON.stringify(resp.user.id));
-    saveToStorage("userEmail", resp.user.email);
+    saveToStorage('landingResponse', JSON.stringify(resp));
+    saveToStorage('categoriesResponse', JSON.stringify(resp.categories));
+    saveToStorage('routesResponse', JSON.stringify(resp.routes));
+    saveToStorage('citiesResponse', JSON.stringify(resp.cities));
+    saveToStorage('emergency', JSON.stringify(resp.emergencies));
+    saveToStorage('queries', JSON.stringify(resp.queries));
+    saveToStorage('gallery', JSON.stringify(resp.gallery));
+    saveToStorage('profileResponse', JSON.stringify(resp.user));
+    saveToStorage('userName', resp.user.name);
+    saveToStorage('userId', JSON.stringify(resp.user.id));
+    saveToStorage('userEmail', resp.user.email);
   };
 
   const slides = [

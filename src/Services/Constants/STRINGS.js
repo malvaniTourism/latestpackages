@@ -162,10 +162,13 @@ const STRING = {
     ENABLE_LOCATION_SERVICES:
       'Please enable location services to continue using this app.',
     OPEN_SETTINGS: 'Open Settings',
-    MODE_OFFLINE: "The mode is set to offline; please switch to online to proceed.",
-    NO_INTERNET_AVAILABLE_MODE_ONLINE:  "No internet connection available, but the mode is set to online. Please check your network.",
-    INTERNET_AVAILABLE_MODE_OFFLINE: "Internet is available, but mode is set to offline, Please check your mode.",
-    NETWORK: "No internet connection available."
+    MODE_OFFLINE:
+      'The mode is set to offline; please switch to online to proceed.',
+    NO_INTERNET_AVAILABLE_MODE_ONLINE:
+      'No internet connection available, but the mode is set to online. Please check your network.',
+    INTERNET_AVAILABLE_MODE_OFFLINE:
+      'Internet is available, but mode is set to offline, Please check your mode.',
+    NETWORK: 'No internet connection available.',
   },
   TABLE: {
     CITY: 'City',

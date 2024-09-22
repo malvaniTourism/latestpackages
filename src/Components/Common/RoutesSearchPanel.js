@@ -10,13 +10,17 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import COLOR from '../../Services/Constants/COLORS';
 import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
-import {setDestination, setLoader, setSource} from '../../Reducers/CommonActions';
+import {
+  setDestination,
+  setLoader,
+  setSource,
+} from '../../Reducers/CommonActions';
 import GlobalText from '../Customs/Text';
 import SearchDropdown from './SearchDropdown';
 import {useTranslation} from 'react-i18next';
 import STRING from '../../Services/Constants/STRINGS';
-import { navigateTo } from '../../Services/CommonMethods';
-import { useFocusEffect } from '@react-navigation/native';
+import {navigateTo} from '../../Services/CommonMethods';
+import {useFocusEffect} from '@react-navigation/native';
 
 const RoutesSearchPanel = ({
   mySource,
@@ -181,7 +185,10 @@ const RoutesSearchPanel = ({
   };
 
   const pressed = type => {
-    navigateTo(navigation, t('SCREEN.SEARCH_PLACE'), {type, from: t("SCREEN.ALL_ROUTES_SEARCH")});
+    navigateTo(navigation, t('SCREEN.SEARCH_PLACE'), {
+      type,
+      from: t('SCREEN.ALL_ROUTES_SEARCH'),
+    });
     setFieldType(type);
   };
 

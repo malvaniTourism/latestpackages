@@ -39,7 +39,9 @@ export const comnPost = async (url, data, navigation) => {
   } catch (err) {
     if (err.response?.status == 401) {
       await AsyncStorage.clear();
-      navigateTo(navigation, STRING.SCREEN.LANG_SELECTION);
+      if (navigation) {
+        navigateTo(navigation, STRING.SCREEN.LANG_SELECTION);
+      }
     }
     return err;
   }

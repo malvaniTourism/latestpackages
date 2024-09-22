@@ -18,7 +18,7 @@ import {
   comnPost,
   dataSync,
   saveToStorage,
-  getFromStorage
+  getFromStorage,
 } from '../../Services/Api/CommonServices';
 import Loader from '../../Components/Customs/Loader';
 import {checkLogin, goBackHandler} from '../../Services/CommonMethods';
@@ -93,12 +93,10 @@ const ExploreGrid = ({route, navigation, ...props}) => {
     const state = await NetInfo.fetch();
     const isConnected = state.isConnected;
 
-    if(!isConnected && !mode)
-    {
+    if (!isConnected && !mode) {
       setIsAlert(true);
       setAlertMessage(
-        (!isConnected && !mode) 
-          ? t('ALERT.NETWORK') : ''// Alert: Network is available but mode is offline
+        !isConnected && !mode ? t('ALERT.NETWORK') : '', // Alert: Network is available but mode is offline
       );
     }
 
@@ -286,8 +284,7 @@ const ExploreGrid = ({route, navigation, ...props}) => {
           visible={showOnlineMode}
           toggleOverlay={() => setShowOnlineMode(false)}
         />
-      <Popup message={alertMessage} onPress={closePopup} visible={isAlert} />
-
+        <Popup message={alertMessage} onPress={closePopup} visible={isAlert} />
       </ScrollView>
     </>
   );

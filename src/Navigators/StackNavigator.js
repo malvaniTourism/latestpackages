@@ -66,7 +66,7 @@ const StackNavigator = () => {
               headerShown: false,
               cardStyle: {backgroundColor: '#fff'},
             }}>
-              <Stack.Screen
+            <Stack.Screen
               name={t('SCREEN.LANG_SELECTION')}
               component={LangSelection}
               options={{headerShown: false}}

@@ -55,49 +55,43 @@ const UpdateProfile = ({
     // Check the internet connectivity state
     const state = await NetInfo.fetch();
     const isConnected = state.isConnected;
-      
+
     // Combined condition for all three cases
     if (
-      (
-        (isConnected && !mode) // Case 1: Internet is available but mode is offline
-      ) || 
-      (
-        (!isConnected && !mode) // Case 2: Internet is not available and mode is offline
-      ) ||
-      (
-        (!isConnected && mode) // Case 3: Internet is not available but mode is online
-      )                               
-    ) {        
+      (isConnected && !mode) || // Case 1: Internet is available but mode is offline
+      (!isConnected && !mode) || // Case 2: Internet is not available and mode is offline
+      (!isConnected && mode) // Case 3: Internet is not available but mode is online
+    ) {
       // The user should be alerted based on their mode and connectivity status
       setIsAlert(true);
       setAlertMessage(
-        (!isConnected && !mode) 
+        !isConnected && !mode
           ? t('ALERT.NETWORK') // Alert: Network is available but mode is offline
-          : (!isConnected && mode) 
+          : !isConnected && mode
           ? t('ALERT.NO_INTERNET_AVAILABLE_MODE_ONLINE') // Alert: Mode is offline, you need to set it to online
-          : (isConnected && !mode)  
+          : isConnected && !mode
           ? t('ALERT.INTERNET_AVAILABLE_MODE_OFFLINE') // Alert: No internet available but mode is online
-          : '' // Default case (optional), if none of the conditions match
+          : '', // Default case (optional), if none of the conditions match
       );
-      
+
       return;
-    }     
+    }
 
     // Proceed with the rest of the save logic if mode is online
     if (mode) {
       setLoader(true);
       let data = {};
-  
+
       // Build the data object based on whether mobile is available
       data = {
         email,
-        ...(mobile && { mobile }), // Only include mobile if available
+        ...(mobile && {mobile}), // Only include mobile if available
         profile_picture: uploadImage,
       };
-  
+
       try {
         const res = await comnPost('v2/updateProfile', data);
-  
+
         if (res.data.success) {
           await AsyncStorage.setItem('isUpdated', 'true');
           refreshOption(); // Assuming this is synchronous or you're handling async within it
@@ -105,9 +99,9 @@ const UpdateProfile = ({
           setIsAlert(true);
           setAlertMessage(
             res.data.message?.email ||
-            res.data.message?.mobile ||
-            res.data?.message ||
-            t('NETWORK')
+              res.data.message?.mobile ||
+              res.data?.message ||
+              t('NETWORK'),
           );
           setLoader(false);
         }
@@ -120,7 +114,7 @@ const UpdateProfile = ({
       setShowOnlineMode(true);
     }
   };
-  
+
   const closePopup = () => {
     setIsAlert(false);
   };

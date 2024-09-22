@@ -21,7 +21,7 @@ const LangSelection = ({navigation}) => {
 
   useEffect(() => {
     saveToken();
-  }, [])
+  }, []);
 
   const saveLang = () => {
     i18n.changeLanguage(language);
