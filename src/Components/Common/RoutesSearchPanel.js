@@ -10,11 +10,13 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import COLOR from '../../Services/Constants/COLORS';
 import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
-import {setLoader} from '../../Reducers/CommonActions';
+import {setDestination, setLoader, setSource} from '../../Reducers/CommonActions';
 import GlobalText from '../Customs/Text';
 import SearchDropdown from './SearchDropdown';
 import {useTranslation} from 'react-i18next';
 import STRING from '../../Services/Constants/STRINGS';
+import { navigateTo } from '../../Services/CommonMethods';
+import { useFocusEffect } from '@react-navigation/native';
 
 const RoutesSearchPanel = ({
   mySource,
@@ -39,11 +41,19 @@ const RoutesSearchPanel = ({
   const [destination, setDestination] = useState(myDestination);
 
   useEffect(() => {
-    // setSource(props.source?.name || "");
-    // setDestination(props.destination.name || "");
+    setSource(props.source || '');
+    setDestination(props.destination || '');
     // checkIsValid()
     checkIsValid();
   }, [props]);
+
+  useFocusEffect(
+    React.useCallback(async () => {
+      setSource(props.source || '');
+      setDestination(props.destination || '');
+      checkIsValid();
+    }, [props.source, props.destination]),
+  );
 
   const setValue = (v, i, index, type) => {
     switch (index) {
@@ -62,14 +72,18 @@ const RoutesSearchPanel = ({
   const getValue = i => {
     switch (i) {
       case 0:
-        return source?.name;
+        return props.source?.name || source?.name;
       case 1:
-        return destination?.name;
+        return props.destination?.name || destination?.name;
     }
   };
 
   const checkIsValid = () => {
-    if (source?.name && destination?.name) setIsValid(true);
+    if (
+      (source?.name || props.source?.name) &&
+      (destination?.name || props.destination?.name)
+    )
+      setIsValid(true);
     else setIsValid(false);
   };
 
@@ -88,6 +102,8 @@ const RoutesSearchPanel = ({
     setSourceId(b.id);
     setDestination(a);
     setDestinationId(a.id);
+    props.setSource(b);
+    props.setDestination(a);
   };
 
   const refresh = async () => {
@@ -97,6 +113,8 @@ const RoutesSearchPanel = ({
     setSourceId(null);
     setDestination('');
     setDestinationId(null);
+    props.setSource('');
+    props.setDestination('');
     onSwap(a, b);
   };
 
@@ -163,7 +181,7 @@ const RoutesSearchPanel = ({
   };
 
   const pressed = type => {
-    searchPlace();
+    navigateTo(navigation, t('SCREEN.SEARCH_PLACE'), {type, from: t("SCREEN.ALL_ROUTES_SEARCH")});
     setFieldType(type);
   };
 
@@ -248,13 +266,22 @@ const RoutesSearchPanel = ({
 };
 
 const mapStateToProps = state => {
-  return {};
+  return {
+    source: state.commonState.source,
+    destination: state.commonState.destination,
+  };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     setLoader: data => {
       dispatch(setLoader(data));
+    },
+    setSource: data => {
+      dispatch(setSource(data));
+    },
+    setDestination: data => {
+      dispatch(setDestination(data));
     },
   };
 };

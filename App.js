@@ -21,6 +21,8 @@ import analytics from '@react-native-firebase/analytics';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import './src/localization/i18n';
 import firebase from '@react-native-firebase/app';
+import { comnPost, dataSync, saveToStorage } from './src/Services/Api/CommonServices';
+import { useTranslation } from 'react-i18next';
 
 // LogBox.ignoreAllLogs();
 // LogBox.ignoreLogs(['Warning: ...', 'Possible Unhandled Promise Rejection']);
@@ -36,6 +38,8 @@ analytics().setAnalyticsCollectionEnabled(true);
 // analytics().setAnalyticsCollectionEnabled(true);
 
 export default function App() {
+  const { t } = useTranslation();
+
   const [isFirstTime, setIsFirstTime] = useState(null); // Set initial state to null
   const [loading, setLoading] = useState(true); // Add loading state
 
@@ -53,7 +57,48 @@ export default function App() {
   };
   useEffect(() => {
     doSomething();
+    callAPI();
   }, []);
+
+  const callAPI = () => {
+    dataSync(t('STORAGE.LANDING_RESPONSE'), callLandingPageAPI, mode).then(
+      resp => {},
+    );
+  }
+
+  const callLandingPageAPI = async site_id => {
+    try {
+        let data = {
+            site_id,
+          };
+        const res = await comnPost('v2/landingpage', data);
+        if (res && res.data.data) {
+          setOfflineData(res.data.data);
+        }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      console.log("finally");
+    }
+  };
+
+  const setOfflineData = resp => {
+    saveToStorage(t('STORAGE.LANDING_RESPONSE'), JSON.stringify(resp));
+    saveToStorage(
+      t('STORAGE.CATEGORIES_RESPONSE'),
+      JSON.stringify(resp.categories),
+    );
+    saveToStorage(t('STORAGE.ROUTES_RESPONSE'), JSON.stringify(resp.routes));
+    saveToStorage(t('STORAGE.CITIES_RESPONSE'), JSON.stringify(resp.cities));
+    saveToStorage(t('STORAGE.EMERGENCY'), JSON.stringify(resp.emergencies));
+    saveToStorage(t('STORAGE.QUERIES'), JSON.stringify(resp.queries));
+    saveToStorage(t('STORAGE.GALLERY'), JSON.stringify(resp.gallery));
+    saveToStorage(t('STORAGE.PROFILE_RESPONSE'), JSON.stringify(resp.user));
+    setProfilePhoto(resp.user.profile_picture);
+    AsyncStorage.setItem(t('STORAGE.USER_NAME'), resp.user.name);
+    AsyncStorage.setItem(t('STORAGE.USER_ID'), JSON.stringify(resp.user.id));
+    AsyncStorage.setItem(t('STORAGE.USER_EMAIL'), resp.user.email);
+  };
 
   const slides = [
     {

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ImageBackground, View} from 'react-native';
 import COLOR from '../../Services/Constants/COLORS';
 import styles from './Styles';
@@ -7,6 +7,7 @@ import GlobalText from '../../Components/Customs/Text';
 import {Dropdown} from 'react-native-element-dropdown';
 import TextButton from '../../Components/Customs/Buttons/TextButton';
 import {navigateTo} from '../../Services/CommonMethods';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LangSelection = ({navigation}) => {
   const {t, i18n} = useTranslation();
@@ -18,9 +19,22 @@ const LangSelection = ({navigation}) => {
   const [language, setLanguage] = useState('en');
   const [isFocus, setIsFocus] = useState(false);
 
+  useEffect(() => {
+    saveToken();
+  }, [])
+
   const saveLang = () => {
     i18n.changeLanguage(language);
     navigateTo(navigation, t('SCREEN.EMAIL'));
+  };
+
+  const saveToken = async () => {
+    if (
+      (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) != null ||
+      (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) != ''
+    ) {
+      navigateTo(navigation, t('SCREEN.HOME'));
+    }
   };
 
   return (

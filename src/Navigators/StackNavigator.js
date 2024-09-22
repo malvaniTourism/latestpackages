@@ -66,6 +66,11 @@ const StackNavigator = () => {
               headerShown: false,
               cardStyle: {backgroundColor: '#fff'},
             }}>
+              <Stack.Screen
+              name={t('SCREEN.LANG_SELECTION')}
+              component={LangSelection}
+              options={{headerShown: false}}
+            />
             <Stack.Screen
               name={t('SCREEN.MAIN')}
               component={DrawerNavigator}
@@ -93,6 +98,11 @@ const StackNavigator = () => {
             presentation: 'modal',
             cardStyle: {backgroundColor: '#fff'},
           }}>
+          {/* <Stack.Screen
+            name={t('SCREEN.LANG_SELECTION')}
+            component={LangSelection}
+            options={{headerShown: false}}
+          /> */}
           <Stack.Screen
             name={t('SCREEN.HOME')}
             component={DrawerNavigator}
@@ -105,10 +115,10 @@ const StackNavigator = () => {
           />
           <Stack.Screen name={t('SCREEN.ROUTES_LIST')} component={RoutesList} />
           <Stack.Screen name={t('SCREEN.BUS_TIMINGS')} component={BusTimings} />
-          <Stack.Screen
+          {/* <Stack.Screen
             name={t('SCREEN.LANG_SELECTION')}
             component={LangSelection}
-          />
+          /> */}
           <Stack.Screen name={t('SCREEN.AUTH_SCREEN')} component={AuthScreen} />
           <Stack.Screen name={t('SCREEN.LOGIN')} component={SignIn} />
           <Stack.Screen

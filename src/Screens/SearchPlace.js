@@ -40,6 +40,9 @@ const SearchPlace = ({navigation, route, ...props}) => {
     comnPost(`v2/sites`, data)
       .then(res => {
         if (res.data.success) {
+          let nextUrl = res.data.data.next_page_url;
+          setPlacesList([...placesList, ...res.data.data.data]);
+          setNextPage(nextUrl[nextUrl.length - 1]);
           props.setLoader(false);
           setPlacesList(res.data.data.data);
         } else {
@@ -82,7 +85,7 @@ const SearchPlace = ({navigation, route, ...props}) => {
       props.setDestination(place);
     }
     setSearchValue('');
-    navigateTo(navigation, t('SCREEN.HOME_TAB'), {from: 'SearchPlace'});
+    navigateTo(navigation, route.params?.from, {from: 'SearchPlace'});
   };
 
   const goToNext = () => {

@@ -183,7 +183,7 @@ const SearchPanel = ({navigation, from, onSwap, ...props}) => {
   };
 
   const pressed = type => {
-    navigateTo(navigation, t('SCREEN.SEARCH_PLACE'), {type});
+    navigateTo(navigation, t('SCREEN.SEARCH_PLACE'), {type, from: t("SCREEN.HOME_TAB")});
     setFieldType(type);
   };
 
