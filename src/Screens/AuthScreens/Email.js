@@ -45,17 +45,19 @@ const Email = ({ navigation, route, ...props }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   GoogleSignin.configure({
-    webClientId: '203571229982-d7l3as4nv7iq4kefuhn2g5cqpremr7v1.apps.googleusercontent.com',
+    scopes: ['profile', 'email'], // Specify any additional scopes you need
+    webClientId: '203571229982-efi4evf812leaot8kf3m8a1jelt28fhf.apps.googleusercontent.com',
   });
 
   const signInWithGoogle = async () => {
     try {
       console.log(1);
-      await GoogleSignin.hasPlayServices();
+      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+
       console.log(2);
       const userInfo = await GoogleSignin.signIn();
       console.log(3);
-      console.log('userInfo.idToken - - ', userInfo.idToken);
+      console.log('userInfo.idToken - - ', userInfo);
 
       // Send userInfo.idToken to your Laravel backend
       const response = await fetch('https://dev.tourkokan.com/api/v2/auth/googleAuth', {
@@ -92,7 +94,7 @@ const Email = ({ navigation, route, ...props }) => {
       }
     } catch (error) {
       console.log(4);
-      console.error(error);
+      console.log(4, error.message, error.code);
     }
   };
 
@@ -316,7 +318,7 @@ const Email = ({ navigation, route, ...props }) => {
         </TouchableOpacity> */}
         <View style={{ alignItems: 'center' }}>
           <TextButton
-            title={t('BUTTON.GENERATE_OTP')}
+            title={t('BUTTON.SEND_OTP')}
             buttonView={styles.buttonView}
             isDisabled={isButtonDisabled}
             raised={true}
