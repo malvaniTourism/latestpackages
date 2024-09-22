@@ -109,9 +109,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
   const [isAlert, setIsAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
 
-  useEffect(() => {
-    console.log("herer 1");
-    
+  useEffect(() => {    
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
       event => {
@@ -158,8 +156,6 @@ const HomeScreen = ({navigation, route, ...props}) => {
   };
 
   useEffect(() => {
-    console.log("herer 2");
-
     let isMounted = true; // flag to track if the component is mounted
 
     const init = async () => {
@@ -267,8 +263,6 @@ const HomeScreen = ({navigation, route, ...props}) => {
 
       if (isUpdated === 'true' && props.mode) {
         // setIsInitialLoad(false); // Update state to indicate that the initial load has occurred
-
-        console.log('herter');
 
         // Your existing logic
         // setCities([]);
