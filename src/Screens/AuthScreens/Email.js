@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {useState} from 'react';
+import React, { useEffect } from 'react';
+import { useState } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -8,26 +8,29 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import TextField from '../../Components/Customs/TextField';
-import {EmailField} from '../../Services/Constants/FIELDS';
+import { EmailField } from '../../Services/Constants/FIELDS';
 import TextButton from '../../Components/Customs/Buttons/TextButton';
 import styles from './Styles';
-import {comnPost} from '../../Services/Api/CommonServices';
-import {connect} from 'react-redux';
-import {saveAccess_token, setLoader} from '../../Reducers/CommonActions';
+import { comnPost, saveToStorage } from '../../Services/Api/CommonServices';
+import { connect } from 'react-redux';
+import { saveAccess_token, setLoader, setMode } from '../../Reducers/CommonActions';
 import Loader from '../../Components/Customs/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import COLOR from '../../Services/Constants/COLORS';
-import {navigateTo} from '../../Services/CommonMethods';
+import { navigateTo } from '../../Services/CommonMethods';
 import GlobalText from '../../Components/Customs/Text';
 // import SQLite from 'react-native-sqlite-storage';
 import Popup from '../../Components/Common/Popup';
 import Feather from 'react-native-vector-icons/Feather';
-import {CommonActions} from '@react-navigation/native';
-import {useTranslation} from 'react-i18next';
-import {color} from 'react-native-reanimated';
+import { CommonActions } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { color } from 'react-native-reanimated';
+import { GoogleSignin, GoogleSigninButton } from '@react-native-google-signin/google-signin';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
 
-const Email = ({navigation, route, ...props}) => {
-  const {t} = useTranslation();
+const Email = ({ navigation, route, ...props }) => {
+  const { t } = useTranslation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -40,6 +43,58 @@ const Email = ({navigation, route, ...props}) => {
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  GoogleSignin.configure({
+    webClientId: '203571229982-d7l3as4nv7iq4kefuhn2g5cqpremr7v1.apps.googleusercontent.com',
+  });
+
+  const signInWithGoogle = async () => {
+    try {
+      console.log(1);
+      await GoogleSignin.hasPlayServices();
+      console.log(2);
+      const userInfo = await GoogleSignin.signIn();
+      console.log(3);
+      console.log('userInfo.idToken - - ', userInfo.idToken);
+
+      // Send userInfo.idToken to your Laravel backend
+      const response = await fetch('https://dev.tourkokan.com/api/v2/auth/googleAuth', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token: userInfo.idToken }),
+      });
+
+      const result = await response.json();
+      console.log('res- - - ', result);
+      if (result.data?.success) {
+        AsyncStorage.setItem(
+          t('STORAGE.ACCESS_TOKEN'),
+          result.data.data.access_token,
+        );
+        AsyncStorage.setItem(
+          t('STORAGE.USER_ID'),
+          JSON.stringify(result.data.data.user.id),
+        );
+        props.setLoader(false);
+        AsyncStorage.setItem(
+          t('STORAGE.IS_FIRST_TIME'),
+          JSON.stringify(true),
+        );
+        saveToStorage(t('STORAGE.MODE'), JSON.stringify(true));
+        props.setMode(true);
+        navigateTo(navigation, t('SCREEN.HOME'));
+      } else {
+        setIsAlert(true);
+        setAlertMessage(result.data.message?.otp || result.data.message);
+        props.setLoader(false);
+      }
+    } catch (error) {
+      console.log(4);
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     // openDB()
@@ -96,7 +151,7 @@ const Email = ({navigation, route, ...props}) => {
       tx.executeSql('SELECT * FROM users', [], (tx, results) => {
         const len = results.rows.length;
         for (let i = 0; i < len; i++) {
-          const {id, name, email} = results.rows.item(i);
+          const { id, name, email } = results.rows.item(i);
           console.log(`User ${id}: ${name} (${email})`);
         }
       });
@@ -128,7 +183,7 @@ const Email = ({navigation, route, ...props}) => {
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [{name: t('SCREEN.HOME')}],
+          routes: [{ name: t('SCREEN.HOME') }],
         }),
       );
     }
@@ -174,7 +229,7 @@ const Email = ({navigation, route, ...props}) => {
       .then(res => {
         if (res.data?.success) {
           props.setLoader(false);
-          navigateTo(navigation, t('SCREEN.VERIFY_OTP'), {email});
+          navigateTo(navigation, t('SCREEN.VERIFY_OTP'), { email });
         } else {
           setIsAlert(true);
           setIsSuccess(false);
@@ -182,8 +237,8 @@ const Email = ({navigation, route, ...props}) => {
             res.data?.message.email
               ? res.data?.message.email
               : res.data?.message
-              ? res.data?.message
-              : t('NETWORK'),
+                ? res.data?.message
+                : t('NETWORK'),
           );
           props.setLoader(false);
         }
@@ -197,11 +252,11 @@ const Email = ({navigation, route, ...props}) => {
   };
 
   const selectPassword = () => {
-    navigateTo(navigation, t('SCREEN.PASSWORD_LOGIN'), {email});
+    navigateTo(navigation, t('SCREEN.PASSWORD_LOGIN'), { email });
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: COLOR.white}}>
+    <View style={{ flex: 1, backgroundColor: COLOR.white }}>
       <ImageBackground
         style={styles.loginImage}
         source={require('../../Assets/Images/Intro/login_background.png')}
@@ -217,7 +272,6 @@ const Email = ({navigation, route, ...props}) => {
         <GlobalText text={t('WELCOME')} style={styles.welcomeText} />
         <GlobalText text={t('APPNAME')} style={styles.boldKokan} />
       </View>
-
       <View style={styles.middleFlex}>
         <GlobalText text={t('LOG_IN')} style={styles.loginText} />
         {EmailField.map((field, index) => {
@@ -260,7 +314,7 @@ const Email = ({navigation, route, ...props}) => {
             style={styles.loginSubText}
           />
         </TouchableOpacity> */}
-        <View style={{alignItems: 'center'}}>
+        <View style={{ alignItems: 'center' }}>
           <TextButton
             title={t('BUTTON.GENERATE_OTP')}
             buttonView={styles.buttonView}
@@ -269,6 +323,20 @@ const Email = ({navigation, route, ...props}) => {
             onPress={() => generateOtp()}
           />
         </View>
+
+        <View style={styles.googleView}>
+          <GlobalText text={"---- OR ----"} style={{marginTop: DIMENSIONS.sectionGap}} />
+            <GoogleSigninButton
+              size={GoogleSigninButton.Size.Wide}
+              color={GoogleSigninButton.Color.Dark}
+              onPress={() => {
+                signInWithGoogle();
+              }}
+              style={styles.googleButton}
+              // disabled={isInProgress}
+            />
+        </View>
+
         <View style={styles.haveAcc}>
           <GlobalText text={t('DONT_HAVE_ACC')} />
           <TouchableOpacity onPress={() => signUpScreen()}>
@@ -278,7 +346,7 @@ const Email = ({navigation, route, ...props}) => {
       </View>
       <KeyboardAvoidingView
         behavior="height"
-        style={{flex: 1}}></KeyboardAvoidingView>
+        style={{ flex: 1 }}></KeyboardAvoidingView>
       <Popup message={alertMessage} onPress={closePopup} visible={isAlert} />
     </View>
   );
@@ -297,6 +365,9 @@ const mapDispatchToProps = dispatch => {
     },
     setLoader: data => {
       dispatch(setLoader(data));
+    },
+    setMode: data => {
+      dispatch(setMode(data));
     },
   };
 };

@@ -278,7 +278,8 @@ const ProfileView = ({navigation, route, ...props}) => {
               onPress: () => {
                 // Proceed to exit the app after the user acknowledges the message
                 // BackHandler.exitApp();
-                ToNavigate();
+                // backPress();
+                navigation.navigate(t('SCREEN.LANG_SELECTION'));
               },
             },
           ],
@@ -291,17 +292,6 @@ const ProfileView = ({navigation, route, ...props}) => {
       console.error('Logout error:', error); // Log any errors
     } finally {
       props.setLoader(false); // Ensure loader is stopped regardless of success or failure
-    }
-  };
-
-  const ToNavigate = async () => {
-    if (
-      (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == null ||
-      (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == ''
-    ) {
-      navigateTo(navigation, t('SCREEN.LANG_SELECTION'));
-    } else {
-      navigateTo(navigation, t('SCREEN.HOME'));
     }
   };
 

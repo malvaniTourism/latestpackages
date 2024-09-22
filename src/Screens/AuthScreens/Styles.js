@@ -36,9 +36,17 @@ const styles = StyleSheet.create({
     flex: 5,
     alignItems: 'center',
   },
+  googleView: {
+    alignItems: "center",
+    justifyContent: 'center',
+    flexDirection: 'column',
+  },
+  googleButton: {
+    width: DIMENSIONS.bannerWidth,
+    marginVertical: DIMENSIONS.sectionGap
+  },
   haveAcc: {
     flexDirection: 'row',
-    marginVertical: 20,
     justifyContent: 'center',
   },
   blueBold: {
