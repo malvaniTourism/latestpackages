@@ -110,6 +110,8 @@ const HomeScreen = ({navigation, route, ...props}) => {
   const [alertMessage, setAlertMessage] = useState('');
 
   useEffect(() => {
+    console.log("herer 1");
+    
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
       event => {
@@ -156,6 +158,8 @@ const HomeScreen = ({navigation, route, ...props}) => {
   };
 
   useEffect(() => {
+    console.log("herer 2");
+
     let isMounted = true; // flag to track if the component is mounted
 
     const init = async () => {
@@ -264,6 +268,8 @@ const HomeScreen = ({navigation, route, ...props}) => {
       if (isUpdated === 'true' && props.mode) {
         // setIsInitialLoad(false); // Update state to indicate that the initial load has occurred
 
+        console.log('herter');
+
         // Your existing logic
         // setCities([]);
         // setRoutes([]);
@@ -278,10 +284,6 @@ const HomeScreen = ({navigation, route, ...props}) => {
     try {
       let isFirstTime = await AsyncStorage.getItem(t('STORAGE.IS_FIRST_TIME'));
       let mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
-
-      if (offline) {
-        return;
-      }
 
       if (mode) {
         const selectedCity = await getSelectedCity();
@@ -327,6 +329,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
         await AsyncStorage.setItem('isUpdated', 'false');
       }
     } catch (error) {
+      console.log(error);
       setIsFetching(false);
       setIsLoading(false);
       props.setLoader(false);
@@ -396,38 +399,38 @@ const HomeScreen = ({navigation, route, ...props}) => {
     setIsLoading(false);
   };
 
-  const onCitySelect = async( city )=> {
-    const mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
-    // Check the internet connectivity state
-    const state = await NetInfo.fetch();
-    const isConnected = state.isConnected;
-      
-    // Combined condition for all three cases
-    if (
-      (
-        (isConnected && !mode) // Case 1: Internet is available but mode is offline
-      ) || 
-      (
-        (!isConnected && !mode) // Case 2: Internet is not available and mode is offline
-      ) ||
-      (
+  const onCitySelect = async city => {
+    let selectedCityId = JSON.parse(await getFromStorage(t('STORAGE.SELECTED_CITY_ID')));
+    let selectedCityName = JSON.parse(await getFromStorage(t('STORAGE.SELECTED_CITY_NAME')));
+
+    let mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
+      // Check the internet connectivity state
+      const state = await NetInfo.fetch();
+      const isConnected = state.isConnected;
+
+      // Combined condition for all three cases
+      if (
+        (isConnected && !mode) || // Case 1: Internet is available but mode is offline
+        (!isConnected && !mode) || // Case 2: Internet is not available and mode is offline
         (!isConnected && mode) // Case 3: Internet is not available but mode is online
-      )                               
-    ) {        
-      // The user should be alerted based on their mode and connectivity status
-      setIsAlert(true);
-      setAlertMessage(
-        (!isConnected && !mode) 
-          ? t('ALERT.NETWORK') // Alert: Network is available but mode is offline
-          : (!isConnected && mode) 
-          ? t('ALERT.NO_INTERNET_AVAILABLE_MODE_ONLINE') // Alert: Mode is offline, you need to set it to online
-          : (isConnected && !mode)  
-          ? t('ALERT.INTERNET_AVAILABLE_MODE_OFFLINE') // Alert: No internet available but mode is online
-          : '' // Default case (optional), if none of the conditions match
-      );
-      
-      return;
-    }     
+      ) {
+        // The user should be alerted based on their mode and connectivity status
+        setIsAlert(true);
+        setAlertMessage(
+          !isConnected && !mode
+            ? t('ALERT.NETWORK') // Alert: Network is available but mode is offline
+            : !isConnected && mode
+            ? t('ALERT.NO_INTERNET_AVAILABLE_MODE_ONLINE') // Alert: Mode is offline, you need to set it to online
+            : isConnected && !mode
+            ? t('ALERT.INTERNET_AVAILABLE_MODE_OFFLINE') // Alert: No internet available but mode is online
+            : '', // Default case (optional), if none of the conditions match
+        );
+        setCurrentCity(selectedCityName);
+        saveToStorage(t('STORAGE.SELECTED_CITY_ID'), JSON.stringify(selectedCityId));
+        saveToStorage(t('STORAGE.SELECTED_CITY_NAME'), JSON.stringify(selectedCityName));
+        
+        return;
+      }
 
     setCurrentCity(city.name);
     saveToStorage(t('STORAGE.SELECTED_CITY_ID'), JSON.stringify(city.id));
@@ -457,7 +460,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
     setUpdateApp(false);
     Linking.openURL(t('APP_URL'));
   };
-  
+
   const closePopup = () => {
     setIsAlert(false);
   };
