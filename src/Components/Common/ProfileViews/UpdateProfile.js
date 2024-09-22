@@ -110,9 +110,11 @@ const UpdateProfile = ({
         setAlertMessage(t('ALERT.WENT_WRONG'));
         setLoader(false);
       }
+      setLoader(false);
     } else {
       setShowOnlineMode(true);
     }
+    setLoader(false);
   };
 
   const closePopup = () => {

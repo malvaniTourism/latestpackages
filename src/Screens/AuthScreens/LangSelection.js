@@ -29,10 +29,16 @@ const LangSelection = ({navigation}) => {
   };
 
   const saveToken = async () => {
+    ToNavigate();
+  };
+
+  const ToNavigate = async () => {
     if (
-      (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) != null ||
-      (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) != ''
+      (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == null ||
+      (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == ''
     ) {
+      navigateTo(navigation, t('SCREEN.LANG_SELECTION'));
+    } else {
       navigateTo(navigation, t('SCREEN.HOME'));
     }
   };

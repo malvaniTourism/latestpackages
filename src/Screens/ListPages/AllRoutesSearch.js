@@ -46,7 +46,7 @@ const AllRoutesSearch = ({navigation, route, ...props}) => {
   const [lastPage, setLastPage] = useState(null);
   const [showOffline, setShowOffline] = useState(false);
 
-  useEffect(() => {
+  useEffect(() => {    
     props.setLoader(true);
     const backHandler = goBackHandler(navigation);
     checkLogin(navigation);
@@ -62,11 +62,12 @@ const AllRoutesSearch = ({navigation, route, ...props}) => {
             setOffline(true);
           }
           setIsLoading(false);
-          props.setLoader(false);
+          // props.setLoader(false);
         },
       );
       // removeFromStorage(t("STORAGE.LANDING_RESPONSE"))
     });
+    props.setLoader(false);
 
     return () => {
       backHandler.remove();
