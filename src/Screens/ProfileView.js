@@ -118,9 +118,16 @@ const ProfileView = ({navigation, route, ...props}) => {
     }
   };
 
-  const backPress = () => {
+  const backPress = async () => {
     if (option == 0) {
-      backPage(navigation);
+      if (
+        (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == null ||
+        (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == ''
+      ) {
+        navigateTo(navigation, t('SCREEN.LANG_SELECTION'));
+      } else {
+        navigateTo(navigation, t('SCREEN.HOME'));
+      }
     } else {
       setOption(0);
     }
@@ -270,7 +277,8 @@ const ProfileView = ({navigation, route, ...props}) => {
               text: 'OK',
               onPress: () => {
                 // Proceed to exit the app after the user acknowledges the message
-                BackHandler.exitApp();
+                // BackHandler.exitApp();
+                ToNavigate();
               },
             },
           ],
@@ -283,6 +291,17 @@ const ProfileView = ({navigation, route, ...props}) => {
       console.error('Logout error:', error); // Log any errors
     } finally {
       props.setLoader(false); // Ensure loader is stopped regardless of success or failure
+    }
+  };
+
+  const ToNavigate = async () => {
+    if (
+      (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == null ||
+      (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == ''
+    ) {
+      navigateTo(navigation, t('SCREEN.LANG_SELECTION'));
+    } else {
+      navigateTo(navigation, t('SCREEN.HOME'));
     }
   };
 

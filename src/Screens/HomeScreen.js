@@ -110,6 +110,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
   const [alertMessage, setAlertMessage] = useState('');
 
   useEffect(() => {
+    const backHandler = BackHandler.addEventListener(t('EVENT.HARDWARE_BACK_PRESS'),() => ToNavigate());
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
       event => {
@@ -126,8 +127,20 @@ const HomeScreen = ({navigation, route, ...props}) => {
     return () => {
       keyboardDidShowListener.remove();
       keyboardDidHideListener.remove();
+      backHandler.remove();
     };
   }, []);
+
+  const ToNavigate = async () => {
+    if (
+      (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == null ||
+      (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == ''
+    ) {
+      navigateTo(navigation, t('SCREEN.LANG_SELECTION'));
+    } else {
+      navigateTo(navigation, t('SCREEN.HOME'));
+    }
+  };
 
   // const setAppMode = async () => {
   //     let mode = await getFromStorage(t("STORAGE.MODE"))

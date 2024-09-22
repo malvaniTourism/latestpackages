@@ -99,8 +99,6 @@ const SearchPanel = ({navigation, from, onSwap, ...props}) => {
     }
     setSource({});
     setDestination({});
-    props.setSource('');
-    props.setDestination('');
   };
 
   const swap = async () => {
