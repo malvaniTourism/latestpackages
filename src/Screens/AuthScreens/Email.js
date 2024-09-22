@@ -46,7 +46,7 @@ const Email = ({navigation, route, ...props}) => {
     // createUserTable();
     const backHandler = BackHandler.addEventListener(
       t('EVENT.HARDWARE_BACK_PRESS'),
-      () => navigateTo(navigation, t('SCREEN.LANG_SELECTION')),
+      () => ToNavigate(),
     );
     return () => {
       backHandler.remove();
@@ -141,6 +141,17 @@ const Email = ({navigation, route, ...props}) => {
 
   const loginWithPassScreen = () => {
     navigateTo(navigation, t('SCREEN.EMAIL_SIGN_IN'));
+  };
+
+  const ToNavigate = async () => {
+    if (
+      (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == null ||
+      (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == ''
+    ) {
+      navigateTo(navigation, t('SCREEN.LANG_SELECTION'));
+    } else {
+      navigateTo(navigation, t('SCREEN.HOME'));
+    }
   };
 
   const validateEmail = email => {
