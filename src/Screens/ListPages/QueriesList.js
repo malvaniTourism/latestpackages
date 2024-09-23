@@ -237,7 +237,7 @@ const QueriesList = ({navigation, route, ...props}) => {
     <>
       <Header
         name={t('HEADER.CONTACT_US')}
-        goBack={() => goBackStep()}
+        goBack={() => backPage()}
         startIcon={
           <Ionicons
             name="chevron-back-outline"

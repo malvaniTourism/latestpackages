@@ -249,17 +249,40 @@ const ProfileView = ({navigation, route, ...props}) => {
   const handleLogout = async () => {
     try {
       const state = await NetInfo.fetch();
+      const isConnected = state.isConnected;
 
-      if (!state.isConnected) {
-        // Handle offline case
+      // Retrieve the app's mode
+      const mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
+
+      // Combined condition for all three cases
+      if (
+        (isConnected && !mode) || // Case 1: Internet is available but mode is offline
+        (!isConnected && !mode) || // Case 2: Internet is not available and mode is offline
+        (!isConnected && mode) // Case 3: Internet is not available but mode is online
+      ) {
+        // Determine the alert message based on the condition
+        const alertMessage = 
+          !isConnected && !mode
+            ? t('ALERT.NETWORK') // Alert: No internet and mode is offline
+            : !isConnected && mode
+            ? t('ALERT.NO_INTERNET_AVAILABLE_MODE_ONLINE') // Alert: No internet but mode is online
+            : isConnected && !mode
+            ? t('ALERT.INTERNET_AVAILABLE_MODE_OFFLINE') // Alert: Internet is available but mode is offline
+            : ''; // Default case (optional)
+
+        // Display the alert with the dynamic message
         Alert.alert(
-          'No Internet Connection',
-          'You are offline. Please check your internet connection and try again.',
+          t('ALERT.TITLE'), // You can set your alert title, e.g., "Connectivity Issue"
+          alertMessage,
           [{text: 'OK'}],
-          {cancelable: false},
+          {cancelable: false}
         );
-        return;
+        
+        return; // Exit early since the condition isn't met
       }
+
+      // Continue with your logic for when internet is available and mode is online
+
       props.setLoader(true);
 
       const res = await comnPost('v2/logout');
@@ -277,9 +300,9 @@ const ProfileView = ({navigation, route, ...props}) => {
               text: 'OK',
               onPress: () => {
                 // Proceed to exit the app after the user acknowledges the message
-                // BackHandler.exitApp();
+                BackHandler.exitApp();
                 // backPress();
-                navigation.navigate(t('SCREEN.LANG_SELECTION'));
+                // navigation.navigate(t('SCREEN.LANG_SELECTION'));
               },
             },
           ],

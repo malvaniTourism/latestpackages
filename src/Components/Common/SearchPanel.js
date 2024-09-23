@@ -5,7 +5,7 @@ import TextButton from '../Customs/Buttons/TextButton';
 import TextField from '../Customs/TextField';
 import styles from './Styles';
 import {connect} from 'react-redux';
-import {comnPost} from '../../Services/Api/CommonServices';
+import {comnPost, getFromStorage} from '../../Services/Api/CommonServices';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import COLOR from '../../Services/Constants/COLORS';
@@ -22,6 +22,7 @@ import {useTranslation} from 'react-i18next';
 import STRING from '../../Services/Constants/STRINGS';
 import Popup from './Popup';
 import {useFocusEffect} from '@react-navigation/native';
+import NetInfo from '@react-native-community/netinfo';
 
 const SearchPanel = ({navigation, from, onSwap, ...props}) => {
   const {t} = useTranslation();
@@ -84,7 +85,32 @@ const SearchPanel = ({navigation, from, onSwap, ...props}) => {
     else setIsValid(false);
   };
 
-  const gotoRoutes = () => {
+  const gotoRoutes = async () => {
+    const mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
+    // Check the internet connectivity state
+    const state = await NetInfo.fetch();
+    const isConnected = state.isConnected;
+
+    // Combined condition for all three cases
+    if (
+      (isConnected && !mode) || // Case 1: Internet is available but mode is offline
+      (!isConnected && !mode) || // Case 2: Internet is not available and mode is offline
+      (!isConnected && mode) // Case 3: Internet is not available but mode is online
+    ) {
+      // The user should be alerted based on their mode and connectivity status
+      setIsAlert(true);
+      setAlertMessage(
+        !isConnected && !mode
+          ? t('ALERT.NETWORK') // Alert: Network is available but mode is offline
+          : !isConnected && mode
+          ? t('ALERT.NO_INTERNET_AVAILABLE_MODE_ONLINE') // Alert: Mode is offline, you need to set it to online
+          : isConnected && !mode
+          ? t('ALERT.INTERNET_AVAILABLE_MODE_OFFLINE') // Alert: No internet available but mode is online
+          : '', // Default case (optional), if none of the conditions match
+      );
+
+      return;
+    }
     // setSource("")
     // setDestination("")
     if (isValid) {
