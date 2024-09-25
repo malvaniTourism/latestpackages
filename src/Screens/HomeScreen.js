@@ -439,18 +439,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
           ? t('ALERT.INTERNET_AVAILABLE_MODE_OFFLINE') // Internet is available but mode is offline
           : '' // Default case (optional)
       );
-  
-      // Reset to previously selected city
-      setCurrentCity(selectedCityName);
-      await saveToStorage(
-        t('STORAGE.SELECTED_CITY_ID'),
-        JSON.stringify(selectedCityId)
-      );
-      await saveToStorage(
-        t('STORAGE.SELECTED_CITY_NAME'),
-        JSON.stringify(selectedCityName)
-      );
-  
+
       return; // Exit the function early
     }
   
