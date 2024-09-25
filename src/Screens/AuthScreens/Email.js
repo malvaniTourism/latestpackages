@@ -46,58 +46,56 @@ const Email = ({ navigation, route, ...props }) => {
 
   GoogleSignin.configure({
     scopes: ['profile', 'email'], // Specify any additional scopes you need
-    webClientId: '203571229982-efi4evf812leaot8kf3m8a1jelt28fhf.apps.googleusercontent.com',
+    webClientId: '203571229982-d9doh1t7ileevdqppomjfjvcvloj1i25.apps.googleusercontent.com',
   });
 
   const signInWithGoogle = async () => {
     try {
-      console.log(1);
+      props.setLoader(true);
       await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-
-      console.log(2);
       const userInfo = await GoogleSignin.signIn();
-      console.log(3);
-      console.log('userInfo.idToken - - ', userInfo);
+  
+      $payload = {
+        token: userInfo.data.idToken,
+        userName: userInfo.data.user.name,
+        userPhoto: userInfo.data.user.photo,
+        userEmail: userInfo.data.user.email
+      };      
 
-      // Send userInfo.idToken to your Laravel backend
-      const response = await fetch('https://dev.tourkokan.com/api/v2/auth/googleAuth', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token: userInfo.idToken }),
-      });
-
-      const result = await response.json();
-      console.log('res- - - ', result);
-      if (result.data?.success) {
-        AsyncStorage.setItem(
-          t('STORAGE.ACCESS_TOKEN'),
-          result.data.data.access_token,
-        );
-        AsyncStorage.setItem(
-          t('STORAGE.USER_ID'),
-          JSON.stringify(result.data.data.user.id),
-        );
-        props.setLoader(false);
-        AsyncStorage.setItem(
-          t('STORAGE.IS_FIRST_TIME'),
-          JSON.stringify(true),
-        );
-        saveToStorage(t('STORAGE.MODE'), JSON.stringify(true));
-        props.setMode(true);
-        navigateTo(navigation, t('SCREEN.HOME'));
-      } else {
-        setIsAlert(true);
-        setAlertMessage(result.data.message?.otp || result.data.message);
-        props.setLoader(false);
+      const res = await comnPost('v2/auth/googleAuth', $payload);
+      {
+        if (res.data.success) {
+          AsyncStorage.setItem(
+            t('STORAGE.ACCESS_TOKEN'),
+            res.data.data.access_token,
+          );
+          AsyncStorage.setItem(
+            t('STORAGE.USER_ID'),
+            JSON.stringify(res.data.data.user.id),
+          );
+          // props.saveAccess_token(res.data.data.access_token);
+          props.setLoader(false);
+          AsyncStorage.setItem(
+            t('STORAGE.IS_FIRST_TIME'),
+            JSON.stringify(true),
+          );
+          saveToStorage(t('STORAGE.MODE'), JSON.stringify(true));
+          props.setMode(true);
+          navigateTo(navigation, t('SCREEN.HOME'));
+        } else {
+          setIsAlert(true);
+          setAlertMessage(res.data.message?.otp || res.data.message);
+          props.setLoader(false);
+        }
       }
     } catch (error) {
-      console.log(4);
+      setIsAlert(true);
+      setAlertMessage(t('ALERT.WENT_WRONG'));
+      props.setLoader(false);
       console.log(4, error.message, error.code);
     }
   };
-
+  
   useEffect(() => {
     // openDB()
     // createUserTable();

@@ -90,7 +90,11 @@ const ProfileView = ({navigation, route, ...props}) => {
           let res = JSON.parse(resp);
           setProfile(res);
           setOption(0);
-          setLocationMap(res.addresses[0].latitude, res.addresses[0].longitude);
+          if (res?.addresses && res.addresses.length > 0) {
+            const latitude = res.addresses[0]?.latitude ?? null;
+            const longitude = res.addresses[0]?.longitude ?? null;
+            setLocationMap(latitude, longitude);
+          } 
           props.setLoader(false);
           setRefreshing(false);
         } else if (resp) {
