@@ -11,7 +11,7 @@ import TextField from '../../Components/Customs/TextField';
 import { EmailField } from '../../Services/Constants/FIELDS';
 import TextButton from '../../Components/Customs/Buttons/TextButton';
 import styles from './Styles';
-import { comnPost, saveToStorage } from '../../Services/Api/CommonServices';
+import { comnPost, getFromStorage, saveToStorage } from '../../Services/Api/CommonServices';
 import { connect } from 'react-redux';
 import { saveAccess_token, setLoader, setMode } from '../../Reducers/CommonActions';
 import Loader from '../../Components/Customs/Loader';
@@ -30,7 +30,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
 
 const Email = ({ navigation, route, ...props }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -55,14 +55,20 @@ const Email = ({ navigation, route, ...props }) => {
     try {
       props.setLoader(true);
       await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+      let lat = await getFromStorage('currentLatitude');
+      let long = await getFromStorage('currentLongitude');
       const userInfo = await GoogleSignin.signIn();
   
       $payload = {
         token: userInfo.data.idToken,
         userName: userInfo.data.user.name,
         userPhoto: userInfo.data.user.photo,
-        userEmail: userInfo.data.user.email
-      };      
+        userEmail: userInfo.data.user.email,
+        referral_code: await getFromStorage('referralCode'),
+        latitude: lat.toString(),
+        longitude: long.toString(),
+        language: t('LANG'),
+      };
 
       const res = await comnPost('v2/auth/googleAuth', $payload);
       {
@@ -99,6 +105,7 @@ const Email = ({ navigation, route, ...props }) => {
   };
   
   useEffect(() => {
+    getAsyncValues();
     // openDB()
     // createUserTable();
     const backHandler = BackHandler.addEventListener(
@@ -110,7 +117,14 @@ const Email = ({ navigation, route, ...props }) => {
       setIsAlert(false);
       setAlertMessage('');
     };
-  }, []);
+  }, [props.mode]);
+
+  const getAsyncValues = async () => {
+    let language = await getFromStorage('language');
+    let mode = await getFromStorage('mode');
+    i18n.changeLanguage(language);
+    props.setMode(mode);
+  }
 
   // const openDB = () => {
   //   const db = SQLite.openDatabase({
@@ -202,8 +216,8 @@ const Email = ({ navigation, route, ...props }) => {
 
   const ToNavigate = async () => {
     if (
-      (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == null ||
-      (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == ''
+      (await getFromStorage(t('STORAGE.ACCESS_TOKEN'))) == null ||
+      (await getFromStorage(t('STORAGE.ACCESS_TOKEN'))) == ''
     ) {
       navigateTo(navigation, t('SCREEN.LANG_SELECTION'));
     } else {

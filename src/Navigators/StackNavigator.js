@@ -66,11 +66,12 @@ const StackNavigator = () => {
               headerShown: false,
               cardStyle: {backgroundColor: '#fff'},
             }}>
-            <Stack.Screen
+            {/* <Stack.Screen
               name={t('SCREEN.LANG_SELECTION')}
               component={LangSelection}
               options={{headerShown: false}}
-            />
+            /> */}
+            <Stack.Screen name={t('SCREEN.EMAIL')} component={Email} />
             <Stack.Screen
               name={t('SCREEN.MAIN')}
               component={DrawerNavigator}
@@ -125,7 +126,7 @@ const StackNavigator = () => {
             name={t('SCREEN.EMAIL_SIGN_IN')}
             component={EmailSignIn}
           />
-          <Stack.Screen name={t('SCREEN.EMAIL')} component={Email} />
+          {/* <Stack.Screen name={t('SCREEN.EMAIL')} component={Email} /> */}
           <Stack.Screen
             name={t('SCREEN.PASSWORD_LOGIN')}
             component={PasswordLogin}

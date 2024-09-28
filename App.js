@@ -6,7 +6,18 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import store from './Store';
-import { Image, LogBox, StyleSheet, View, ActivityIndicator, TextInput, Button } from 'react-native';
+import {
+  Image,
+  LogBox,
+  StyleSheet,
+  View,
+  ActivityIndicator,
+  TextInput,
+  Button,
+  PermissionsAndroid,
+  Text,
+  TouchableOpacity
+} from 'react-native';
 import StackNavigator from './src/Navigators/StackNavigator';
 import COLOR from './src/Services/Constants/COLORS';
 import AppIntroSlider from 'react-native-app-intro-slider';
@@ -28,6 +39,9 @@ import {
 } from './src/Services/Api/CommonServices';
 import { useTranslation } from 'react-i18next';
 import { Dropdown } from 'react-native-element-dropdown';
+import Geolocation from '@react-native-community/geolocation';
+import DeviceInfo from 'react-native-device-info';
+import { navigateTo } from './src/Services/CommonMethods';
 
 // LogBox.ignoreAllLogs();
 // LogBox.ignoreLogs(['Warning: ...', 'Possible Unhandled Promise Rejection']);
@@ -43,41 +57,41 @@ analytics().setAnalyticsCollectionEnabled(true);
 const slides = [
   {
     key: 1,
-    title: 'Title 1',
-    text: 'Description.\nSay something cool',
+    title: 'Select Language',
     image: require('./src/Assets/Images/Intro/4-min.png'),
     backgroundColor: '#fff',
     type: 'language',
-    onNext: () => {
-        console.log('Slide 1 Next clicked');
-        // Perform any actions specific to Slide 1
-      },
   },
   {
     key: 2,
-    title: 'Title 2',
-    text: 'Other cool stuff',
+    title: 'Enter Referral Code',
     image: require('./src/Assets/Images/Intro/5-min.png'),
     backgroundColor: '#fff',
     type: 'referral',
-    onNext: () => {
-        console.log('Slide 2 Next clicked');
-        // Perform any actions specific to Slide 1
-      },
   },
   {
     key: 3,
-    title: 'Title 3',
-    text: "I'm already out of descriptions\n\nLorem ipsum bla bla bla",
+    title: 'Enable Location',
     image: require('./src/Assets/Images/Intro/6-min.png'),
     backgroundColor: '#fff',
     type: 'location',
-    onNext: () => {
-        console.log('Slide 3 Next clicked');
-        // Perform any actions specific to Slide 1
-      },
+  },
+  {
+    key: 4,
+    title: 'Accept Terms and Conditions',
+    image: require('./src/Assets/Images/Intro/5-min.png'),
+    backgroundColor: '#fff',
+    type: 'terms',
+  },
+  {
+    key: 5,
+    title: 'Select Online/Offline Mode',
+    image: require('./src/Assets/Images/Intro/6-min.png'),
+    backgroundColor: '#fff',
+    type: 'mode',
   },
 ];
+
 
 export default function App() {
   // const { i18n } = useTranslation();
@@ -85,7 +99,6 @@ export default function App() {
 
   const [isFirstTime, setIsFirstTime] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [textValues, setTextValues] = useState({ 1: '', 2: '', 3: '' }); // State for text inputs
   const [list, setList] = useState([
     { label: 'English', value: 'en' },
     { label: 'मराठी', value: 'mr' },
@@ -93,22 +106,60 @@ export default function App() {
   const [language, setLanguage] = useState('en');
   const [isFocus, setIsFocus] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [textValues, setTextValues] = useState({ 1: '', 2: '', 3: '', 4: '', 5: '' });
+  const [watchID, setWatchID] = useState('');
 
-  const doSomething = async () => {
-    try {
-      const isFirstTimeValue = await AsyncStorage.getItem(STRING.STORAGE.IS_FIRST_TIME);
-      setIsFirstTime(isFirstTimeValue);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching isFirstTime value:', error);
-      setLoading(false);
-    }
-  };
+  const [latitude, setCurrentLatitude] = useState(null);
+  const [longitude, setCurrentLongitude] = useState(null);
+  const [mode, setMode] = useState("true");
+  const [isLocationEnabled, setIsLocationEnabled] = useState(false);
+
+  const languagesList = [
+    { label: 'English', value: 'en' },
+    { label: 'मराठी', value: 'mr' },
+  ];
 
   useEffect(() => {
-    doSomething();
+    const checkFirstTime = async () => {
+      const isFirstTimeValue = await AsyncStorage.getItem('IS_FIRST_TIME');
+      setIsFirstTime(isFirstTimeValue);
+      setLoading(false);
+    };
+    checkFirstTime();
     callAPI();
   }, []);
+
+  const handleInputChange = (key, value) => {
+    console.log(key, value);
+
+    setTextValues(prev => ({ ...prev, [key]: value }));
+  };
+
+  // const handleNextButton = () => {
+  //   if (currentIndex < slides.length - 1) {
+  //     setCurrentIndex(currentIndex + 1);
+  //     if (sliderRef.current) sliderRef.current.goToSlide(currentIndex + 1);
+  //   }
+  // };
+
+  const handleNextButton = () => {
+    console.log(currentIndex, textValues);
+
+    if (currentIndex === 3 && !textValues[4]) {
+      alert('Please accept the Terms and Conditions.');
+      return;
+    }
+
+    if (currentIndex === 2 && (!latitude || !longitude)) {
+      alert('Please share your location.');
+      return;
+    }
+
+    if (currentIndex < slides.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+      if (sliderRef.current) sliderRef.current.goToSlide(currentIndex + 1);
+    }
+  };
 
   const callAPI = () => {
     dataSync('landingResponse', callLandingPageAPI, true).then(resp => { });
@@ -142,29 +193,27 @@ export default function App() {
     saveToStorage('userEmail', resp.user.email);
   };
 
-  const handleNextButton = () => {
-    // Call the `onNext` function of the current slide
-    slides[currentIndex].onNext();
+  // const handleNextButton = () => {
+  //   // Call the `onNext` function of the current slide
+  //   slides[currentIndex].onNext();
 
-    // Move to the next slide
-    if (currentIndex < slides.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    }
-  };
+  //   // Move to the next slide
+  //   if (currentIndex < slides.length - 1) {
+  //     setCurrentIndex(currentIndex + 1);
+  //   }
+  // };
 
-  const handleInputChange = (key, value) => {
-    setTextValues(prev => ({ ...prev, [key]: value }));
-  };
+  // const handleInputChange = (key, value) => {
+  //   setTextValues(prev => ({ ...prev, [key]: value }));
+  // };
 
   const handleSave = (key) => {
     console.log(`Saved for Slide ${key}:`, textValues[key]);
   };
 
   const myLocationPress = async () => {
-    props.setLoader(true);
 
     let valid = true;
-    let errorMessage = '';
 
     // Inner async function to handle async logic
     const checkLocationAndSetupListeners = async () => {
@@ -172,27 +221,23 @@ export default function App() {
 
       // If location services are disabled, show an alert
       if (!locationEnabled) {
-        errorMessage = t('ALERT.LOCATION_SERVICES_DISABLED');
+        console.log('ALERT.LOCATION_SERVICES_DISABLED');
         valid = false;
       }
 
       if (!valid) {
         // Prompt the user to enable location services
         Alert.alert(
-          t('ALERT.LOCATION_REQUIRED'), // Title of the alert
-          t('ALERT.ENABLE_LOCATION_SERVICES'), // Message to user
+          'ALERT.LOCATION_REQUIRED', // Title of the alert
+          'ALERT.ENABLE_LOCATION_SERVICES', // Message to user
           [
             // { text: t('ALERT.CANCEL'), style: 'cancel' }, // Cancel option
             {
-              text: t('ALERT.OPEN_SETTINGS'),
+              text: 'ALERT.OPEN_SETTINGS',
               onPress: () => openLocationSettings(), // Open location settings
             },
           ],
         );
-
-        setAlertMessage(errorMessage);
-        setIsAlert(true);
-        setShowPrivacy(false);
       }
     };
 
@@ -207,8 +252,8 @@ export default function App() {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
           {
-            title: t('LOCATION_ACCESS_REQUIRED'),
-            message: t('NEEDS_TO_ACCESS'),
+            title: 'LOCATION_ACCESS_REQUIRED',
+            message: 'NEEDS_TO_ACCESS',
           },
         );
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
@@ -216,104 +261,180 @@ export default function App() {
           getOneTimeLocation();
           subscribeLocation();
         } else {
-          setLocationStatus(t('PERMISSION_DENIED'));
-          props.setLoader(false);
+          setLocationStatus('PERMISSION_DENIED');
         }
       } catch (err) {
         console.warn(err);
-        props.setLoader(false);
       }
     }
   };
 
-  const saveLang = () => {
-    // i18n.changeLanguage(language);
-    AsyncStorage.setItem("Language", language);
-    navigateTo(navigation, t('SCREEN.EMAIL'));
+  const getOneTimeLocation = () => {
+    // setFetchingText('ALERT.FETCHING_TEXT');
+    // setLocationStatus('GETTING_LOCATION');
+    Geolocation.getCurrentPosition(
+      position => {
+        // setLocationStatus('YOU_ARE_HERE');
+        const currentLatitude = position.coords.latitude;
+        const currentLongitude = position.coords.longitude;
+        setCurrentLatitude(currentLatitude);
+        setCurrentLongitude(currentLongitude);
+      },
+      error => {
+        setLocationStatus(error.message);
+      },
+      { enableHighAccuracy: false, timeout: 30000, maximumAge: 1000 },
+    );
+  };
+
+  const subscribeLocation = () => {
+    let WatchID = Geolocation.watchPosition(
+      position => {
+        // setLocationStatus('YOU_ARE_HERE');
+        const currentLatitude = position.coords.latitude;
+        const currentLongitude = position.coords.longitude;
+        setCurrentLatitude(currentLatitude);
+        setCurrentLongitude(currentLongitude);
+
+        console.log([currentLatitude, currentLongitude]);
+
+      },
+      error => {
+        setLocationStatus(error.message);
+      },
+      { enableHighAccuracy: false, maximumAge: 1000 },
+    );
+    setWatchID(WatchID);
+  };
+
+  const checkLocationServices = async () => {
+    const enabled = await DeviceInfo.isLocationEnabled();
+    setIsLocationEnabled(enabled);
+    return enabled;
   };
 
   const renderItem = ({ item }) => {
     return (
       <View style={[styles.slide, { backgroundColor: item.backgroundColor }]}>
-        <Image source={item.image} style={styles.image} />
-        {/* <View style={styles.appName}>
-          <GlobalText text={STRING.APPNAME} style={styles.loginName} />
-        </View> */}
+        {item.image && <Image source={item.image} style={styles.image} />}
 
         <View style={styles.bottomFields}>
           {item.type === 'language' ? (
             <Dropdown
-              style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              itemTextStyle={styles.itemTextStyle}
-              dropdownTextStyle={styles.dropdownText}
-              iconStyle={styles.dropdownIcon}
-              data={list}
-              maxHeight={300}
+              style={styles.dropdown}
+              data={languagesList}
               labelField="label"
               valueField="value"
-              placeholder={!isFocus ? 'Select item' : '...'}
+              placeholder="Select Language"
               value={language}
-              onFocus={() => setIsFocus(true)}
-              onBlur={() => setIsFocus(false)}
-              onChange={item => {
-                setLanguage(item.value);
-                setIsFocus(false);
-              }}
+              onChange={item => setLanguage(item.value)}
             />
-          )
-            : item.type === 'referral' ? (
-                <TextInput
-                  style={styles.textInput}
-                  placeholder={`Enter text for ${item.title}`}
-                  value={textValues[item.key]}
-                  onChangeText={text => handleInputChange(item.key, text)}
-                />
-            )
-              : (
-                <TextButton
-                  title={"Share Location"}
-                  buttonView={styles.locButtonView}
-                  isDisabled={false}
-                  raised={true}
-                  onPress={() => myLocationPress()}
-                />
-              )}
+          ) : item.type === 'referral' ? (
+            <TextInput
+              style={styles.textInput}
+              placeholder="Enter Referral Code"
+              value={textValues[item.key]}
+              onChangeText={text => handleInputChange(item.key, text)}
+            />
+          ) : item.type === 'location' ? (
+            <TextButton
+              title={"Share Location"}
+              buttonView={styles.locButtonView}
+              isDisabled={false}
+              raised={true}
+              onPress={() => myLocationPress()}
+            />
+          ) : item.type === 'terms' ? (
+            <View>
+              {/* <TextInput
+                style={styles.checkbox}
+                placeholder="Accept Terms and Conditions"
+                value={textValues[item.key]}
+                onChangeText={text => handleInputChange(item.key, text)}
+              /> */}
+              <Text onPress={() => setTextValues({ ...textValues, 4: !textValues[4] })}>
+                {textValues[4] ? '✓ I Accept Terms & Conditions' : 'I Accept Terms & Conditions'}
+              </Text>
+            </View>
+          ) : item.type === 'mode' ? (
+            <View style={styles.modeSelection}>
+              <Button
+                title="Online"
+                onPress={() =>
+                  setMode("true")
+                }
+              />
+              <Button
+                title="Offline"
+                onPress={() =>
+                  setMode("false")
+                }
+              />
+            </View>
+          ) : null}
         </View>
       </View>
     );
   };
 
-  const onDone = (key) => {
-    console.log('key - -', key);
-    
-    AsyncStorage.setItem(STRING.STORAGE.IS_FIRST_TIME, 'false');
+  const renderDoneButton = () => (
+    <View style={styles.buttonCircle}>
+      <Ionicons name="checkmark" color={COLOR.white} size={30} />
+    </View>
+  );
+
+  const renderNextButton = () => (
+    <View style={styles.buttonCircle}>
+      <Ionicons name="arrow-forward" color={COLOR.white} size={30} onPress={handleNextButton} />
+    </View>
+  );
+
+  const renderPrevButton = () => {
+    <View style={styles.buttonCircle}>
+      <Ionicons name="arrow-back" color={COLOR.white} size={30} onPress={handleBackButton} />
+    </View>
+  };
+
+  const onDone = async () => {
+    // Save the user's preferences
+    await saveToStorage('IS_FIRST_TIME', 'false');
+    await saveToStorage('language', language);
+    await saveToStorage('referralCode', textValues[2] || '');
+    await saveToStorage('currentLatitude', JSON.stringify(latitude));
+    await saveToStorage('currentLongitude', JSON.stringify(longitude));
+    await saveToStorage('termsAccepted', JSON.stringify(textValues[4] || false));
+    await saveToStorage('mode', mode);
     setIsFirstTime('false');
   };
 
-  const renderNextButton = () => {
-    return (
-      <View style={styles.buttonCircle}>
-        <Ionicons name="arrow-forward" color={COLOR.white} size={30} onPress={() => {
-            if (sliderRef.current && currentIndex < slides.length - 1) {
-              sliderRef.current.goToSlide(currentIndex + 1); // Navigate to the next slide
-              slides[currentIndex].onNext();  // Trigger slide-specific action
-            }
-          }}
-        />
-      </View>
-    );
+  const handleBackButton = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+      sliderRef.current.goToSlide(currentIndex - 1);
+    }
   };
 
-  const renderDoneButton = () => {
-    return (
-      <View style={styles.buttonCircle}>
-        <Ionicons name="checkmark" color={COLOR.white} size={30} />
-      </View>
-    );
-  };
+  // const renderNextButton = () => {
+  //   return (
+  //     <View style={styles.buttonCircle}>
+  //       <Ionicons name="arrow-forward" color={COLOR.white} size={30} onPress={() => {
+  //           if (sliderRef.current && currentIndex < slides.length - 1) {
+  //             sliderRef.current.goToSlide(currentIndex + 1); // Navigate to the next slide
+  //             slides[currentIndex].onNext();  // Trigger slide-specific action
+  //           }
+  //         }}
+  //       />
+  //     </View>
+  //   );
+  // };
+
+  // const renderDoneButton = () => {
+  //   return (
+  //     <View style={styles.buttonCircle}>
+  //       <Ionicons name="checkmark" color={COLOR.white} size={30} />
+  //     </View>
+  //   );
+  // };
 
   const onSlideChange = (index) => {
     // Update the current index and trigger specific actions for the slide.
@@ -344,7 +465,7 @@ export default function App() {
     <>
       <StatusBar backgroundColor={COLOR.loginImageBlue} />
       <AppIntroSlider
-      ref={sliderRef}
+        ref={sliderRef}
         nextButtonTextColor={'#000'}
         renderItem={renderItem}
         data={slides}
@@ -364,8 +485,12 @@ export default function App() {
         }}
         renderDoneButton={renderDoneButton}
         renderNextButton={renderNextButton}
+        // renderPrevButton={renderPrevButton}
         onSlideChange={setCurrentIndex}
+        scrollEnabled={false}
+        dotClickEnabled={false}
       />
+      {currentIndex > 0 && renderPrevButton()}
     </>
   );
 }
