@@ -253,7 +253,7 @@ const QueriesList = ({navigation, route, ...props}) => {
                 setStep(1);
                 setLoading(false);
               }}>
-              <GlobalText text={'Add Query'} />
+              <GlobalText text={t("BUTTON.ADD_QUERY")} />
             </TouchableOpacity>
           )
         }

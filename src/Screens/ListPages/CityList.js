@@ -173,7 +173,7 @@ const CityList = ({navigation, route, ...props}) => {
   return (
     <>
       <Header
-        name={route?.params?.subCat?.name || t('HEADER.CITIES')}
+        name={route?.params?.subCat?.name || route?.params?.type || t('HEADER.CITIES')}
         startIcon={
           <Ionicons
             name="chevron-back-outline"

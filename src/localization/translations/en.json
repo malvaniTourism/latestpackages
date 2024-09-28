@@ -54,7 +54,8 @@
     "ATTACHMENT": "+ Upload Attachment",
     "ONLINE": "Online",
     "OFFLINE": "Offline",
-    "LOCATION": "Location"
+    "LOCATION": "Location",
+    "ADD_QUERY": "Add Query"
   },
   "SCREEN": {
     "ROOT": "Root",

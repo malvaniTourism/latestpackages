@@ -58,10 +58,11 @@ const AllRoutesSearch = ({navigation, route, ...props}) => {
           if (resp) {
             let res = JSON.parse(resp);
             setList(res);
+            setIsLoading(false);
           } else if (resp) {
             setOffline(true);
+            setIsLoading(false);
           }
-          setIsLoading(false);
           // props.setLoader(false);
         },
       );
@@ -90,7 +91,6 @@ const AllRoutesSearch = ({navigation, route, ...props}) => {
   const searchRoute = (a, b, isNext) => {
     AsyncStorage.setItem('isLangChanged', 'false');
     if (nextPage >= 1) {
-      setIsLoading(true);
       props.setLoader(true);
       const data = {
         source_place_id: a || source?.id,

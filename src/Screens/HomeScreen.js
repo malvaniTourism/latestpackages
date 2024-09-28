@@ -23,7 +23,7 @@ import {
   saveToStorage,
 } from '../Services/Api/CommonServices';
 import {connect} from 'react-redux';
-import {saveAccess_token, setLoader, setMode} from '../Reducers/CommonActions';
+import {saveAccess_token, setDestination, setLoader, setMode, setSource} from '../Reducers/CommonActions';
 // import * as SplashScreen from 'expo-splash-screen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import TextButton from '../Components/Customs/Buttons/TextButton';
@@ -261,6 +261,8 @@ const HomeScreen = ({navigation, route, ...props}) => {
   }, [props.access_token]);
 
   const onRefresh = () => {
+    props.setSource('');
+    props.setDestination('');
     setRefreshing(true);
     if (props.mode) {
       callLandingPageAPI();
@@ -756,6 +758,12 @@ const mapDispatchToProps = dispatch => {
     },
     setMode: data => {
       dispatch(setMode(data));
+    },
+    setSource: data => {
+      dispatch(setSource(data));
+    },
+    setDestination: data => {
+      dispatch(setDestination(data));
     },
   };
 };

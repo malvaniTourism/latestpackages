@@ -10,6 +10,7 @@ import {setDestination, setLoader, setSource} from '../Reducers/CommonActions';
 import Loader from '../Components/Customs/Loader';
 import {checkLogin, goBackHandler, navigateTo} from '../Services/CommonMethods';
 import {useTranslation} from 'react-i18next';
+import STRING from '../Services/Constants/STRINGS';
 
 const SearchPlace = ({navigation, route, ...props}) => {
   const {t} = useTranslation();
@@ -79,7 +80,7 @@ const SearchPlace = ({navigation, route, ...props}) => {
   };
 
   const setPlace = place => {
-    if (route.params.type == t('LABEL.SOURCE')) {
+    if (route.params.type == STRING.LABEL.SOURCE) {
       props.setSource(place);
     } else {
       props.setDestination(place);
