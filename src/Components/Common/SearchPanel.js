@@ -143,7 +143,7 @@ const SearchPanel = ({navigation, from, onSwap, ...props}) => {
     setDestination('');
     props.setSource('');
     props.setDestination('');
-    onSwap(a, b);
+    // onSwap(a, b);
   };
 
   const searchPlace = v => {

@@ -447,8 +447,9 @@ const styles = StyleSheet.create({
     top: -15,
   },
   image: {
-    height: DIMENSIONS.screenHeight,
+    height: DIMENSIONS.screenHeight - 200,
     width: DIMENSIONS.screenWidth,
+    resizeMode: "stretch"
   },
   text: {
     color: COLOR.black,
@@ -553,6 +554,44 @@ const styles = StyleSheet.create({
     marginLeft: DIMENSIONS.bannerWidth - 60,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  bottomFields: {
+    top: 10,
+    alignItems: "center"
+  },
+  textInput: {
+    borderWidth: 1,
+    borderColor: COLOR.gray,
+    borderRadius: 5,
+    padding: 10,
+    width: DIMENSIONS.bannerWidth,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 10,
+  },
+  dropdown: {
+    width: DIMENSIONS.bannerWidth,
+    height: 46,
+    borderWidth: 1,
+    borderColor: COLOR.themeBlue,
+    borderRadius: DIMENSIONS.borderRadiusXS,
+    paddingLeft: 10,
+  },
+  dropdownIcon: {
+    width: 30,
+    height: 30,
+  },
+  locButtonView: {
+    borderRadius: DIMENSIONS.borderRadius,
+    marginVertical: 10,
+    fontSize: DIMENSIONS.subtitleTextSize,
+    backgroundColor: COLOR.themeBlue,
+    elevation: 0,
+    width: DIMENSIONS.bannerWidth,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
