@@ -46,7 +46,9 @@ const Email = ({ navigation, route, ...props }) => {
 
   GoogleSignin.configure({
     scopes: ['profile', 'email'], // Specify any additional scopes you need
-    webClientId: '203571229982-d9doh1t7ileevdqppomjfjvcvloj1i25.apps.googleusercontent.com',
+    webClientId: __DEV__
+    ? '203571229982-d9doh1t7ileevdqppomjfjvcvloj1i25.apps.googleusercontent.com'   // Debug webClientId
+    : '203571229982-9uv6encu2akkkh57hsbbmap8jtklvfnl.apps.googleusercontent.com' // Release webClientId
   });
 
   const signInWithGoogle = async () => {
