@@ -1,10 +1,10 @@
 import 'react-native-gesture-handler';
-import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Provider } from 'react-redux';
+import {StatusBar} from 'expo-status-bar';
+import React, {useEffect, useState} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {Provider} from 'react-redux';
 import store from './Store';
 import {
   Image,
@@ -16,7 +16,7 @@ import {
   Button,
   PermissionsAndroid,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
 import StackNavigator from './src/Navigators/StackNavigator';
 import COLOR from './src/Services/Constants/COLORS';
@@ -37,11 +37,13 @@ import {
   dataSync,
   saveToStorage,
 } from './src/Services/Api/CommonServices';
-import { useTranslation } from 'react-i18next';
-import { Dropdown } from 'react-native-element-dropdown';
+import {useTranslation} from 'react-i18next';
+import {Dropdown} from 'react-native-element-dropdown';
 import Geolocation from '@react-native-community/geolocation';
 import DeviceInfo from 'react-native-device-info';
-import { navigateTo } from './src/Services/CommonMethods';
+import {navigateTo} from './src/Services/CommonMethods';
+import TextField from './src/Components/Customs/TextField';
+import {CheckBox} from '@rneui/themed';
 
 // LogBox.ignoreAllLogs();
 // LogBox.ignoreLogs(['Warning: ...', 'Possible Unhandled Promise Rejection']);
@@ -92,7 +94,6 @@ const slides = [
   },
 ];
 
-
 export default function App() {
   // const { i18n } = useTranslation();
   const sliderRef = React.useRef(null);
@@ -100,23 +101,30 @@ export default function App() {
   const [isFirstTime, setIsFirstTime] = useState(null);
   const [loading, setLoading] = useState(true);
   const [list, setList] = useState([
-    { label: 'English', value: 'en' },
-    { label: 'मराठी', value: 'mr' },
+    {label: 'English', value: 'en'},
+    {label: 'मराठी', value: 'mr'},
   ]);
   const [language, setLanguage] = useState('en');
   const [isFocus, setIsFocus] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [textValues, setTextValues] = useState({ 1: '', 2: '', 3: '', 4: '', 5: '' });
+  const [textValues, setTextValues] = useState({
+    1: '',
+    2: '',
+    3: '',
+    4: '',
+    5: '',
+  });
   const [watchID, setWatchID] = useState('');
 
   const [latitude, setCurrentLatitude] = useState(null);
   const [longitude, setCurrentLongitude] = useState(null);
-  const [mode, setMode] = useState("true");
+  const [mode, setMode] = useState('true');
   const [isLocationEnabled, setIsLocationEnabled] = useState(false);
+  const [isPrivacyChecked, setIsPrivacyChecked] = useState(false);
 
   const languagesList = [
-    { label: 'English', value: 'en' },
-    { label: 'मराठी', value: 'mr' },
+    {label: 'English', value: 'en'},
+    {label: 'मराठी', value: 'mr'},
   ];
 
   useEffect(() => {
@@ -130,9 +138,7 @@ export default function App() {
   }, []);
 
   const handleInputChange = (key, value) => {
-    console.log(key, value);
-
-    setTextValues(prev => ({ ...prev, [key]: value }));
+    setTextValues(prev => ({...prev, [key]: value}));
   };
 
   // const handleNextButton = () => {
@@ -143,8 +149,6 @@ export default function App() {
   // };
 
   const handleNextButton = () => {
-    console.log(currentIndex, textValues);
-
     if (currentIndex === 3 && !textValues[4]) {
       alert('Please accept the Terms and Conditions.');
       return;
@@ -162,12 +166,12 @@ export default function App() {
   };
 
   const callAPI = () => {
-    dataSync('landingResponse', callLandingPageAPI, true).then(resp => { });
+    dataSync('landingResponse', callLandingPageAPI, true).then(resp => {});
   };
 
   const callLandingPageAPI = async site_id => {
     try {
-      let data = { site_id };
+      let data = {site_id};
       const res = await comnPost('v2/landingpage', data);
       if (res && res.data.data) {
         setOfflineData(res.data.data);
@@ -207,12 +211,7 @@ export default function App() {
   //   setTextValues(prev => ({ ...prev, [key]: value }));
   // };
 
-  const handleSave = (key) => {
-    console.log(`Saved for Slide ${key}:`, textValues[key]);
-  };
-
   const myLocationPress = async () => {
-
     let valid = true;
 
     // Inner async function to handle async logic
@@ -283,7 +282,7 @@ export default function App() {
       error => {
         setLocationStatus(error.message);
       },
-      { enableHighAccuracy: false, timeout: 30000, maximumAge: 1000 },
+      {enableHighAccuracy: false, timeout: 30000, maximumAge: 1000},
     );
   };
 
@@ -297,12 +296,11 @@ export default function App() {
         setCurrentLongitude(currentLongitude);
 
         console.log([currentLatitude, currentLongitude]);
-
       },
       error => {
         setLocationStatus(error.message);
       },
-      { enableHighAccuracy: false, maximumAge: 1000 },
+      {enableHighAccuracy: false, maximumAge: 1000},
     );
     setWatchID(WatchID);
   };
@@ -313,9 +311,14 @@ export default function App() {
     return enabled;
   };
 
-  const renderItem = ({ item }) => {
+  const privacyClicked = () => {
+    setIsPrivacyChecked(!isPrivacyChecked);
+    setTextValues({...textValues, 4: !textValues[4]});
+  };
+
+  const renderItem = ({item}) => {
     return (
-      <View style={[styles.slide, { backgroundColor: item.backgroundColor }]}>
+      <View style={[styles.slide, {backgroundColor: item.backgroundColor}]}>
         {item.image && <Image source={item.image} style={styles.image} />}
 
         <View style={styles.bottomFields}>
@@ -330,15 +333,16 @@ export default function App() {
               onChange={item => setLanguage(item.value)}
             />
           ) : item.type === 'referral' ? (
-            <TextInput
-              style={styles.textInput}
+            <TextField
+              style={styles.searchPanelField}
+              inputContainerStyle={styles.inputContainerStyle}
               placeholder="Enter Referral Code"
               value={textValues[item.key]}
               onChangeText={text => handleInputChange(item.key, text)}
             />
           ) : item.type === 'location' ? (
             <TextButton
-              title={"Share Location"}
+              title={'Share Location'}
               buttonView={styles.locButtonView}
               isDisabled={false}
               raised={true}
@@ -352,25 +356,32 @@ export default function App() {
                 value={textValues[item.key]}
                 onChangeText={text => handleInputChange(item.key, text)}
               /> */}
-              <Text onPress={() => setTextValues({ ...textValues, 4: !textValues[4] })}>
-                {textValues[4] ? '✓ I Accept Terms & Conditions' : 'I Accept Terms & Conditions'}
-              </Text>
+              <CheckBox
+                title={'I Accept Terms & Conditions'}
+                onPress={() => privacyClicked()}
+                checked={isPrivacyChecked}
+              />
             </View>
           ) : item.type === 'mode' ? (
-            <View style={styles.modeSelection}>
-              <Button
-                title="Online"
-                onPress={() =>
-                  setMode("true")
-                }
-              />
-              <Button
-                title="Offline"
-                onPress={() =>
-                  setMode("false")
-                }
-              />
-            </View>
+            <>
+              <GlobalText text={'How would you like to use your app?'} />
+              <View style={styles.modeSelection}>
+                <TextButton
+                  title={'Online'}
+                  buttonView={styles.modeButtons}
+                  isDisabled={false}
+                  raised={true}
+                  onPress={() => setMode('true')}
+                />
+                <TextButton
+                  title={'Offline'}
+                  buttonView={styles.modeButtons}
+                  isDisabled={false}
+                  raised={true}
+                  onPress={() => setMode('false')}
+                />
+              </View>
+            </>
           ) : null}
         </View>
       </View>
@@ -385,15 +396,25 @@ export default function App() {
 
   const renderNextButton = () => (
     <View style={styles.buttonCircle}>
-      <Ionicons name="arrow-forward" color={COLOR.white} size={30} onPress={handleNextButton} />
+      <Ionicons
+        name="arrow-forward"
+        color={COLOR.white}
+        size={30}
+        onPress={handleNextButton}
+      />
     </View>
   );
 
-  const renderPrevButton = () => {
-    <View style={styles.buttonCircle}>
-      <Ionicons name="arrow-back" color={COLOR.white} size={30} onPress={handleBackButton} />
+  const renderNewButton = () => (
+    <View style={styles.backCircle}>
+      <Ionicons
+        name="arrow-back"
+        color={COLOR.white}
+        size={30}
+        onPress={handleBackButton}
+      />
     </View>
-  };
+  );
 
   const onDone = async () => {
     // Save the user's preferences
@@ -402,7 +423,10 @@ export default function App() {
     await saveToStorage('referralCode', textValues[2] || '');
     await saveToStorage('currentLatitude', JSON.stringify(latitude));
     await saveToStorage('currentLongitude', JSON.stringify(longitude));
-    await saveToStorage('termsAccepted', JSON.stringify(textValues[4] || false));
+    await saveToStorage(
+      'termsAccepted',
+      JSON.stringify(textValues[4] || false),
+    );
     await saveToStorage('mode', mode);
     setIsFirstTime('false');
   };
@@ -436,7 +460,7 @@ export default function App() {
   //   );
   // };
 
-  const onSlideChange = (index) => {
+  const onSlideChange = index => {
     // Update the current index and trigger specific actions for the slide.
     setCurrentIndex(index);
     // Trigger any actions specific to the new slide
@@ -490,7 +514,7 @@ export default function App() {
         scrollEnabled={false}
         dotClickEnabled={false}
       />
-      {currentIndex > 0 && renderPrevButton()}
+      {currentIndex > 0 && renderNewButton()}
     </>
   );
 }

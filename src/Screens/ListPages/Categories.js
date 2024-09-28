@@ -67,8 +67,6 @@ const Categories = ({route, navigation, ...props}) => {
           resp = JSON.parse(res);
         }
         if (resp) {
-          console.log(resp);
-
           setCategories(resp);
           setSelectedCategory(resp[0].name);
           setSelectedSubCategory(resp[0].sub_categories);

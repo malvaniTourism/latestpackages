@@ -302,7 +302,7 @@ const CityDetails = ({navigation, route, offline, ...props}) => {
   const seeMore = () => {
     navigateTo(navigation, t('SCREEN.CITY_LIST'), {
       parent_id: city.id,
-      type: t('VILLAGES')
+      type: t('VILLAGES'),
     });
   };
 

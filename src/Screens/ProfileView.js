@@ -94,7 +94,7 @@ const ProfileView = ({navigation, route, ...props}) => {
             const latitude = res.addresses[0]?.latitude ?? null;
             const longitude = res.addresses[0]?.longitude ?? null;
             setLocationMap(latitude, longitude);
-          } 
+          }
           props.setLoader(false);
           setRefreshing(false);
         } else if (resp) {
@@ -265,7 +265,7 @@ const ProfileView = ({navigation, route, ...props}) => {
         (!isConnected && mode) // Case 3: Internet is not available but mode is online
       ) {
         // Determine the alert message based on the condition
-        const alertMessage = 
+        const alertMessage =
           !isConnected && !mode
             ? t('ALERT.NETWORK') // Alert: No internet and mode is offline
             : !isConnected && mode
@@ -279,9 +279,9 @@ const ProfileView = ({navigation, route, ...props}) => {
           t('ALERT.TITLE'), // You can set your alert title, e.g., "Connectivity Issue"
           alertMessage,
           [{text: 'OK'}],
-          {cancelable: false}
+          {cancelable: false},
         );
-        
+
         return; // Exit early since the condition isn't met
       }
 

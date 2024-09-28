@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
+import React, {useEffect} from 'react';
+import {useState} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -8,7 +8,7 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import TextField from '../../Components/Customs/TextField';
-import { SignInFields } from '../../Services/Constants/FIELDS';
+import {SignInFields} from '../../Services/Constants/FIELDS';
 import TextButton from '../../Components/Customs/Buttons/TextButton';
 import styles from './Styles';
 import {
@@ -16,7 +16,7 @@ import {
   saveToStorage,
   getFromStorage,
 } from '../../Services/Api/CommonServices';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import {
   saveAccess_token,
   setLoader,
@@ -25,16 +25,16 @@ import {
 import Loader from '../../Components/Customs/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import COLOR from '../../Services/Constants/COLORS';
-import { navigateTo } from '../../Services/CommonMethods';
+import {navigateTo} from '../../Services/CommonMethods';
 import GlobalText from '../../Components/Customs/Text';
 // import SQLite from 'react-native-sqlite-storage';
 import Popup from '../../Components/Common/Popup';
 import Feather from 'react-native-vector-icons/Feather';
-import { CommonActions } from '@react-navigation/native';
-import { useTranslation } from 'react-i18next';
+import {CommonActions} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
 
-const EmailSignIn = ({ navigation, route, ...props }) => {
-  const { t } = useTranslation();
+const EmailSignIn = ({navigation, route, ...props}) => {
+  const {t} = useTranslation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -103,7 +103,7 @@ const EmailSignIn = ({ navigation, route, ...props }) => {
       tx.executeSql('SELECT * FROM users', [], (tx, results) => {
         const len = results.rows.length;
         for (let i = 0; i < len; i++) {
-          const { id, name, email } = results.rows.item(i);
+          const {id, name, email} = results.rows.item(i);
           console.log(`User ${id}: ${name} (${email})`);
         }
       });
@@ -198,7 +198,7 @@ const EmailSignIn = ({ navigation, route, ...props }) => {
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [{ name: t('SCREEN.HOME') }],
+          routes: [{name: t('SCREEN.HOME')}],
         }),
       );
     }
@@ -272,8 +272,8 @@ const EmailSignIn = ({ navigation, route, ...props }) => {
             res.data.message.email
               ? res.data.message.email
               : res.data.message.password
-                ? res.data.message.password
-                : res.data.message,
+              ? res.data.message.password
+              : res.data.message,
           );
           props.setLoader(false);
           // setIsSuccess(false);
@@ -288,11 +288,11 @@ const EmailSignIn = ({ navigation, route, ...props }) => {
   };
 
   const selectPassword = () => {
-    navigateTo(navigation, t('SCREEN.PASSWORD_LOGIN'), { email });
+    navigateTo(navigation, t('SCREEN.PASSWORD_LOGIN'), {email});
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: COLOR.white }}>
+    <View style={{flex: 1, backgroundColor: COLOR.white}}>
       <ImageBackground
         style={styles.loginImage}
         source={require('../../Assets/Images/Intro/login_background.png')}
@@ -350,7 +350,7 @@ const EmailSignIn = ({ navigation, route, ...props }) => {
             style={styles.loginSubText}
           />
         </TouchableOpacity>
-        <View style={{ alignItems: 'center' }}>
+        <View style={{alignItems: 'center'}}>
           <TextButton
             title={t('BUTTON.LOGIN')}
             buttonView={styles.buttonView}
@@ -368,7 +368,7 @@ const EmailSignIn = ({ navigation, route, ...props }) => {
       </View>
       <KeyboardAvoidingView
         behavior="height"
-        style={{ flex: 1 }}></KeyboardAvoidingView>
+        style={{flex: 1}}></KeyboardAvoidingView>
       <Popup message={alertMessage} onPress={closePopup} visible={isAlert} />
     </View>
   );

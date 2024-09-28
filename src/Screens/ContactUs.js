@@ -151,8 +151,6 @@ const ContactUs = ({navigation, route, step, setStep, offline, ...props}) => {
   };
 
   const closePopup = () => {
-    console.log('closePopup called');
-    console.log('setStep:', setStep);
     setIsAlert(false);
     if (isMounted.current && typeof setStep === 'function') {
       setStep(0);

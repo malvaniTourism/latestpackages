@@ -34,7 +34,7 @@ import {useTranslation} from 'react-i18next';
 import {CheckBox} from '@rneui/themed';
 import PrivacyPolicy from '../../Components/Common/PrivacyPolicy';
 import DeviceInfo from 'react-native-device-info';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 const SignUp = ({navigation, ...props}) => {
   const opacity = useRef(new Animated.Value(0)).current;
@@ -81,30 +81,33 @@ const SignUp = ({navigation, ...props}) => {
   const [showPrivacy, setShowPrivacy] = useState(false);
 
   GoogleSignin.configure({
-    webClientId: '203571229982-d7l3as4nv7iq4kefuhn2g5cqpremr7v1.apps.googleusercontent.com',
+    webClientId:
+      '203571229982-d7l3as4nv7iq4kefuhn2g5cqpremr7v1.apps.googleusercontent.com',
   });
 
   const signInWithGoogle = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      console.log('userInfo.idToken - - ', userInfo.idToken);
-      
+
       // Send userInfo.idToken to your Laravel backend
-      const response = await fetch('https://dev.tourkokan.com/api/v2/auth/googleAuth', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        'https://dev.tourkokan.com/api/v2/auth/googleAuth',
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({token: userInfo.idToken}),
         },
-        body: JSON.stringify({ token: userInfo.idToken }),
-      });
-  
+      );
+
       // Handle authentication response
       const result = await response.json();
       console.log('res- - - ', result);
-      
+
       // Store result token if successful
-    } catch (error) {  
+    } catch (error) {
       console.error('error- - ', error);
     }
   };

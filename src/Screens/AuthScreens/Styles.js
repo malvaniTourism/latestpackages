@@ -37,13 +37,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   googleView: {
-    alignItems: "center",
+    alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
   },
   googleButton: {
     width: DIMENSIONS.bannerWidth,
-    marginVertical: DIMENSIONS.sectionGap
+    marginVertical: DIMENSIONS.sectionGap,
   },
   haveAcc: {
     flexDirection: 'row',

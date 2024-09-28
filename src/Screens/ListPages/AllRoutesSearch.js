@@ -46,7 +46,7 @@ const AllRoutesSearch = ({navigation, route, ...props}) => {
   const [lastPage, setLastPage] = useState(null);
   const [showOffline, setShowOffline] = useState(false);
 
-  useEffect(() => {    
+  useEffect(() => {
     props.setLoader(true);
     const backHandler = goBackHandler(navigation);
     checkLogin(navigation);
@@ -205,7 +205,7 @@ const AllRoutesSearch = ({navigation, route, ...props}) => {
       </View>
       <SafeAreaView
         style={{
-          paddingBottom: 180,
+          paddingBottom: 320,
           minHeight: DIMENSIONS.screenHeight,
         }}>
         {isFirstTime && isLoading ? (

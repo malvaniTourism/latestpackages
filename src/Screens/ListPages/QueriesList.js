@@ -111,7 +111,6 @@ const QueriesList = ({navigation, route, ...props}) => {
 
   useEffect(() => {
     if (step == 0) {
-      console.log('step---', step);
       fetchData(1, true);
     }
   }, [step, nextPage]);
@@ -253,7 +252,7 @@ const QueriesList = ({navigation, route, ...props}) => {
                 setStep(1);
                 setLoading(false);
               }}>
-              <GlobalText text={t("BUTTON.ADD_QUERY")} />
+              <GlobalText text={t('BUTTON.ADD_QUERY')} />
             </TouchableOpacity>
           )
         }

@@ -447,9 +447,10 @@ const styles = StyleSheet.create({
     top: -15,
   },
   image: {
-    height: DIMENSIONS.screenHeight - 200,
+    height: DIMENSIONS.screenHeight - 250,
     width: DIMENSIONS.screenWidth,
-    resizeMode: "stretch"
+    resizeMode: 'stretch',
+    marginTop: DIMENSIONS.headerHeight - 20,
   },
   text: {
     color: COLOR.black,
@@ -475,6 +476,18 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  backCircle: {
+    width: 40,
+    height: 40,
+    backgroundColor: COLOR.themeBlue,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: -64,
+    marginLeft: 20,
+    // marginRight: -20,
+    marginBottom: 24,
   },
   catIconStyle: {
     height: DIMENSIONS.iconXXL - 20,
@@ -557,14 +570,7 @@ const styles = StyleSheet.create({
   },
   bottomFields: {
     top: 10,
-    alignItems: "center"
-  },
-  textInput: {
-    borderWidth: 1,
-    borderColor: COLOR.gray,
-    borderRadius: 5,
-    padding: 10,
-    width: DIMENSIONS.bannerWidth,
+    alignItems: 'center',
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -592,6 +598,23 @@ const styles = StyleSheet.create({
     width: DIMENSIONS.bannerWidth,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  modeSelection: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: DIMENSIONS.bannerWidth,
+  },
+  modeButtons: {
+    width: DIMENSIONS.bannerWidth / 2 - 30,
+    height: 50,
+    marginTop: 10,
+    borderRadius: DIMENSIONS.borderRadiusXS,
+  },
+  searchPanelField: {
+    borderWidth: 1,
+    borderRadius: DIMENSIONS.borderRadiusSmall,
+    borderColor: COLOR.themeBlue,
+    height: 45,
   },
 });
 

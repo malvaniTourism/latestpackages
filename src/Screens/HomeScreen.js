@@ -23,7 +23,13 @@ import {
   saveToStorage,
 } from '../Services/Api/CommonServices';
 import {connect} from 'react-redux';
-import {saveAccess_token, setDestination, setLoader, setMode, setSource} from '../Reducers/CommonActions';
+import {
+  saveAccess_token,
+  setDestination,
+  setLoader,
+  setMode,
+  setSource,
+} from '../Reducers/CommonActions';
 // import * as SplashScreen from 'expo-splash-screen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import TextButton from '../Components/Customs/Buttons/TextButton';
@@ -110,7 +116,10 @@ const HomeScreen = ({navigation, route, ...props}) => {
   const [alertMessage, setAlertMessage] = useState('');
 
   useEffect(() => {
-    const backHandler = BackHandler.addEventListener(t('EVENT.HARDWARE_BACK_PRESS'),() => ToNavigate());
+    const backHandler = BackHandler.addEventListener(
+      t('EVENT.HARDWARE_BACK_PRESS'),
+      () => ToNavigate(),
+    );
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
       event => {
@@ -338,7 +347,6 @@ const HomeScreen = ({navigation, route, ...props}) => {
         await AsyncStorage.setItem('isUpdated', 'false');
       }
     } catch (error) {
-      console.log(error);
       setIsFetching(false);
       setIsLoading(false);
       props.setLoader(false);
@@ -411,19 +419,19 @@ const HomeScreen = ({navigation, route, ...props}) => {
   const onCitySelect = async city => {
     // Retrieve previously selected city details
     const selectedCityId = JSON.parse(
-      await getFromStorage(t('STORAGE.SELECTED_CITY_ID'))
+      await getFromStorage(t('STORAGE.SELECTED_CITY_ID')),
     );
     const selectedCityName = JSON.parse(
-      await getFromStorage(t('STORAGE.SELECTED_CITY_NAME'))
+      await getFromStorage(t('STORAGE.SELECTED_CITY_NAME')),
     );
-  
+
     // Retrieve the app's mode
     const mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
-  
+
     // Check the internet connectivity state
     const state = await NetInfo.fetch();
     const isConnected = state.isConnected;
-  
+
     // Combined condition for all three cases
     if (
       (isConnected && !mode) || // Case 1: Internet is available but mode is offline
@@ -439,21 +447,23 @@ const HomeScreen = ({navigation, route, ...props}) => {
           ? t('ALERT.NO_INTERNET_AVAILABLE_MODE_ONLINE') // No internet but mode is online
           : isConnected && !mode
           ? t('ALERT.INTERNET_AVAILABLE_MODE_OFFLINE') // Internet is available but mode is offline
-          : '' // Default case (optional)
+          : '', // Default case (optional)
       );
 
       return; // Exit the function early
     }
-  
+
     // Update to the newly selected city
     setCurrentCity(city.name);
     await saveToStorage(t('STORAGE.SELECTED_CITY_ID'), JSON.stringify(city.id));
-    await saveToStorage(t('STORAGE.SELECTED_CITY_NAME'), JSON.stringify(city.name));
-  
+    await saveToStorage(
+      t('STORAGE.SELECTED_CITY_NAME'),
+      JSON.stringify(city.name),
+    );
+
     // Call the API with the new city ID
     callLandingPageAPI(city.id);
   };
-  
 
   const onlineClick = () => {
     saveToStorage(t('STORAGE.MODE'), JSON.stringify(true));

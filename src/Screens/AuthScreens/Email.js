@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
+import React, {useEffect} from 'react';
+import {useState} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -8,29 +8,40 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import TextField from '../../Components/Customs/TextField';
-import { EmailField } from '../../Services/Constants/FIELDS';
+import {EmailField} from '../../Services/Constants/FIELDS';
 import TextButton from '../../Components/Customs/Buttons/TextButton';
 import styles from './Styles';
-import { comnPost, getFromStorage, saveToStorage } from '../../Services/Api/CommonServices';
-import { connect } from 'react-redux';
-import { saveAccess_token, setLoader, setMode } from '../../Reducers/CommonActions';
+import {
+  comnPost,
+  getFromStorage,
+  saveToStorage,
+} from '../../Services/Api/CommonServices';
+import {connect} from 'react-redux';
+import {
+  saveAccess_token,
+  setLoader,
+  setMode,
+} from '../../Reducers/CommonActions';
 import Loader from '../../Components/Customs/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import COLOR from '../../Services/Constants/COLORS';
-import { navigateTo } from '../../Services/CommonMethods';
+import {navigateTo} from '../../Services/CommonMethods';
 import GlobalText from '../../Components/Customs/Text';
 // import SQLite from 'react-native-sqlite-storage';
 import Popup from '../../Components/Common/Popup';
 import Feather from 'react-native-vector-icons/Feather';
-import { CommonActions } from '@react-navigation/native';
-import { useTranslation } from 'react-i18next';
-import { color } from 'react-native-reanimated';
-import { GoogleSignin, GoogleSigninButton } from '@react-native-google-signin/google-signin';
+import {CommonActions} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
+import {color} from 'react-native-reanimated';
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+} from '@react-native-google-signin/google-signin';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
 
-const Email = ({ navigation, route, ...props }) => {
-  const { t, i18n } = useTranslation();
+const Email = ({navigation, route, ...props}) => {
+  const {t, i18n} = useTranslation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -47,18 +58,18 @@ const Email = ({ navigation, route, ...props }) => {
   GoogleSignin.configure({
     scopes: ['profile', 'email'], // Specify any additional scopes you need
     webClientId: __DEV__
-    ? '203571229982-d9doh1t7ileevdqppomjfjvcvloj1i25.apps.googleusercontent.com'   // Debug webClientId
-    : '203571229982-9uv6encu2akkkh57hsbbmap8jtklvfnl.apps.googleusercontent.com' // Release webClientId
+      ? '203571229982-d9doh1t7ileevdqppomjfjvcvloj1i25.apps.googleusercontent.com' // Debug webClientId
+      : '203571229982-9uv6encu2akkkh57hsbbmap8jtklvfnl.apps.googleusercontent.com', // Release webClientId
   });
 
   const signInWithGoogle = async () => {
     try {
       props.setLoader(true);
-      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+      await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
       let lat = await getFromStorage('currentLatitude');
       let long = await getFromStorage('currentLongitude');
       const userInfo = await GoogleSignin.signIn();
-  
+
       $payload = {
         token: userInfo.data.idToken,
         userName: userInfo.data.user.name,
@@ -100,10 +111,9 @@ const Email = ({ navigation, route, ...props }) => {
       setIsAlert(true);
       setAlertMessage(t('ALERT.WENT_WRONG'));
       props.setLoader(false);
-      console.log(4, error.message, error.code);
     }
   };
-  
+
   useEffect(() => {
     getAsyncValues();
     // openDB()
@@ -124,7 +134,7 @@ const Email = ({ navigation, route, ...props }) => {
     let mode = await getFromStorage('mode');
     i18n.changeLanguage(language);
     props.setMode(mode);
-  }
+  };
 
   // const openDB = () => {
   //   const db = SQLite.openDatabase({
@@ -167,7 +177,7 @@ const Email = ({ navigation, route, ...props }) => {
       tx.executeSql('SELECT * FROM users', [], (tx, results) => {
         const len = results.rows.length;
         for (let i = 0; i < len; i++) {
-          const { id, name, email } = results.rows.item(i);
+          const {id, name, email} = results.rows.item(i);
           console.log(`User ${id}: ${name} (${email})`);
         }
       });
@@ -199,7 +209,7 @@ const Email = ({ navigation, route, ...props }) => {
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [{ name: t('SCREEN.HOME') }],
+          routes: [{name: t('SCREEN.HOME')}],
         }),
       );
     }
@@ -245,7 +255,7 @@ const Email = ({ navigation, route, ...props }) => {
       .then(res => {
         if (res.data?.success) {
           props.setLoader(false);
-          navigateTo(navigation, t('SCREEN.VERIFY_OTP'), { email });
+          navigateTo(navigation, t('SCREEN.VERIFY_OTP'), {email});
         } else {
           setIsAlert(true);
           setIsSuccess(false);
@@ -253,8 +263,8 @@ const Email = ({ navigation, route, ...props }) => {
             res.data?.message.email
               ? res.data?.message.email
               : res.data?.message
-                ? res.data?.message
-                : t('NETWORK'),
+              ? res.data?.message
+              : t('NETWORK'),
           );
           props.setLoader(false);
         }
@@ -268,11 +278,11 @@ const Email = ({ navigation, route, ...props }) => {
   };
 
   const selectPassword = () => {
-    navigateTo(navigation, t('SCREEN.PASSWORD_LOGIN'), { email });
+    navigateTo(navigation, t('SCREEN.PASSWORD_LOGIN'), {email});
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: COLOR.white }}>
+    <View style={{flex: 1, backgroundColor: COLOR.white}}>
       <ImageBackground
         style={styles.loginImage}
         source={require('../../Assets/Images/Intro/login_background.png')}
@@ -330,7 +340,7 @@ const Email = ({ navigation, route, ...props }) => {
             style={styles.loginSubText}
           />
         </TouchableOpacity> */}
-        <View style={{ alignItems: 'center' }}>
+        <View style={{alignItems: 'center'}}>
           <TextButton
             title={t('BUTTON.SEND_OTP')}
             buttonView={styles.buttonView}
@@ -341,16 +351,19 @@ const Email = ({ navigation, route, ...props }) => {
         </View>
 
         <View style={styles.googleView}>
-          <GlobalText text={"---- OR ----"} style={{marginTop: DIMENSIONS.sectionGap}} />
-            <GoogleSigninButton
-              size={GoogleSigninButton.Size.Wide}
-              color={GoogleSigninButton.Color.Dark}
-              onPress={() => {
-                signInWithGoogle();
-              }}
-              style={styles.googleButton}
-              // disabled={isInProgress}
-            />
+          <GlobalText
+            text={'---- OR ----'}
+            style={{marginTop: DIMENSIONS.sectionGap}}
+          />
+          <GoogleSigninButton
+            size={GoogleSigninButton.Size.Wide}
+            color={GoogleSigninButton.Color.Dark}
+            onPress={() => {
+              signInWithGoogle();
+            }}
+            style={styles.googleButton}
+            // disabled={isInProgress}
+          />
         </View>
 
         <View style={styles.haveAcc}>
@@ -362,7 +375,7 @@ const Email = ({ navigation, route, ...props }) => {
       </View>
       <KeyboardAvoidingView
         behavior="height"
-        style={{ flex: 1 }}></KeyboardAvoidingView>
+        style={{flex: 1}}></KeyboardAvoidingView>
       <Popup message={alertMessage} onPress={closePopup} visible={isAlert} />
     </View>
   );
