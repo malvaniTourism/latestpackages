@@ -336,7 +336,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
 
           if (isFirstTime == 'true') {
             // refRBSheet.current.open()
-            setModePopup(true);
+            // setModePopup(true);
             await AsyncStorage.setItem(
               t('STORAGE.IS_FIRST_TIME'),
               JSON.stringify(false),

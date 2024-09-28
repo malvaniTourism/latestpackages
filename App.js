@@ -44,6 +44,7 @@ import DeviceInfo from 'react-native-device-info';
 import {navigateTo} from './src/Services/CommonMethods';
 import TextField from './src/Components/Customs/TextField';
 import {CheckBox} from '@rneui/themed';
+import PrivacyPolicy from './src/Components/Common/PrivacyPolicy';
 
 // LogBox.ignoreAllLogs();
 // LogBox.ignoreLogs(['Warning: ...', 'Possible Unhandled Promise Rejection']);
@@ -81,7 +82,7 @@ const slides = [
   {
     key: 4,
     title: 'Accept Terms and Conditions',
-    image: require('./src/Assets/Images/Intro/5-min.png'),
+    image: null,
     backgroundColor: '#fff',
     type: 'terms',
   },
@@ -356,6 +357,10 @@ export default function App() {
                 value={textValues[item.key]}
                 onChangeText={text => handleInputChange(item.key, text)}
               /> */}
+              <PrivacyPolicy
+              // acceptClick={acceptClick}
+              // cancelClick={closePopup}
+              />
               <CheckBox
                 title={'I Accept Terms & Conditions'}
                 onPress={() => privacyClicked()}

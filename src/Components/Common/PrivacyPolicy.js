@@ -15,6 +15,8 @@ const PrivacyPolicy = ({cancelClick, acceptClick}) => {
       style={{
         height: DIMENSIONS.screenHeight - 200,
         width: DIMENSIONS.bannerWidth,
+        marginTop: 20,
+        marginBottom: -10,
       }}>
       <ScrollView style={styles.container}>
         <View style={styles.textContainer}>
@@ -165,7 +167,7 @@ const PrivacyPolicy = ({cancelClick, acceptClick}) => {
         </View>
       </ScrollView>
 
-      <View style={styles.spaceBetween}>
+      {/* <View style={styles.spaceBetween}>
         <TextButton
           title={t('BUTTON.CANCEL')}
           buttonView={styles.privacyButtons}
@@ -178,7 +180,7 @@ const PrivacyPolicy = ({cancelClick, acceptClick}) => {
           raised={true}
           onPress={acceptClick}
         />
-      </View>
+      </View> */}
     </View>
   );
 };
