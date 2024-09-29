@@ -70,6 +70,7 @@ const Email = ({navigation, route, ...props}) => {
       await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
       let lat = await getFromStorage('currentLatitude');
       let long = await getFromStorage('currentLongitude');
+      let referral_code = await getFromStorage('referralCode');
       const userInfo = await GoogleSignin.signIn();
 
       $payload = {
@@ -77,9 +78,9 @@ const Email = ({navigation, route, ...props}) => {
         userName: userInfo.data.user.name,
         userPhoto: userInfo.data.user.photo,
         userEmail: userInfo.data.user.email,
-        referral_code: await getFromStorage('referralCode'),
-        latitude: lat.toString(),
-        longitude: long.toString(),
+        referral_code: referral_code,
+        latitude: lat === null ? '' : lat.toString(),
+        longitude: long === null ? '' : long.toString(), 
         language: t('LANG'),
       };
 
@@ -110,6 +111,7 @@ const Email = ({navigation, route, ...props}) => {
         }
       }
     } catch (error) {
+      console.log(error);
       setIsAlert(true);
       setAlertMessage(t('ALERT.WENT_WRONG'));
       props.setLoader(false);
