@@ -290,6 +290,16 @@ const styles = StyleSheet.create({
   focusCell: {
     borderColor: COLOR.themeBlue,
   },
+  middleFlexImage: {
+    justifyContent: 'center',
+    padding: 10,
+    flex: 5,
+    alignItems: 'center',
+  },
+  lottie: {
+    width: 300,
+    height: 300,
+  },
 });
 
 export default styles;

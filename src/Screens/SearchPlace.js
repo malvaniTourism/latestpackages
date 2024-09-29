@@ -80,13 +80,13 @@ const SearchPlace = ({navigation, route, ...props}) => {
   };
 
   const setPlace = place => {
+    navigateTo(navigation, route.params?.from, {from: 'SearchPlace'});
     if (route.params.type == STRING.LABEL.SOURCE) {
       props.setSource(place);
     } else {
       props.setDestination(place);
     }
     setSearchValue('');
-    navigateTo(navigation, route.params?.from, {from: 'SearchPlace'});
   };
 
   const goToNext = () => {

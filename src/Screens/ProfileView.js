@@ -46,7 +46,7 @@ import Popup from '../Components/Common/Popup';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import DIMENSIONS from '../Services/Constants/DIMENSIONS';
 import ComingSoon from '../Components/Common/ComingSoon';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 const ProfileView = ({navigation, route, ...props}) => {
   const {t, i18n} = useTranslation();

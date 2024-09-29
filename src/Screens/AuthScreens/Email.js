@@ -39,6 +39,7 @@ import {
 } from '@react-native-google-signin/google-signin';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
+import LottieView from 'lottie-react-native';
 
 const Email = ({navigation, route, ...props}) => {
   const {t, i18n} = useTranslation();
@@ -54,6 +55,7 @@ const Email = ({navigation, route, ...props}) => {
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   GoogleSignin.configure({
     scopes: ['profile', 'email'], // Specify any additional scopes you need
@@ -138,6 +140,7 @@ const Email = ({navigation, route, ...props}) => {
     if (token) {
       navigateTo(navigation, t('SCREEN.HOME'));
     }
+    setIsLoading(false);
   };
 
   // const openDB = () => {
@@ -299,84 +302,97 @@ const Email = ({navigation, route, ...props}) => {
 
       <View>
         <Loader />
-        <GlobalText text={t('WELCOME')} style={styles.welcomeText} />
-        <GlobalText text={t('APPNAME')} style={styles.boldKokan} />
+        <GlobalText text={''} style={styles.welcomeText} />
+        <GlobalText text={''} style={styles.boldKokan} />
       </View>
-      <View style={styles.middleFlex}>
-        <GlobalText text={t('LOG_IN')} style={styles.loginText} />
-        {EmailField.map((field, index) => {
-          return (
-            <TextField
-              name={field.name}
-              label={field.name}
-              placeholder={field.placeholder}
-              fieldType={field.type}
-              length={field.length}
-              required={field.required}
-              disabled={false}
-              value={getValue(index)}
-              setChild={(v, i) => setValue(v, i, index)}
-              style={styles.containerStyle}
-              inputContainerStyle={styles.inputContainerStyle}
-              isSecure={field.isSecure}
-              rightIcon={
-                field.type == `${t('TYPE.PASSWORD')}` && (
-                  <Feather
-                    name={field.isSecure ? 'eye' : 'eye-off'}
-                    size={24}
-                    color={COLOR.themeBlue}
-                    onPress={() => {
-                      field.isSecure = !showPassword;
-                      setShowPassword(!showPassword);
-                    }}
-                    style={styles.eyeIcon}
-                  />
-                )
-              }
-            />
-          );
-        })}
+      {isLoading ? (
+        <View style={styles.middleFlexImage}>
+          <LottieView
+            source={{
+              uri: 'https://lottie.host/e62be0da-7e40-4ec5-9087-a6d04b0dbbaf/AjOP12tbTd.json',
+            }}
+            autoPlay
+            loop
+            style={styles.lottie}
+          />
+        </View>
+      ) : (
+        <View style={styles.middleFlex}>
+          <GlobalText text={t('LOG_IN')} style={styles.loginText} />
+          {EmailField.map((field, index) => {
+            return (
+              <TextField
+                name={field.name}
+                label={field.name}
+                placeholder={field.placeholder}
+                fieldType={field.type}
+                length={field.length}
+                required={field.required}
+                disabled={false}
+                value={getValue(index)}
+                setChild={(v, i) => setValue(v, i, index)}
+                style={styles.containerStyle}
+                inputContainerStyle={styles.inputContainerStyle}
+                isSecure={field.isSecure}
+                rightIcon={
+                  field.type == `${t('TYPE.PASSWORD')}` && (
+                    <Feather
+                      name={field.isSecure ? 'eye' : 'eye-off'}
+                      size={24}
+                      color={COLOR.themeBlue}
+                      onPress={() => {
+                        field.isSecure = !showPassword;
+                        setShowPassword(!showPassword);
+                      }}
+                      style={styles.eyeIcon}
+                    />
+                  )
+                }
+              />
+            );
+          })}
 
-        {/* login with passowrd commented for the time need to fix functionality as soon as possible */}
-        {/* <TouchableOpacity onPress={() => loginWithPassScreen()}>
+          {/* login with passowrd commented for the time need to fix functionality as soon as possible */}
+          {/* <TouchableOpacity onPress={() => loginWithPassScreen()}>
           <GlobalText
             text={t('BUTTON.LOGIN_WITH_PASSWORD')}
             style={styles.loginSubText}
           />
         </TouchableOpacity> */}
-        <View style={{alignItems: 'center'}}>
-          <TextButton
-            title={t('BUTTON.SEND_OTP')}
-            buttonView={styles.buttonView}
-            isDisabled={isButtonDisabled}
-            raised={true}
-            onPress={() => generateOtp()}
-          />
-        </View>
+          <View style={{alignItems: 'center'}}>
+            <TextButton
+              title={t('BUTTON.SEND_OTP')}
+              buttonView={styles.buttonView}
+              isDisabled={isButtonDisabled}
+              raised={true}
+              onPress={() => generateOtp()}
+            />
+          </View>
 
-        <View style={styles.googleView}>
-          <GlobalText
-            text={'---- OR ----'}
-            style={{marginTop: DIMENSIONS.sectionGap}}
-          />
-          <GoogleSigninButton
-            size={GoogleSigninButton.Size.Wide}
-            color={GoogleSigninButton.Color.Dark}
-            onPress={() => {
-              signInWithGoogle();
-            }}
-            style={styles.googleButton}
-            // disabled={isInProgress}
-          />
-        </View>
+          <View style={styles.googleView}>
+            <GlobalText
+              text={'---- OR ----'}
+              style={{marginTop: DIMENSIONS.sectionGap}}
+            />
+            <GoogleSigninButton
+              size={GoogleSigninButton.Size.Wide}
+              color={GoogleSigninButton.Color.Dark}
+              onPress={() => {
+                signInWithGoogle();
+              }}
+              style={styles.googleButton}
+              // disabled={isInProgress}
+            />
+          </View>
 
-        <View style={styles.haveAcc}>
-          <GlobalText text={t('DONT_HAVE_ACC')} />
-          <TouchableOpacity onPress={() => signUpScreen()}>
-            <GlobalText text={t('SIGN_UP')} style={styles.blueBold} />
-          </TouchableOpacity>
+          <View style={styles.haveAcc}>
+            <GlobalText text={t('DONT_HAVE_ACC')} />
+            <TouchableOpacity onPress={() => signUpScreen()}>
+              <GlobalText text={t('SIGN_UP')} style={styles.blueBold} />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      )}
       <KeyboardAvoidingView
         behavior="height"
         style={{flex: 1}}></KeyboardAvoidingView>

@@ -21,7 +21,6 @@ const CityCardSmall = ({data, reload, navigation, addComment, onClick}) => {
   const [commentCount, setCommentCount] = useState(data?.comment_count || 0);
   const [rate, setRate] = useState(data?.rate?.rating_avg_rate);
   const [cardType, setCardType] = useState('city');
-  console.log('data - - -', data);
 
   useEffect(() => {
     setRating(data?.rating_avg_rate);

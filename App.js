@@ -237,7 +237,7 @@ export default function App() {
             Alert.alert('Success', 'Location services have been enabled');
             getOneTimeLocation();
           })
-          .catch((error) => {
+          .catch(error => {
             console.error('Error enabling location services:', error);
             Alert.alert('Error', 'Failed to enable location services');
           });
@@ -253,7 +253,7 @@ export default function App() {
     Geolocation.getCurrentPosition(
       position => {
         const currentLatitude = position.coords.latitude;
-        const currentLongitude = position.coords.longitude;        
+        const currentLongitude = position.coords.longitude;
         setCurrentLatitude(currentLatitude);
         setCurrentLongitude(currentLongitude);
       },
