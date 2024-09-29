@@ -423,7 +423,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   slide: {
-    height: DIMENSIONS.screenHeight,
+    height: DIMENSIONS.screenHeight - (DIMENSIONS.headerHeight + 20),
     width: DIMENSIONS.screenWidth,
   },
   title: {

@@ -19,6 +19,8 @@ import {
   TouchableOpacity,
   Animated,
   Alert,
+  KeyboardAvoidingView,
+  ScrollView,
 } from 'react-native';
 import StackNavigator from './src/Navigators/StackNavigator';
 import COLOR from './src/Services/Constants/COLORS';
@@ -84,7 +86,7 @@ const slides = [
   {
     key: 3,
     title: 'Enable Location',
-    image: require('./src/Assets/Images/Intro/6-min.png'),
+    image: require('./src/Assets/Images/Intro/7-min.png'),
     backgroundColor: '#fff',
     type: 'location',
   },
@@ -297,6 +299,13 @@ export default function App() {
 
   const renderItem = ({item}) => {
     return (
+      <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    style={{flex: 1}}
+    keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
+    >
+      <ScrollView contentContainerStyle={{flexGrow: 1}}>
+
       <View style={[styles.slide, {backgroundColor: item.backgroundColor}]}>
         {item.image && <Image source={item.image} style={styles.image} />}
 
@@ -312,6 +321,7 @@ export default function App() {
               onChange={item => setLanguage(item.value)}
             />
           ) : item.type === 'referral' ? (
+            <KeyboardAvoidingView>
             <TextField
               style={styles.searchPanelField}
               inputContainerStyle={styles.inputContainerStyle}
@@ -319,6 +329,7 @@ export default function App() {
               value={textValues[item.key]}
               onChangeText={text => handleInputChange(item.key, text)}
             />
+            </KeyboardAvoidingView>
           ) : item.type === 'location' ? (
             <TextButton
               title={'Share Location'}
@@ -397,6 +408,8 @@ export default function App() {
           ) : null}
         </View>
       </View>
+      </ScrollView>
+      </KeyboardAvoidingView>
     );
   };
 
