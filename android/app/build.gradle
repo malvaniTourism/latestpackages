@@ -82,7 +82,7 @@ android {
         applicationId "com.tourkokan"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 24
+        versionCode 25
         versionName "1.0.0"
     }
     signingConfigs {
@@ -93,8 +93,8 @@ android {
             keyPassword 'android'
         }
         release {
-            // storeFile file('/Users/balkrushnawalke/Documents/malvani/react_native/More_Latest/tourkokan/tourkokan-release.keystore')
-            storeFile file('/var/www/html/latestpackages/android/app/keystore/tourkokan-release.keystore')
+            storeFile file('/Users/balkrushnawalke/Documents/malvani/react_native/More_Latest/tourkokan/tourkokan-release.keystore')
+            // storeFile file('/var/www/html/latestpackages/android/app/keystore/tourkokan-release.keystore')
             storePassword 'tourkokan'
             keyAlias 'my-key-alias'
             keyPassword 'tourkokan'
