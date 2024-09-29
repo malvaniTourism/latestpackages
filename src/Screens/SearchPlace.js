@@ -11,7 +11,7 @@ import Loader from '../Components/Customs/Loader';
 import {checkLogin, goBackHandler, navigateTo} from '../Services/CommonMethods';
 import {useTranslation} from 'react-i18next';
 import STRING from '../Services/Constants/STRINGS';
-import { TouchableOpacity } from 'react-native';
+import {TouchableOpacity} from 'react-native';
 
 const SearchPlace = ({navigation, route, ...props}) => {
   const {t} = useTranslation();
@@ -98,16 +98,16 @@ const SearchPlace = ({navigation, route, ...props}) => {
   const renderItem = ({item}) => {
     return (
       <TouchableOpacity
-      onPress={() => setPlace(item)}
-      style={styles.listItem}
-      activeOpacity={0.3} // Set the opacity when the item is pressed
-    >
-     <ListItem bottomDivider>
-<ListItem.Content>
-  <ListItem.Title>{item.name}</ListItem.Title>
-</ListItem.Content>
-</ListItem>
-    </TouchableOpacity>
+        onPress={() => setPlace(item)}
+        style={styles.listItem}
+        activeOpacity={0.3} // Set the opacity when the item is pressed
+      >
+        <ListItem bottomDivider>
+          <ListItem.Content>
+            <ListItem.Title>{item.name}</ListItem.Title>
+          </ListItem.Content>
+        </ListItem>
+      </TouchableOpacity>
     );
   };
 

@@ -1,8 +1,12 @@
-import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
+import React, {useEffect, useRef} from 'react';
+import {View, Text, StyleSheet, Animated} from 'react-native';
 
 const FlatListSkeleton = () => {
-  const dots = useRef([new Animated.Value(0), new Animated.Value(0), new Animated.Value(0)]).current;
+  const dots = useRef([
+    new Animated.Value(0),
+    new Animated.Value(0),
+    new Animated.Value(0),
+  ]).current;
 
   const startAnimation = () => {
     dots.forEach((dot, index) => {
@@ -19,7 +23,7 @@ const FlatListSkeleton = () => {
             useNativeDriver: false,
           }),
         ]),
-        { iterations: -1 }
+        {iterations: -1},
       ).start();
     });
   };

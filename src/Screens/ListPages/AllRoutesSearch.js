@@ -91,7 +91,7 @@ const AllRoutesSearch = ({navigation, route, ...props}) => {
     navigateTo(navigation, t('SCREEN.ROUTES_LIST'), {item});
   };
 
-  const searchRoute = async(a, b, isNext) => {
+  const searchRoute = async (a, b, isNext) => {
     AsyncStorage.setItem('isLangChanged', 'false');
 
     if (nextPage >= 1) {

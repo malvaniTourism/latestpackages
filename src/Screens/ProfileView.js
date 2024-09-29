@@ -47,6 +47,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import DIMENSIONS from '../Services/Constants/DIMENSIONS';
 import ComingSoon from '../Components/Common/ComingSoon';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {DevSettings} from 'react-native';
 
 const ProfileView = ({navigation, route, ...props}) => {
   const {t, i18n} = useTranslation();
@@ -129,7 +130,7 @@ const ProfileView = ({navigation, route, ...props}) => {
         (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == null ||
         (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == ''
       ) {
-        navigateTo(navigation, t('SCREEN.LANG_SELECTION'));
+        navigateTo(navigation, t('SCREEN.EMAIL'));
       } else {
         navigateTo(navigation, t('SCREEN.HOME'));
       }
@@ -229,7 +230,7 @@ const ProfileView = ({navigation, route, ...props}) => {
     if (props.mode) {
       comnPost('v2/user-profile', props.access_token, navigation)
         .then(res => {
-          if (res && res.data.data)            
+          if (res && res.data.data)
             saveToStorage(
               t('STORAGE.PROFILE_RESPONSE'),
               JSON.stringify(res.data.data),
@@ -248,6 +249,25 @@ const ProfileView = ({navigation, route, ...props}) => {
           props.setLoader(false);
           setRefreshing(false);
         });
+    }
+  };
+
+  const clearStorageExcept = async (keysToKeep = []) => {
+    try {
+      // Get all keys from AsyncStorage
+      const allKeys = await AsyncStorage.getAllKeys();
+
+      // Filter out keys that you want to keep
+      const keysToRemove = allKeys.filter(key => !keysToKeep.includes(key));
+
+      // Remove all keys except the ones you want to keep
+      if (keysToRemove.length > 0) {
+        await AsyncStorage.multiRemove(keysToRemove);
+      }
+
+      console.log('Storage cleared except:', keysToKeep);
+    } catch (error) {
+      console.error('Error clearing storage:', error);
     }
   };
 
@@ -283,10 +303,8 @@ const ProfileView = ({navigation, route, ...props}) => {
           {cancelable: false},
         );
 
-        return; // Exit early since the condition isn't met
+        return;
       }
-
-      // Continue with your logic for when internet is available and mode is online
 
       props.setLoader(true);
 
@@ -294,8 +312,8 @@ const ProfileView = ({navigation, route, ...props}) => {
 
       if (res.data.success) {
         await GoogleSignin.signOut();
+        await clearStorageExcept(['IS_FIRST_TIME', 'MODE']);
 
-        await AsyncStorage.clear();
         setIsAlert(false);
         // loggedOut(t('SCREEN.LANG_SELECTION'));
         // Show a thank you message
@@ -306,10 +324,7 @@ const ProfileView = ({navigation, route, ...props}) => {
             {
               text: 'OK',
               onPress: () => {
-                // Proceed to exit the app after the user acknowledges the message
-                BackHandler.exitApp();
-                // backPress();
-                // navigation.navigate(t('SCREEN.LANG_SELECTION'));
+                DevSettings.reload();
               },
             },
           ],

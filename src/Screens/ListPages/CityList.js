@@ -14,7 +14,7 @@ import {
   comnPost,
   dataSync,
   saveToStorage,
-  getFromStorage
+  getFromStorage,
 } from '../../Services/Api/CommonServices';
 import {connect} from 'react-redux';
 import Loader from '../../Components/Customs/Loader';
@@ -252,14 +252,16 @@ const CityList = ({navigation, route, ...props}) => {
             }}>
             <GlobalText
               style={{fontWeight: 'bold'}}
-              text={offline ? (
-                <GlobalText
-                  style={{fontWeight: 'bold'}}
-                  text={t('NO_INTERNET')}
-                />
-              ) : (
-                <FlatListSkeleton />
-              )}
+              text={
+                offline ? (
+                  <GlobalText
+                    style={{fontWeight: 'bold'}}
+                    text={t('NO_INTERNET')}
+                  />
+                ) : (
+                  <FlatListSkeleton />
+                )
+              }
             />
           </View>
         )}

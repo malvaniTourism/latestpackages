@@ -89,7 +89,7 @@ const ExploreGrid = ({route, navigation, ...props}) => {
 
   const fetchData = async (page, reset = false) => {
     const mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
-    
+
     if (props.mode) {
       if (loading || (page > currentPage && page > lastPage)) return;
 

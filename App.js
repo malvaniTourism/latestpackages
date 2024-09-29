@@ -140,6 +140,11 @@ export default function App() {
     {label: 'मराठी', value: 'mr'},
   ];
 
+  const [isLoading, setIsLoading] = useState(false); // State to manage loading spinner
+  const [locationStatus, setLocationStatus] = useState('Share Location'); // State for button text
+  const [buttonColor, setButtonColor] = useState('#007bff'); // Initial button color
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
   useEffect(() => {
     const checkFirstTime = async () => {
       const isFirstTimeValue = await AsyncStorage.getItem('IS_FIRST_TIME');
@@ -168,25 +173,29 @@ export default function App() {
         alert('Please accept the Terms and Conditions.');
         return;
       }
-  
+
       if (!latitude || !longitude) {
+        console.log(1);
+
         alert('Please share your location.');
         return;
       }
     }
-  
+
     // Check when on the second slide for location sharing
     if (currentIndex === 2 && (!latitude || !longitude)) {
+      console.log(2);
+
       alert('Please share your location.');
       return;
     }
-  
+
     // Proceed to the next slide
     if (currentIndex < slides.length - 1) {
       setCurrentIndex(currentIndex + 1);
       if (sliderRef.current) sliderRef.current.goToSlide(currentIndex + 1);
     }
-  };  
+  };
 
   const callAPI = () => {
     dataSync('landingResponse', callLandingPageAPI, true).then(resp => {});
@@ -236,6 +245,9 @@ export default function App() {
 
   const enableLocationService = async () => {
     try {
+      setIsLoading(true); // Start loading spinner
+      setIsButtonDisabled(true); // Disable the button while processing
+
       // Check if location is already enabled
       const isLocationEnabled = await LocationEnabler.isLocationEnabled();
 
@@ -252,28 +264,54 @@ export default function App() {
           .catch(error => {
             console.error('Error enabling location services:', error);
             Alert.alert('Error', 'Failed to enable location services');
+            setIsLoading(false); // Stop loading spinner
+            setIsButtonDisabled(false); // Re-enable the button
           });
       }
     } catch (error) {
       console.log(error);
       Alert.alert('Error', 'Something went wrong');
-      console.error('Error checking/enabling location services:', error);
+      setIsLoading(false); // Stop loading spinner
+      setIsButtonDisabled(false); // Re-enable the button
     }
   };
 
-  const getOneTimeLocation = () => {
-    Geolocation.getCurrentPosition(
-      position => {
-        const currentLatitude = position.coords.latitude;
-        const currentLongitude = position.coords.longitude;
-        setCurrentLatitude(currentLatitude);
-        setCurrentLongitude(currentLongitude);
-      },
-      error => {
-        setLocationStatus(error.message);
-      },
-      {enableHighAccuracy: false, timeout: 30000, maximumAge: 1000},
-    );
+  const getOneTimeLocation = async () => {
+    try {
+      Geolocation.getCurrentPosition(
+        position => {
+          const currentLatitude = position.coords.latitude;
+          const currentLongitude = position.coords.longitude;
+
+          console.log(
+            'Latitude:',
+            currentLatitude,
+            'Longitude:',
+            currentLongitude,
+          );
+          setCurrentLatitude(currentLatitude);
+          setCurrentLongitude(currentLongitude);
+          setLocationStatus('Location Enabled'); // Update button text
+          setButtonColor('#28a745'); // Set color to green after success
+          setIsLoading(false); // Stop loading spinner
+          setIsButtonDisabled(true); // Keep the button disabled
+        },
+        error => {
+          setLocationStatus('Enable Location'); // Reset text
+          setButtonColor('#dc3545'); // Change to red color on error
+          setIsLoading(false); // Stop loading spinner
+          setIsButtonDisabled(false); // Enable button again
+          console.error('Location Error:', error);
+        },
+        {enableHighAccuracy: false, timeout: 30000, maximumAge: 1000},
+      );
+    } catch (error) {
+      setLocationStatus('Enable Location'); // Reset text
+      setButtonColor('#dc3545'); // Change to red color on error
+      setIsLoading(false);
+      setIsButtonDisabled(false); // Enable button again
+      console.error('Error fetching location:', error);
+    }
   };
 
   const privacyClicked = () => {
@@ -300,115 +338,123 @@ export default function App() {
   const renderItem = ({item}) => {
     return (
       <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    style={{flex: 1}}
-    keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
-    >
-      <ScrollView contentContainerStyle={{flexGrow: 1}}>
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{flex: 1}}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}>
+        <ScrollView contentContainerStyle={{flexGrow: 1}}>
+          <View style={[styles.slide, {backgroundColor: item.backgroundColor}]}>
+            {item.image && <Image source={item.image} style={styles.image} />}
 
-      <View style={[styles.slide, {backgroundColor: item.backgroundColor}]}>
-        {item.image && <Image source={item.image} style={styles.image} />}
-
-        <View style={styles.bottomFields}>
-          {item.type === 'language' ? (
-            <Dropdown
-              style={styles.dropdown}
-              data={languagesList}
-              labelField="label"
-              valueField="value"
-              placeholder="Select Language"
-              value={language}
-              onChange={item => setLanguage(item.value)}
-            />
-          ) : item.type === 'referral' ? (
-            <KeyboardAvoidingView>
-            <TextField
-              style={styles.searchPanelField}
-              inputContainerStyle={styles.inputContainerStyle}
-              placeholder="Enter Referral Code"
-              value={textValues[item.key]}
-              onChangeText={text => handleInputChange(item.key, text)}
-            />
-            </KeyboardAvoidingView>
-          ) : item.type === 'location' ? (
-            <TextButton
-              title={'Share Location'}
-              buttonView={styles.locButtonView}
-              isDisabled={false}
-              raised={true}
-              onPress={() => enableLocationService()}
-            />
-          ) : item.type === 'terms' ? (
-            <View>
-              {/* <TextInput
+            <View style={styles.bottomFields}>
+              {item.type === 'language' ? (
+                <Dropdown
+                  style={styles.dropdown}
+                  data={languagesList}
+                  labelField="label"
+                  valueField="value"
+                  placeholder="Select Language"
+                  value={language}
+                  onChange={item => setLanguage(item.value)}
+                />
+              ) : item.type === 'referral' ? (
+                <KeyboardAvoidingView>
+                  <TextField
+                    style={styles.searchPanelField}
+                    inputContainerStyle={styles.inputContainerStyle}
+                    placeholder="Enter Referral Code"
+                    value={textValues[item.key]}
+                    onChangeText={text => handleInputChange(item.key, text)}
+                  />
+                </KeyboardAvoidingView>
+              ) : item.type === 'location' ? (
+                <View>
+                  <TextButton
+                    title={
+                      isLoading ? (
+                        <ActivityIndicator size="small" color="#fff" />
+                      ) : (
+                        locationStatus
+                      )
+                    } // Show spinner instead of text when loading
+                    buttonView={[
+                      styles.locButtonView,
+                      {backgroundColor: buttonColor},
+                    ]}
+                    isDisabled={isButtonDisabled}
+                    raised={true}
+                    onPress={enableLocationService}></TextButton>
+                </View>
+              ) : item.type === 'terms' ? (
+                <View>
+                  {/* <TextInput
                 style={styles.checkbox}
                 placeholder="Accept Terms and Conditions"
                 value={textValues[item.key]}
                 onChangeText={text => handleInputChange(item.key, text)}
               /> */}
-              <PrivacyPolicy
-              // acceptClick={acceptClick}
-              // cancelClick={closePopup}
-              />
-              <CheckBox
-                title={'I Accept Terms & Conditions'}
-                onPress={() => privacyClicked()}
-                checked={isPrivacyChecked}
-              />
-            </View>
-          ) : item.type === 'mode' ? (
-            <View style={styles.modeScreen}>
-              <GlobalText
-                text={'How would you like to use your app?'}
-                style={styles.sectionTitle}
-              />
-              <View
-                style={{
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  marginTop: 20,
-                }}>
-                <View style={styles.toggleContainer}>
-                  <TouchableOpacity onPress={() => changeMode(true)}>
-                    <Animated.View
-                      style={[
-                        styles.optionCard,
-                        mode && styles.selectedCard,
-                        {transform: [{scale: mode ? scaleValue : 1}]},
-                      ]}>
-                      <FontAwesome5Icon
-                        name="cloud"
-                        size={50}
-                        color="#4cd137"
-                      />
-                      <Text style={styles.optionText}>Online Mode</Text>
-                    </Animated.View>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity onPress={() => changeMode(false)}>
-                    <Animated.View
-                      style={[
-                        styles.optionCard,
-                        !mode && styles.selectedCard,
-                        {transform: [{scale: !mode ? scaleValue : 1}]},
-                      ]}>
-                      <Feather name="wifi-off" size={50} color="#f39c12" />
-                      <Text style={styles.optionText}>Offline Mode</Text>
-                    </Animated.View>
-                  </TouchableOpacity>
+                  <PrivacyPolicy
+                  // acceptClick={acceptClick}
+                  // cancelClick={closePopup}
+                  />
+                  <CheckBox
+                    title={'I Accept Terms & Conditions'}
+                    onPress={() => privacyClicked()}
+                    checked={isPrivacyChecked}
+                  />
                 </View>
-                <GlobalText
-                  text={
-                    'Please note: Even in offline mode, a network connection is required initially to complete the login process and load essential data.'
-                  }
-                  style={styles.note}
-                />
-              </View>
+              ) : item.type === 'mode' ? (
+                <View style={styles.modeScreen}>
+                  <GlobalText
+                    text={'How would you like to use your app?'}
+                    style={styles.sectionTitle}
+                  />
+                  <View
+                    style={{
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      marginTop: 20,
+                    }}>
+                    <View style={styles.toggleContainer}>
+                      <TouchableOpacity onPress={() => changeMode(true)}>
+                        <Animated.View
+                          style={[
+                            styles.optionCard,
+                            mode && styles.selectedCard,
+                            {transform: [{scale: mode ? scaleValue : 1}]},
+                          ]}>
+                          <FontAwesome5Icon
+                            name="cloud"
+                            size={50}
+                            color="#4cd137"
+                          />
+                          <Text style={styles.optionText}>Online Mode</Text>
+                        </Animated.View>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity onPress={() => changeMode(false)}>
+                        <Animated.View
+                          style={[
+                            styles.optionCard,
+                            !mode && styles.selectedCard,
+                            {transform: [{scale: !mode ? scaleValue : 1}]},
+                          ]}>
+                          <Feather name="wifi-off" size={50} color="#f39c12" />
+                          <Text style={styles.optionText}>Offline Mode</Text>
+                        </Animated.View>
+                      </TouchableOpacity>
+                    </View>
+                    <GlobalText
+                      text={
+                        'Please note: Even in offline mode, a network connection is required initially to complete the login process and load essential data.'
+                      }
+                      style={styles.note}
+                    />
+                  </View>
+                </View>
+              ) : null}
             </View>
-          ) : null}
-        </View>
-      </View>
-      </ScrollView>
+          </View>
+        </ScrollView>
       </KeyboardAvoidingView>
     );
   };

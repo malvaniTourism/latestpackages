@@ -665,6 +665,11 @@ const styles = StyleSheet.create({
     fontSize: 11,
     width: DIMENSIONS.bannerWidth,
   },
+  locButtonView: {
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
 });
 
 export default styles;
