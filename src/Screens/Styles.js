@@ -670,6 +670,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
   },
+  searchPanelFieldNew: {
+    borderWidth: 1,
+    borderRadius: DIMENSIONS.borderRadiusSmall,
+    borderColor: COLOR.themeBlue,
+    backgroundColor: COLOR.white,
+    height: 45,
+  },
 });
 
 export default styles;
