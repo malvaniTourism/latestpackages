@@ -36,6 +36,7 @@
     "react-i18next": "^15.0.1",
     "react-masonry-infinite": "^1.2.2",
     "react-native": "0.75.2",
+    "react-native-android-location-enabler": "^2.0.1",
     "react-native-animated-loader": "^1.0.0",
     "react-native-app-intro-slider": "^4.0.4",
     "react-native-collapsible": "^1.6.2",

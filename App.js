@@ -18,6 +18,7 @@ import {
   Text,
   TouchableOpacity,
   Animated,
+  Alert,
 } from 'react-native';
 import StackNavigator from './src/Navigators/StackNavigator';
 import COLOR from './src/Services/Constants/COLORS';
@@ -47,6 +48,12 @@ import TextField from './src/Components/Customs/TextField';
 import {CheckBox, Switch} from '@rneui/themed';
 import PrivacyPolicy from './src/Components/Common/PrivacyPolicy';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+// import LocationEnabler from 'react-native-android-location-enabler';
+import {
+  checkLocationEnabled,
+  requestResolutionSettings,
+} from 'react-native-android-location-enabler';
+import * as LocationEnabler from 'react-native-android-location-enabler';
 
 // LogBox.ignoreAllLogs();
 // LogBox.ignoreLogs(['Warning: ...', 'Possible Unhandled Promise Rejection']);
@@ -215,71 +222,38 @@ export default function App() {
   //   setTextValues(prev => ({ ...prev, [key]: value }));
   // };
 
-  const myLocationPress = async () => {
-    let valid = true;
+  const enableLocationService = async () => {
+    try {
+      // Check if location is already enabled
+      const isLocationEnabled = await LocationEnabler.isLocationEnabled();
 
-    // Inner async function to handle async logic
-    const checkLocationAndSetupListeners = async () => {
-      const locationEnabled = await checkLocationServices();
-
-      // If location services are disabled, show an alert
-      if (!locationEnabled) {
-        console.log('ALERT.LOCATION_SERVICES_DISABLED');
-        valid = false;
+      if (isLocationEnabled) {
+        console.log('Location services are already enabled');
+        getOneTimeLocation();
+      } else {
+        LocationEnabler.promptForEnableLocationIfNeeded()
+          .then(() => {
+            console.log('Location services have been enabled');
+            Alert.alert('Success', 'Location services have been enabled');
+            getOneTimeLocation();
+          })
+          .catch((error) => {
+            console.error('Error enabling location services:', error);
+            Alert.alert('Error', 'Failed to enable location services');
+          });
       }
-
-      if (!valid) {
-        // Prompt the user to enable location services
-        Alert.alert(
-          'ALERT.LOCATION_REQUIRED', // Title of the alert
-          'ALERT.ENABLE_LOCATION_SERVICES', // Message to user
-          [
-            // { text: t('ALERT.CANCEL'), style: 'cancel' }, // Cancel option
-            {
-              text: 'ALERT.OPEN_SETTINGS',
-              onPress: () => openLocationSettings(), // Open location settings
-            },
-          ],
-        );
-      }
-    };
-
-    // Call the async function
-    checkLocationAndSetupListeners();
-
-    if (Platform.OS === 'ios') {
-      getOneTimeLocation();
-      subscribeLocation();
-    } else {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-          {
-            title: 'LOCATION_ACCESS_REQUIRED',
-            message: 'NEEDS_TO_ACCESS',
-          },
-        );
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          // To Check, If Permission is granted
-          getOneTimeLocation();
-          subscribeLocation();
-        } else {
-          setLocationStatus('PERMISSION_DENIED');
-        }
-      } catch (err) {
-        console.warn(err);
-      }
+    } catch (error) {
+      console.log(error);
+      Alert.alert('Error', 'Something went wrong');
+      console.error('Error checking/enabling location services:', error);
     }
   };
 
   const getOneTimeLocation = () => {
-    // setFetchingText('ALERT.FETCHING_TEXT');
-    // setLocationStatus('GETTING_LOCATION');
     Geolocation.getCurrentPosition(
       position => {
-        // setLocationStatus('YOU_ARE_HERE');
         const currentLatitude = position.coords.latitude;
-        const currentLongitude = position.coords.longitude;
+        const currentLongitude = position.coords.longitude;        
         setCurrentLatitude(currentLatitude);
         setCurrentLongitude(currentLongitude);
       },
@@ -288,31 +262,6 @@ export default function App() {
       },
       {enableHighAccuracy: false, timeout: 30000, maximumAge: 1000},
     );
-  };
-
-  const subscribeLocation = () => {
-    let WatchID = Geolocation.watchPosition(
-      position => {
-        // setLocationStatus('YOU_ARE_HERE');
-        const currentLatitude = position.coords.latitude;
-        const currentLongitude = position.coords.longitude;
-        setCurrentLatitude(currentLatitude);
-        setCurrentLongitude(currentLongitude);
-
-        console.log([currentLatitude, currentLongitude]);
-      },
-      error => {
-        setLocationStatus(error.message);
-      },
-      {enableHighAccuracy: false, maximumAge: 1000},
-    );
-    setWatchID(WatchID);
-  };
-
-  const checkLocationServices = async () => {
-    const enabled = await DeviceInfo.isLocationEnabled();
-    setIsLocationEnabled(enabled);
-    return enabled;
   };
 
   const privacyClicked = () => {
@@ -366,7 +315,7 @@ export default function App() {
               buttonView={styles.locButtonView}
               isDisabled={false}
               raised={true}
-              onPress={() => myLocationPress()}
+              onPress={() => enableLocationService()}
             />
           ) : item.type === 'terms' ? (
             <View>

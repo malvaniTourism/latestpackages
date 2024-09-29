@@ -46,6 +46,7 @@ import Popup from '../Components/Common/Popup';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import DIMENSIONS from '../Services/Constants/DIMENSIONS';
 import ComingSoon from '../Components/Common/ComingSoon';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 const ProfileView = ({navigation, route, ...props}) => {
   const {t, i18n} = useTranslation();
@@ -292,6 +293,8 @@ const ProfileView = ({navigation, route, ...props}) => {
       const res = await comnPost('v2/logout');
 
       if (res.data.success) {
+        await GoogleSignin.signOut();
+
         await AsyncStorage.clear();
         setIsAlert(false);
         // loggedOut(t('SCREEN.LANG_SELECTION'));
