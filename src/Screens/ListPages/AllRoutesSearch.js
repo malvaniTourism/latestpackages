@@ -31,6 +31,7 @@ import {useTranslation} from 'react-i18next';
 import {useFocusEffect} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ComingSoon from '../../Components/Common/ComingSoon';
+import Popup from '../../Components/Common/Popup';
 
 const AllRoutesSearch = ({navigation, route, ...props}) => {
   const {t} = useTranslation();
@@ -45,6 +46,8 @@ const AllRoutesSearch = ({navigation, route, ...props}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [lastPage, setLastPage] = useState(null);
   const [showOffline, setShowOffline] = useState(false);
+  const [isAlert, setIsAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
   useEffect(() => {
     props.setLoader(true);
@@ -88,8 +91,9 @@ const AllRoutesSearch = ({navigation, route, ...props}) => {
     navigateTo(navigation, t('SCREEN.ROUTES_LIST'), {item});
   };
 
-  const searchRoute = (a, b, isNext) => {
+  const searchRoute = async(a, b, isNext) => {
     AsyncStorage.setItem('isLangChanged', 'false');
+
     if (nextPage >= 1) {
       props.setLoader(true);
       const data = {
@@ -137,12 +141,42 @@ const AllRoutesSearch = ({navigation, route, ...props}) => {
     }
   };
 
-  const loadMoreRoutes = () => {
+  const loadMoreRoutes = async () => {
+    const mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
+    // Check the internet connectivity state
+    const state = await NetInfo.fetch();
+    const isConnected = state.isConnected;
+
+    // Combined condition for all three cases
+    if (
+      (isConnected && !mode) || // Case 1: Internet is available but mode is offline
+      (!isConnected && !mode) || // Case 2: Internet is not available and mode is offline
+      (!isConnected && mode) // Case 3: Internet is not available but mode is online
+    ) {
+      // The user should be alerted based on their mode and connectivity status
+      setIsAlert(true);
+      setAlertMessage(
+        !isConnected && !mode
+          ? t('ALERT.NETWORK') // Alert: Network is available but mode is offline
+          : !isConnected && mode
+          ? t('ALERT.NO_INTERNET_AVAILABLE_MODE_ONLINE') // Alert: Mode is offline, you need to set it to online
+          : isConnected && !mode
+          ? t('ALERT.INTERNET_AVAILABLE_MODE_OFFLINE') // Alert: No internet available but mode is online
+          : '', // Default case (optional), if none of the conditions match
+      );
+
+      return;
+    }
+
     if (!props.mode) {
       setShowOffline(true);
     } else if (!isLoading && nextPage <= lastPage) {
       searchRoute(source, destination, true);
     }
+  };
+
+  const closePopup = () => {
+    setIsAlert(false);
   };
 
   const renderItem = ({item}) => {
@@ -246,6 +280,7 @@ const AllRoutesSearch = ({navigation, route, ...props}) => {
           </View>
         )}
       </SafeAreaView>
+      <Popup message={alertMessage} onPress={closePopup} visible={isAlert} />
       <ComingSoon
         message={t('GET_MORE_DATA')}
         visible={showOffline}

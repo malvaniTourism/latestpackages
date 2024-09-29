@@ -229,7 +229,7 @@ const ProfileView = ({navigation, route, ...props}) => {
     if (props.mode) {
       comnPost('v2/user-profile', props.access_token, navigation)
         .then(res => {
-          if (res && res.data.data)
+          if (res && res.data.data)            
             saveToStorage(
               t('STORAGE.PROFILE_RESPONSE'),
               JSON.stringify(res.data.data),
@@ -415,13 +415,14 @@ const ProfileView = ({navigation, route, ...props}) => {
             source={{
               uri: `${
                 profile.profile_picture
-                  ? Path.FTP_PATH + profile.profile_picture
+                  ? profile.profile_picture
                   : 'https://api-private.atlassian.com/users/2143ab39b9c73bcab4fe6562fff8d23d/avatar'
               }`,
             }}
           />
         )}
-        {option == 3 && (
+        {/* the profile photo update commented for we are using gmail sign in it provides profile deatils */}
+        {/* {option == 3 && (
           <Octicons
             name="pencil"
             size={17}
@@ -429,7 +430,7 @@ const ProfileView = ({navigation, route, ...props}) => {
             color={COLOR.black}
             style={styles.profileEdit}
           />
-        )}
+        )} */}
         <GlobalText text={profile.email} style={styles.pricingOptionTitle} />
       </View>
 

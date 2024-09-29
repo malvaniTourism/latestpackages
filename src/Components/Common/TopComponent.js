@@ -124,7 +124,7 @@ const TopComponent = ({
             source={{
               uri: `${
                 profilePhoto
-                  ? Path.FTP_PATH + profilePhoto
+                  ? profilePhoto
                   : 'https://api-private.atlassian.com/users/2143ab39b9c73bcab4fe6562fff8d23d/avatar'
               }`,
             }}

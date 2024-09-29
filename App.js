@@ -160,21 +160,31 @@ export default function App() {
   // };
 
   const handleNextButton = () => {
-    if (currentIndex === 3 && !textValues[4]) {
-      alert('Please accept the Terms and Conditions.');
-      return;
+    // Check when on the third slide for Terms and Conditions acceptance and location sharing
+    if (currentIndex === 3) {
+      if (!textValues[4]) {
+        alert('Please accept the Terms and Conditions.');
+        return;
+      }
+  
+      if (!latitude || !longitude) {
+        alert('Please share your location.');
+        return;
+      }
     }
-
+  
+    // Check when on the second slide for location sharing
     if (currentIndex === 2 && (!latitude || !longitude)) {
       alert('Please share your location.');
       return;
     }
-
+  
+    // Proceed to the next slide
     if (currentIndex < slides.length - 1) {
       setCurrentIndex(currentIndex + 1);
       if (sliderRef.current) sliderRef.current.goToSlide(currentIndex + 1);
     }
-  };
+  };  
 
   const callAPI = () => {
     dataSync('landingResponse', callLandingPageAPI, true).then(resp => {});

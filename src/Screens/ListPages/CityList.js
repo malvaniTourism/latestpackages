@@ -14,6 +14,7 @@ import {
   comnPost,
   dataSync,
   saveToStorage,
+  getFromStorage
 } from '../../Services/Api/CommonServices';
 import {connect} from 'react-redux';
 import Loader from '../../Components/Customs/Loader';
@@ -32,6 +33,8 @@ import GlobalText from '../../Components/Customs/Text';
 import {useTranslation} from 'react-i18next';
 import styles from './Styles';
 import ComingSoon from '../../Components/Common/ComingSoon';
+import Popup from '../../Components/Common/Popup';
+import FlatListSkeleton from './FlatListSkeleton';
 
 const CityList = ({navigation, route, ...props}) => {
   const {t} = useTranslation();
@@ -47,11 +50,15 @@ const CityList = ({navigation, route, ...props}) => {
   const [refreshing, setRefreshing] = useState(false);
   const [showOffline, setShowOffline] = useState(false);
   const [showOnlineMode, setShowOnlineMode] = useState(false);
+  const [isAlert, setIsAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
   useEffect(() => {
+    props.setLoader(true);
+    setLoading(true);
+
     const backHandler = goBackHandler(navigation);
     checkLogin(navigation);
-    props.setLoader(true);
     setCities([]);
 
     const unsubscribe = NetInfo.addEventListener(state => {
@@ -82,16 +89,6 @@ const CityList = ({navigation, route, ...props}) => {
   useEffect(() => {
     fetchCities(1, true);
   }, [route.params]);
-
-  const onRefresh = () => {
-    setRefreshing(true);
-    if (props.mode) {
-      fetchCities(1, true);
-    } else {
-      setShowOnlineMode(true);
-      setRefreshing(false);
-    }
-  };
 
   const fetchCities = (page, reset) => {
     if (props.mode) {
@@ -145,6 +142,16 @@ const CityList = ({navigation, route, ...props}) => {
     navigateTo(navigation, t('SCREEN.CITY_DETAILS'), {id});
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    if (props.mode) {
+      fetchCities(1, true);
+    } else {
+      setShowOnlineMode(true);
+      setRefreshing(false);
+    }
+  };
+
   const renderItem = ({item}) => (
     <TouchableOpacity
       // onPress={() => getCityDetails(item.id)}
@@ -153,12 +160,41 @@ const CityList = ({navigation, route, ...props}) => {
     </TouchableOpacity>
   );
 
-  const loadMoreCities = () => {
+  const loadMoreCities = async () => {
+    const mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
+    // Check the internet connectivity state
+    const state = await NetInfo.fetch();
+    const isConnected = state.isConnected;
+
+    // Combined condition for all three cases
+    if (
+      (isConnected && !mode) || // Case 1: Internet is available but mode is offline
+      (!isConnected && !mode) || // Case 2: Internet is not available and mode is offline
+      (!isConnected && mode) // Case 3: Internet is not available but mode is online
+    ) {
+      // The user should be alerted based on their mode and connectivity status
+      setIsAlert(true);
+      setAlertMessage(
+        !isConnected && !mode
+          ? t('ALERT.NETWORK') // Alert: Network is available but mode is offline
+          : !isConnected && mode
+          ? t('ALERT.NO_INTERNET_AVAILABLE_MODE_ONLINE') // Alert: Mode is offline, you need to set it to online
+          : isConnected && !mode
+          ? t('ALERT.INTERNET_AVAILABLE_MODE_OFFLINE') // Alert: No internet available but mode is online
+          : '', // Default case (optional), if none of the conditions match
+      );
+
+      return;
+    }
     if (!props.mode) {
       setShowOffline(true);
     } else if (!loading && nextPage <= lastPage) {
       fetchCities(nextPage, false);
     }
+  };
+
+  const closePopup = () => {
+    setIsAlert(false);
   };
 
   const renderFooter = () => {
@@ -216,16 +252,18 @@ const CityList = ({navigation, route, ...props}) => {
             }}>
             <GlobalText
               style={{fontWeight: 'bold'}}
-              text={
-                offline
-                  ? t('NO_INTERNET')
-                  : !props.isLoading
-                  ? t('NO_DATA')
-                  : ''
-              }
+              text={offline ? (
+                <GlobalText
+                  style={{fontWeight: 'bold'}}
+                  text={t('NO_INTERNET')}
+                />
+              ) : (
+                <FlatListSkeleton />
+              )}
             />
           </View>
         )}
+        <Popup message={alertMessage} onPress={closePopup} visible={isAlert} />
         <ComingSoon
           message={t('ONLINE_MODE')}
           visible={showOnlineMode}

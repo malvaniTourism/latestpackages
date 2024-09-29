@@ -89,17 +89,7 @@ const ExploreGrid = ({route, navigation, ...props}) => {
 
   const fetchData = async (page, reset = false) => {
     const mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
-    // Check the internet connectivity state
-    const state = await NetInfo.fetch();
-    const isConnected = state.isConnected;
-
-    if (!isConnected && !mode) {
-      setIsAlert(true);
-      setAlertMessage(
-        !isConnected && !mode ? t('ALERT.NETWORK') : '', // Alert: Network is available but mode is offline
-      );
-    }
-
+    
     if (props.mode) {
       if (loading || (page > currentPage && page > lastPage)) return;
 
@@ -152,7 +142,33 @@ const ExploreGrid = ({route, navigation, ...props}) => {
     setLastPage(1);
   };
 
-  const handleScroll = event => {
+  const handleScroll = async event => {
+    const mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
+    // Check the internet connectivity state
+    const state = await NetInfo.fetch();
+    const isConnected = state.isConnected;
+
+    // Combined condition for all three cases
+    if (
+      (isConnected && !mode) || // Case 1: Internet is available but mode is offline
+      (!isConnected && !mode) || // Case 2: Internet is not available and mode is offline
+      (!isConnected && mode) // Case 3: Internet is not available but mode is online
+    ) {
+      // The user should be alerted based on their mode and connectivity status
+      setIsAlert(true);
+      setAlertMessage(
+        !isConnected && !mode
+          ? t('ALERT.NETWORK') // Alert: Network is available but mode is offline
+          : !isConnected && mode
+          ? t('ALERT.NO_INTERNET_AVAILABLE_MODE_ONLINE') // Alert: Mode is offline, you need to set it to online
+          : isConnected && !mode
+          ? t('ALERT.INTERNET_AVAILABLE_MODE_OFFLINE') // Alert: No internet available but mode is online
+          : '', // Default case (optional), if none of the conditions match
+      );
+
+      return;
+    }
+
     const contentHeight = event.nativeEvent.contentSize.height;
     const offsetY = event.nativeEvent.contentOffset.y;
     const scrollHeight = event.nativeEvent.layoutMeasurement.height;
