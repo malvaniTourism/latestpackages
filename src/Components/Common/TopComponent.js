@@ -22,7 +22,6 @@ const TopComponent = ({
   openLocationSheet,
   currentCity,
   gotoProfile,
-  profilePhoto,
   cities,
   setCurrentCity,
   ...props
@@ -32,10 +31,15 @@ const TopComponent = ({
 
   const [showCities, setShowCities] = useState(false);
   const [isOnline, setIsOnline] = useState(true);
+  const [profilePhoto, setProfilePhoto] = useState(null);
 
   useEffect(async () => {
     let mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
+    let picture = JSON.parse(
+      await getFromStorage(t('STORAGE.PROFILE_PICTURE')),
+    );
     setIsOnline(mode);
+    setProfilePhoto(picture);
     // props.setMode(mode);
   }, []);
 

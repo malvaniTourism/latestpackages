@@ -134,6 +134,10 @@ const Email = ({navigation, route, ...props}) => {
     let mode = await getFromStorage('mode');
     i18n.changeLanguage(language);
     props.setMode(mode);
+    let token = await getFromStorage(t('STORAGE.ACCESS_TOKEN'));
+    if (token) {
+      navigateTo(navigation, t('SCREEN.HOME'));
+    }
   };
 
   // const openDB = () => {

@@ -27,12 +27,7 @@ const RouteHeadCard = ({data, cardClick, style}) => {
           )}
         </View>
         <View style={{flex: 3, justifyContent: 'space-evenly'}}>
-          <GlobalText
-            text={`${data.source_place.name} ${t('TO')} ${
-              data.destination_place.name
-            }`}
-            style={styles.routeHeadCardTitle}
-          />
+          <GlobalText text={`${data.name}`} style={styles.routeHeadCardTitle} />
           {/* <GlobalText text={`${data.start_time} - ${data.end_time}`} /> */}
           <View>
             <View

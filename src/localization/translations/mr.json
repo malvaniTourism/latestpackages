@@ -125,7 +125,8 @@
     "QUERIES": "queries",
     "GALLERY": "gallery",
     "MODE": "mode",
-    "APP_VERSION": "appVersion"
+    "APP_VERSION": "appVersion",
+    "PROFILE_PICTURE": "profilePicture"
   },
   "HEADER": {
     "BUS_TIMINGS": "बसच्या वेळा",
@@ -177,7 +178,9 @@
     "MODE_OFFLINE": "मोड ऑफलाइन सेट आहे; कृपया ऑनलाइनमध्ये बदल करा.",
     "NO_INTERNET_AVAILABLE_MODE_ONLINE": "इंटरनेट कनेक्शन उपलब्ध नाही, परंतु मोड ऑनलाइन आहे. कृपया आपले नेटवर्क तपासा.",
     "INTERNET_AVAILABLE_MODE_OFFLINE": "इंटरनेट कनेक्शन उपलब्ध आहे, परंतु मोड ऑफलाइन आहे. कृपया आपला मोड तपासा.",
-    "NETWORK": "इंटरनेट कनेक्शन उपलब्ध नाही."
+    "NETWORK": "इंटरनेट कनेक्शन उपलब्ध नाही.",
+    "THANK_YOU": "धन्यवाद",
+    "VISIT_AGAIN": "Tourkokan वापरल्याबद्दल धन्यवाद...! कृपया पुन्हा भेट द्या..."
   },
   "TABLE": {
     "CITY": "City",

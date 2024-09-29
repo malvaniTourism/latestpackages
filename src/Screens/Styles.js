@@ -616,6 +616,55 @@ const styles = StyleSheet.create({
     borderColor: COLOR.themeBlue,
     height: 45,
   },
+  switchContainer: {
+    width: 100,
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
+    padding: 5,
+  },
+  switchCircle: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#fff',
+    position: 'absolute',
+    top: 5,
+  },
+  modeScreen: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: DIMENSIONS.screenHeight - 100,
+  },
+  toggleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  optionCard: {
+    width: 150,
+    height: 150,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    marginHorizontal: 10,
+    elevation: 5,
+  },
+  selectedCard: {
+    backgroundColor: '#e3f2fd',
+  },
+  optionText: {
+    marginTop: 15,
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#333',
+  },
+  note: {
+    fontSize: 11,
+    width: DIMENSIONS.bannerWidth,
+  },
 });
 
 export default styles;

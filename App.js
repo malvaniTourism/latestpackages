@@ -17,6 +17,7 @@ import {
   PermissionsAndroid,
   Text,
   TouchableOpacity,
+  Animated,
 } from 'react-native';
 import StackNavigator from './src/Navigators/StackNavigator';
 import COLOR from './src/Services/Constants/COLORS';
@@ -43,8 +44,9 @@ import Geolocation from '@react-native-community/geolocation';
 import DeviceInfo from 'react-native-device-info';
 import {navigateTo} from './src/Services/CommonMethods';
 import TextField from './src/Components/Customs/TextField';
-import {CheckBox} from '@rneui/themed';
+import {CheckBox, Switch} from '@rneui/themed';
 import PrivacyPolicy from './src/Components/Common/PrivacyPolicy';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
 // LogBox.ignoreAllLogs();
 // LogBox.ignoreLogs(['Warning: ...', 'Possible Unhandled Promise Rejection']);
@@ -89,7 +91,7 @@ const slides = [
   {
     key: 5,
     title: 'Select Online/Offline Mode',
-    image: require('./src/Assets/Images/Intro/6-min.png'),
+    image: null,
     backgroundColor: '#fff',
     type: 'mode',
   },
@@ -119,9 +121,10 @@ export default function App() {
 
   const [latitude, setCurrentLatitude] = useState(null);
   const [longitude, setCurrentLongitude] = useState(null);
-  const [mode, setMode] = useState('true');
+  const [mode, setMode] = useState(true);
   const [isLocationEnabled, setIsLocationEnabled] = useState(false);
   const [isPrivacyChecked, setIsPrivacyChecked] = useState(false);
+  const [scaleValue] = useState(new Animated.Value(1));
 
   const languagesList = [
     {label: 'English', value: 'en'},
@@ -317,6 +320,22 @@ export default function App() {
     setTextValues({...textValues, 4: !textValues[4]});
   };
 
+  const changeMode = () => {
+    saveToStorage('mode', JSON.stringify(!mode));
+    setMode(!mode);
+    Animated.spring(scaleValue, {
+      toValue: 1.1,
+      friction: 2,
+      useNativeDriver: true,
+    }).start(() => {
+      Animated.spring(scaleValue, {
+        toValue: 1,
+        friction: 2,
+        useNativeDriver: true,
+      }).start();
+    });
+  };
+
   const renderItem = ({item}) => {
     return (
       <View style={[styles.slide, {backgroundColor: item.backgroundColor}]}>
@@ -368,25 +387,54 @@ export default function App() {
               />
             </View>
           ) : item.type === 'mode' ? (
-            <>
-              <GlobalText text={'How would you like to use your app?'} />
-              <View style={styles.modeSelection}>
-                <TextButton
-                  title={'Online'}
-                  buttonView={styles.modeButtons}
-                  isDisabled={false}
-                  raised={true}
-                  onPress={() => setMode('true')}
-                />
-                <TextButton
-                  title={'Offline'}
-                  buttonView={styles.modeButtons}
-                  isDisabled={false}
-                  raised={true}
-                  onPress={() => setMode('false')}
+            <View style={styles.modeScreen}>
+              <GlobalText
+                text={'How would you like to use your app?'}
+                style={styles.sectionTitle}
+              />
+              <View
+                style={{
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  marginTop: 20,
+                }}>
+                <View style={styles.toggleContainer}>
+                  <TouchableOpacity onPress={() => changeMode(true)}>
+                    <Animated.View
+                      style={[
+                        styles.optionCard,
+                        mode && styles.selectedCard,
+                        {transform: [{scale: mode ? scaleValue : 1}]},
+                      ]}>
+                      <FontAwesome5Icon
+                        name="cloud"
+                        size={50}
+                        color="#4cd137"
+                      />
+                      <Text style={styles.optionText}>Online Mode</Text>
+                    </Animated.View>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity onPress={() => changeMode(false)}>
+                    <Animated.View
+                      style={[
+                        styles.optionCard,
+                        !mode && styles.selectedCard,
+                        {transform: [{scale: !mode ? scaleValue : 1}]},
+                      ]}>
+                      <Feather name="wifi-off" size={50} color="#f39c12" />
+                      <Text style={styles.optionText}>Offline Mode</Text>
+                    </Animated.View>
+                  </TouchableOpacity>
+                </View>
+                <GlobalText
+                  text={
+                    'Please note: Even in offline mode, a network connection is required initially to complete the login process and load essential data.'
+                  }
+                  style={styles.note}
                 />
               </View>
-            </>
+            </View>
           ) : null}
         </View>
       </View>
@@ -432,7 +480,7 @@ export default function App() {
       'termsAccepted',
       JSON.stringify(textValues[4] || false),
     );
-    await saveToStorage('mode', mode);
+    await saveToStorage('mode', JSON.stringify(mode));
     setIsFirstTime('false');
   };
 

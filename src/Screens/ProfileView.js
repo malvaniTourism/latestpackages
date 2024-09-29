@@ -297,8 +297,8 @@ const ProfileView = ({navigation, route, ...props}) => {
         // loggedOut(t('SCREEN.LANG_SELECTION'));
         // Show a thank you message
         Alert.alert(
-          'Thank You',
-          'Thank you for using the Tourkokan...!  Please visit again...',
+          t('ALERT.THANK_YOU'),
+          t('ALERT.VISIT_AGAIN'),
           [
             {
               text: 'OK',

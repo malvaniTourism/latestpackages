@@ -102,7 +102,6 @@ const HomeScreen = ({navigation, route, ...props}) => {
   ]);
   const [bannerObject, setBannerObject] = useState([]);
   const [currentCity, setCurrentCity] = useState(null);
-  const [profilePhoto, setProfilePhoto] = useState('');
   const [sindhudurg, setSindh] = useState({});
   const [refreshing, setRefreshing] = useState(false);
   const [keyboardOffset, setKeyboardOffset] = useState(0);
@@ -289,7 +288,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
         // setIsInitialLoad(false); // Update state to indicate that the initial load has occurred
 
         // Your existing logic
-        // setCities([]);
+        setCities([]);
         // setRoutes([]);
         // setBannerObject([]);
         props.setLoader(true);
@@ -380,7 +379,10 @@ const HomeScreen = ({navigation, route, ...props}) => {
     saveToStorage(t('STORAGE.QUERIES'), JSON.stringify(resp.queries));
     saveToStorage(t('STORAGE.GALLERY'), JSON.stringify(resp.gallery));
     saveToStorage(t('STORAGE.PROFILE_RESPONSE'), JSON.stringify(resp.user));
-    setProfilePhoto(resp.user.profile_picture);
+    saveToStorage(
+      t('STORAGE.PROFILE_PICTURE'),
+      JSON.stringify(resp.user.profile_picture),
+    );
     AsyncStorage.setItem(t('STORAGE.USER_NAME'), resp.user.name);
     AsyncStorage.setItem(t('STORAGE.USER_ID'), JSON.stringify(resp.user.id));
     AsyncStorage.setItem(t('STORAGE.USER_EMAIL'), resp.user.email);
@@ -504,7 +506,6 @@ const HomeScreen = ({navigation, route, ...props}) => {
           navigation={navigation}
           openLocationSheet={() => openLocationSheet()}
           gotoProfile={() => openProfile()}
-          profilePhoto={profilePhoto}
         />
       )}
       <Popup message={alertMessage} onPress={closePopup} visible={isAlert} />

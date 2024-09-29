@@ -125,7 +125,8 @@
     "QUERIES": "queries",
     "GALLERY": "gallery",
     "MODE": "mode",
-    "APP_VERSION": "appVersion"
+    "APP_VERSION": "appVersion",
+    "PROFILE_PICTURE": "profilePicture"
   },
   "HEADER": {
     "BUS_TIMINGS": "Bus Timings",
@@ -174,7 +175,9 @@
     "MODE_OFFLINE": "The mode is set to offline; please switch to online to proceed.",
     "NO_INTERNET_AVAILABLE_MODE_ONLINE": "No internet connection available, but the mode is set to online. Please check your network.",
     "INTERNET_AVAILABLE_MODE_OFFLINE": "Internet is available, but mode is set to offline, Please check your mode.",
-    "NETWORK": "No internet connection available."
+    "NETWORK": "No internet connection available.",
+    "THANK_YOU": "Thank You",
+    "VISIT_AGAIN": "Thank you for using the Tourkokan...!  Please visit again..."
   },
   "TABLE": {
     "CITY": "City",

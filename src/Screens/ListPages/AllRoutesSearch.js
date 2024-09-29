@@ -96,7 +96,6 @@ const AllRoutesSearch = ({navigation, route, ...props}) => {
         source_place_id: a || source?.id,
         destination_place_id: b || destination?.id,
       };
-      console.log('data - -', data);
 
       comnPost(`v2/routes?page=${isNext ? nextPage : 1}`, data, navigation)
         .then(res => {
@@ -207,8 +206,7 @@ const AllRoutesSearch = ({navigation, route, ...props}) => {
       </View>
       <SafeAreaView
         style={{
-          paddingBottom: 320,
-          minHeight: DIMENSIONS.screenHeight,
+          height: DIMENSIONS.halfHeight + DIMENSIONS.headerSpace - 30,
         }}>
         {isFirstTime && isLoading ? (
           <>
