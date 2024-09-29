@@ -312,7 +312,8 @@ const ProfileView = ({navigation, route, ...props}) => {
 
       if (res.data.success) {
         await GoogleSignin.signOut();
-        await clearStorageExcept(['IS_FIRST_TIME', 'MODE']);
+        // await clearStorageExcept(['IS_FIRST_TIME', 'MODE']);
+        await AsyncStorage.clear();
 
         setIsAlert(false);
         // loggedOut(t('SCREEN.LANG_SELECTION'));
@@ -324,7 +325,8 @@ const ProfileView = ({navigation, route, ...props}) => {
             {
               text: 'OK',
               onPress: () => {
-                DevSettings.reload();
+                // DevSettings.reload();
+                BackHandler.exitApp();
               },
             },
           ],
