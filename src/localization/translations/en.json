@@ -126,7 +126,12 @@
     "GALLERY": "gallery",
     "MODE": "mode",
     "APP_VERSION": "appVersion",
-    "PROFILE_PICTURE": "profilePicture"
+    "PROFILE_PICTURE": "profilePicture",
+    "LANGUAGE": "language",
+    "REFERRAL_CODE": "referralCode",
+    "CURRENT_LATITUDE": "currentLatitude",
+    "CURRENT_LONGITUDE": "currentLongitude",
+    "TERMS_ACCEPTED": "termsAccepted"
   },
   "HEADER": {
     "BUS_TIMINGS": "Bus Timings",
@@ -177,7 +182,19 @@
     "INTERNET_AVAILABLE_MODE_OFFLINE": "Internet is available, but mode is set to offline, Please check your mode.",
     "NETWORK": "No internet connection available.",
     "THANK_YOU": "Thank You",
-    "VISIT_AGAIN": "Thank you for using the Tourkokan...!  Please visit again..."
+    "VISIT_AGAIN": "Thank you for using the Tourkokan...!  Please visit again...",
+    "TNC": "Please accept the Terms and Conditions.",
+    "SHARE_LOCATION": "Please share your location.",
+    "LOC_ENABLED": "Location services are already enabled",
+    "LOCATION_ENABLED": "Location services have been enabled",
+    "LOC_ERROR": "Error enabling location services:",
+    "LOC_FAILED": "Failed to enable location services",
+    "LOC_ENABLE": "Location Enabled",
+    "ENABLE_LOC": "Enable Location",
+    "SELECT_LANG": "Select Language",
+    "ENTER_REFERRAL": "Enter Referral Code",
+    "ACCEPT_TERMS": "Accept Terms and Conditions",
+    "SELECT_MODE": "Select Online/Offline Mode"
   },
   "TABLE": {
     "CITY": "City",
@@ -313,5 +330,8 @@
   "CITIES": "Cities",
   "VILLAGES": "Villages",
   "TO": "To",
-  "PRIVACY_POLICY": "Privacy Policy"
+  "PRIVACY_POLICY": "Privacy Policy",
+  "ACCEPT_TNC": "I Accept Terms & Conditions",
+  "APP_USAGE": "How would you like to use your app?",
+  "NOTE": "Please note: Even in offline mode, a network connection is required initially to complete the login process and load essential data."
 }

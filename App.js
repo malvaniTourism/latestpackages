@@ -40,6 +40,7 @@ import firebase from '@react-native-firebase/app';
 import {
   comnPost,
   dataSync,
+  getFromStorage,
   saveToStorage,
 } from './src/Services/Api/CommonServices';
 import { useTranslation } from 'react-i18next';
@@ -72,37 +73,37 @@ analytics().setAnalyticsCollectionEnabled(true);
 const slides = [
   {
     key: 1,
-    title: 'Select Language',
+    title: STRING.ALERT.SELECT_LANG,
     image: require('./src/Assets/Images/Intro/4-min.png'),
-    backgroundColor: '#fff',
+    backgroundColor: COLOR.white,
     type: 'language',
   },
   {
     key: 2,
-    title: 'Enter Referral Code',
+    title: STRING.ALERT.ENTER_REFERRAL,
     image: require('./src/Assets/Images/Intro/5-min.png'),
-    backgroundColor: '#fff',
+    backgroundColor: COLOR.white,
     type: 'referral',
   },
   {
     key: 3,
-    title: 'Enable Location',
+    title: STRING.ALERT.ENABLE_LOC,
     image: require('./src/Assets/Images/Intro/7-min.png'),
-    backgroundColor: '#fff',
+    backgroundColor: COLOR.white,
     type: 'location',
   },
   {
     key: 4,
-    title: 'Accept Terms and Conditions',
+    title: STRING.ALERT.ACCEPT_TERMS,
     image: null,
-    backgroundColor: '#fff',
+    backgroundColor: COLOR.white,
     type: 'terms',
   },
   {
     key: 5,
-    title: 'Select Online/Offline Mode',
+    title: STRING.ALERT.SELECT_MODE,
     image: null,
-    backgroundColor: '#fff',
+    backgroundColor: COLOR.white,
     type: 'mode',
   },
 ];
@@ -113,12 +114,7 @@ export default function App() {
 
   const [isFirstTime, setIsFirstTime] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [list, setList] = useState([
-    { label: 'English', value: 'en' },
-    { label: 'मराठी', value: 'mr' },
-  ]);
   const [language, setLanguage] = useState('en');
-  const [isFocus, setIsFocus] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [textValues, setTextValues] = useState({
     1: '',
@@ -127,24 +123,19 @@ export default function App() {
     4: '',
     5: '',
   });
-  const [watchID, setWatchID] = useState('');
-
   const [latitude, setCurrentLatitude] = useState(null);
   const [longitude, setCurrentLongitude] = useState(null);
   const [mode, setMode] = useState(true);
-  const [isLocationEnabled, setIsLocationEnabled] = useState(false);
   const [isPrivacyChecked, setIsPrivacyChecked] = useState(false);
   const [scaleValue] = useState(new Animated.Value(1));
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-
   const languagesList = [
     { label: 'English', value: 'en' },
     { label: 'मराठी', value: 'mr' },
   ];
-
   const [isLoading, setIsLoading] = useState(false); // State to manage loading spinner
-  const [locationStatus, setLocationStatus] = useState('Share Location'); // State for button text
-  const [buttonColor, setButtonColor] = useState('#007bff'); // Initial button color
+  const [locationStatus, setLocationStatus] = useState('Share Location');
+  const [buttonColor, setButtonColor] = useState(COLOR.themeBlue);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [referral, setReferral] = useState('');
 
@@ -169,7 +160,7 @@ export default function App() {
 
   useEffect(() => {
     const checkFirstTime = async () => {
-      const isFirstTimeValue = await AsyncStorage.getItem('IS_FIRST_TIME');
+      const isFirstTimeValue = await getFromStorage(STRING.STORAGE.IS_FIRST_TIME);
       setIsFirstTime(isFirstTimeValue);
       setLoading(false);
     };
@@ -192,14 +183,14 @@ export default function App() {
     // Check when on the third slide for Terms and Conditions acceptance and location sharing
     if (currentIndex === 3) {
       if (!textValues[4]) {
-        alert('Please accept the Terms and Conditions.');
+        alert(STRING.ALERT.TNC);
         return;
       }
 
       if (!latitude || !longitude) {
         console.log(1);
 
-        alert('Please share your location.');
+        alert(STRING.ALERT.SHARE_LOCATION);
         return;
       }
     }
@@ -208,7 +199,7 @@ export default function App() {
     if (currentIndex === 2 && (!latitude || !longitude)) {
       console.log(2);
 
-      alert('Please share your location.');
+      alert(STRING.ALERT.SHARE_LOCATION);
       return;
     }
 
@@ -220,7 +211,7 @@ export default function App() {
   };
 
   const callAPI = () => {
-    dataSync('landingResponse', callLandingPageAPI, true).then(resp => { });
+    dataSync(STRING.STORAGE.LANDING_RESPONSE, callLandingPageAPI, true).then(resp => { });
   };
 
   const callLandingPageAPI = async site_id => {
@@ -238,17 +229,17 @@ export default function App() {
   };
 
   const setOfflineData = resp => {
-    saveToStorage('landingResponse', JSON.stringify(resp));
-    saveToStorage('categoriesResponse', JSON.stringify(resp.categories));
-    saveToStorage('routesResponse', JSON.stringify(resp.routes));
-    saveToStorage('citiesResponse', JSON.stringify(resp.cities));
-    saveToStorage('emergency', JSON.stringify(resp.emergencies));
-    saveToStorage('queries', JSON.stringify(resp.queries));
-    saveToStorage('gallery', JSON.stringify(resp.gallery));
-    saveToStorage('profileResponse', JSON.stringify(resp.user));
-    saveToStorage('userName', resp.user.name);
-    saveToStorage('userId', JSON.stringify(resp.user.id));
-    saveToStorage('userEmail', resp.user.email);
+    saveToStorage(STRING.STORAGE.LANDING_RESPONSE, JSON.stringify(resp));
+    saveToStorage(STRING.STORAGE.CATEGORIES_RESPONSE, JSON.stringify(resp.categories));
+    saveToStorage(STRING.STORAGE.ROUTES_RESPONSE, JSON.stringify(resp.routes));
+    saveToStorage(STRING.STORAGE.CITIES_RESPONSE, JSON.stringify(resp.cities));
+    saveToStorage(STRING.STORAGE.EMERGENCY, JSON.stringify(resp.emergencies));
+    saveToStorage(STRING.STORAGE.QUERIES, JSON.stringify(resp.queries));
+    saveToStorage(STRING.STORAGE.GALLERY, JSON.stringify(resp.gallery));
+    saveToStorage(STRING.STORAGE.PROFILE_RESPONSE, JSON.stringify(resp.user));
+    saveToStorage(STRING.STORAGE.USER_NAME, resp.user.name);
+    saveToStorage(STRING.STORAGE.USER_ID, JSON.stringify(resp.user.id));
+    saveToStorage(STRING.STORAGE.USER_EMAIL, resp.user.email);
   };
 
   // const handleNextButton = () => {
@@ -274,25 +265,25 @@ export default function App() {
       const isLocationEnabled = await LocationEnabler.isLocationEnabled();
 
       if (isLocationEnabled) {
-        console.log('Location services are already enabled');
+        console.log(STRING.ALERT.LOC_ENABLED);
         getOneTimeLocation();
       } else {
         LocationEnabler.promptForEnableLocationIfNeeded()
           .then(() => {
-            console.log('Location services have been enabled');
-            Alert.alert('Success', 'Location services have been enabled');
+            console.log(STRING.ALERT.LOCATION_ENABLED);
+            Alert.alert('Success', STRING.ALERT.LOCATION_ENABLED);
             getOneTimeLocation();
           })
           .catch(error => {
-            console.error('Error enabling location services:', error);
-            Alert.alert('Error', 'Failed to enable location services');
+            console.error(STRING.ALERT.LOC_ERROR, error);
+            Alert.alert('Error', STRING.ALERT.LOC_FAILED);
             setIsLoading(false); // Stop loading spinner
             setIsButtonDisabled(false); // Re-enable the button
           });
       }
     } catch (error) {
       console.log(error);
-      Alert.alert('Error', 'Something went wrong');
+      Alert.alert('Error', STRING.ALERT.WENT_WRONG);
       setIsLoading(false); // Stop loading spinner
       setIsButtonDisabled(false); // Re-enable the button
     }
@@ -313,14 +304,14 @@ export default function App() {
           );
           setCurrentLatitude(currentLatitude);
           setCurrentLongitude(currentLongitude);
-          setLocationStatus('Location Enabled'); // Update button text
+          setLocationStatus(STRING.ALERT.LOC_ENABLE); // Update button text
           setButtonColor('#28a745'); // Set color to green after success
           setIsLoading(false); // Stop loading spinner
           setIsButtonDisabled(true); // Keep the button disabled
         },
         error => {
-          setLocationStatus('Enable Location'); // Reset text
-          setButtonColor('#dc3545'); // Change to red color on error
+          setLocationStatus(STRING.ALERT.ENABLE_LOC); // Reset text
+          setButtonColor(COLOR.red); // Change to red color on error
           setIsLoading(false); // Stop loading spinner
           setIsButtonDisabled(false); // Enable button again
           console.error('Location Error:', error);
@@ -328,8 +319,8 @@ export default function App() {
         { enableHighAccuracy: false, timeout: 30000, maximumAge: 1000 },
       );
     } catch (error) {
-      setLocationStatus('Enable Location'); // Reset text
-      setButtonColor('#dc3545'); // Change to red color on error
+      setLocationStatus(STRING.ALERT.ENABLE_LOC); // Reset text
+      setButtonColor(COLOR.red); // Change to red color on error
       setIsLoading(false);
       setIsButtonDisabled(false); // Enable button again
       console.error('Error fetching location:', error);
@@ -342,7 +333,7 @@ export default function App() {
   };
 
   const changeMode = () => {
-    saveToStorage('mode', JSON.stringify(!mode));
+    saveToStorage(STRING.STORAGE.MODE, JSON.stringify(!mode));
     setMode(!mode);
     Animated.spring(scaleValue, {
       toValue: 1.1,
@@ -426,7 +417,7 @@ export default function App() {
                   // cancelClick={closePopup}
                   />
                   <CheckBox
-                    title={'I Accept Terms & Conditions'}
+                    title={STRING.ACCEPT_TNC}
                     onPress={() => privacyClicked()}
                     checked={isPrivacyChecked}
                   />
@@ -434,7 +425,7 @@ export default function App() {
               ) : item.type === 'mode' ? (
                 <View style={styles.modeScreen}>
                   <GlobalText
-                    text={'How would you like to use your app?'}
+                    text={STRING.APP_USAGE}
                     style={styles.sectionTitle}
                   />
                   <View
@@ -473,9 +464,7 @@ export default function App() {
                       </TouchableOpacity>
                     </View>
                     <GlobalText
-                      text={
-                        'Please note: Even in offline mode, a network connection is required initially to complete the login process and load essential data.'
-                      }
+                      text={STRING.NOTE}
                       style={styles.note}
                     />
                   </View>
@@ -518,16 +507,13 @@ export default function App() {
 
   const onDone = async () => {
     // Save the user's preferences
-    await saveToStorage('IS_FIRST_TIME', 'false');
-    await saveToStorage('language', language);
-    await saveToStorage('referralCode', referral);
-    await saveToStorage('currentLatitude', JSON.stringify(latitude));
-    await saveToStorage('currentLongitude', JSON.stringify(longitude));
-    await saveToStorage(
-      'termsAccepted',
-      JSON.stringify(textValues[4] || false),
-    );
-    await saveToStorage('mode', JSON.stringify(mode));
+    await saveToStorage(STRING.STORAGE.IS_FIRST_TIME, 'false');
+    await saveToStorage(STRING.STORAGE.LANGUAGE, language);
+    await saveToStorage(STRING.STORAGE.REFERRAL_CODE, referral);
+    await saveToStorage(STRING.STORAGE.CURRENT_LATITUDE, JSON.stringify(latitude));
+    await saveToStorage(STRING.STORAGE.CURRENT_LONGITUDE, JSON.stringify(longitude));
+    await saveToStorage(STRING.STORAGE.TERMS_ACCEPTED, JSON.stringify(textValues[4] || false));
+    await saveToStorage(STRING.STORAGE.MODE, JSON.stringify(mode));
     setIsFirstTime('false');
   };
 

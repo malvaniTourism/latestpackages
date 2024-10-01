@@ -68,9 +68,9 @@ const Email = ({navigation, route, ...props}) => {
     try {
       props.setLoader(true);
       await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
-      let lat = await getFromStorage('currentLatitude');
-      let long = await getFromStorage('currentLongitude');
-      let referral_code = await getFromStorage('referralCode');
+      let lat = await getFromStorage(t("STORAGE.CURRENT_LATITUDE"));
+      let long = await getFromStorage(t("STORAGE.CURRENT_LONGITUDE"));
+      let referral_code = await getFromStorage(t("STORAGE.REFERRAL_CODE"));
       const userInfo = await GoogleSignin.signIn();
 
       $payload = {
@@ -111,7 +111,6 @@ const Email = ({navigation, route, ...props}) => {
         }
       }
     } catch (error) {
-      console.log(error);
       setIsAlert(true);
       setAlertMessage(t('ALERT.WENT_WRONG'));
       props.setLoader(false);
@@ -134,8 +133,8 @@ const Email = ({navigation, route, ...props}) => {
   }, [props.mode]);
 
   const getAsyncValues = async () => {
-    let language = await getFromStorage('language');
-    let mode = await getFromStorage('mode');
+    let language = await getFromStorage(t('STORAGE.LANGUAGE'));
+    let mode = await getFromStorage(t('STORAGE.MODE'));
     i18n.changeLanguage(language);
     props.setMode(mode);
     let token = await getFromStorage(t('STORAGE.ACCESS_TOKEN'));

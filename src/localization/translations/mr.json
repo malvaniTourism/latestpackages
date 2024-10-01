@@ -126,7 +126,12 @@
     "GALLERY": "gallery",
     "MODE": "mode",
     "APP_VERSION": "appVersion",
-    "PROFILE_PICTURE": "profilePicture"
+    "PROFILE_PICTURE": "profilePicture",
+    "LANGUAGE": "language",
+    "REFERRAL_CODE": "referralCode",
+    "CURRENT_LATITUDE": "currentLatitude",
+    "CURRENT_LONGITUDE": "currentLongitude",
+    "TERMS_ACCEPTED": "termsAccepted"
   },
   "HEADER": {
     "BUS_TIMINGS": "बसच्या वेळा",
@@ -180,7 +185,19 @@
     "INTERNET_AVAILABLE_MODE_OFFLINE": "इंटरनेट कनेक्शन उपलब्ध आहे, परंतु मोड ऑफलाइन आहे. कृपया आपला मोड तपासा.",
     "NETWORK": "इंटरनेट कनेक्शन उपलब्ध नाही.",
     "THANK_YOU": "धन्यवाद",
-    "VISIT_AGAIN": "Tourkokan वापरल्याबद्दल धन्यवाद...! कृपया पुन्हा भेट द्या..."
+    "VISIT_AGAIN": "Tourkokan वापरल्याबद्दल धन्यवाद...! कृपया पुन्हा भेट द्या...",
+    "TNC": "कृपया अटी व शर्ती स्वीकारा.",
+    "SHARE_LOCATION": "कृपया तुमचे स्थान शेअर करा.",
+    "LOC_ENABLED": "स्थान सेवा आधीच सक्षम आहेत",
+    "LOCATION_ENABLED": "स्थान सेवा सक्षम केल्या आहेत",
+    "LOC_ERROR": "स्थान सेवा सक्षम करताना त्रुटी:",
+    "LOC_FAILED": "स्थान सेवा सक्षम करण्यात अयशस्वी",
+    "LOC_ENABLE": "स्थान सक्षम",
+    "ENABLE_LOC": "स्थान सक्षम करा",
+    "SELECT_LANG": "भाषा निवडा",
+    "ENTER_REFERRAL": "रेफरल कोड एंटर करा",
+    "ACCEPT_TERMS": "अटी व शर्ती स्वीकारा",
+    "SELECT_MODE": "ऑनलाइन/ऑफलाइन मोड निवडा"
   },
   "TABLE": {
     "CITY": "City",
@@ -316,5 +333,8 @@
   "CITIES": "शहरे",
   "VILLAGES": "गावे",
   "TO": "ते",
-  "PRIVACY_POLICY": "Privacy Policy"
+  "PRIVACY_POLICY": "Privacy Policy",
+  "ACCEPT_TNC": "I Accept Terms & Conditions",
+  "APP_USAGE": "How would you like to use your app?",
+  "NOTE": "Please note: Even in offline mode, a network connection is required initially to complete the login process and load essential data."
 }
