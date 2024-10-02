@@ -54,6 +54,8 @@
     "ATTACHMENT": "+ संलग्नक अपलोड करा",
     "ONLINE": "ऑनलाइन",
     "OFFLINE": "ऑफलाइन",
+    "ONLINE_MODE": "ऑनलाइन मोड",
+    "OFFLINE_MODE": "ऑफलाइन मोड",
     "LOCATION": "स्थान",
     "ADD_QUERY": "क्वेरी जोडा"
   },
@@ -333,8 +335,8 @@
   "CITIES": "शहरे",
   "VILLAGES": "गावे",
   "TO": "ते",
-  "PRIVACY_POLICY": "Privacy Policy",
-  "ACCEPT_TNC": "I Accept Terms & Conditions",
-  "APP_USAGE": "How would you like to use your app?",
-  "NOTE": "Please note: Even in offline mode, a network connection is required initially to complete the login process and load essential data."
+  "PRIVACY_POLICY": "गोपनीयता धोरण",
+  "ACCEPT_TNC": "मी अटी आणि शर्ती स्वीकारतो",
+  "APP_USAGE": "तुम्हाला तुमचा ॲप कसा वापरायचा आहे?",
+  "NOTE": "कृपया लक्षात ठेवा: ऑफलाइन मोडमध्ये देखील, लॉगिन प्रक्रिया पूर्ण करण्यासाठी आणि आवश्यक डेटा लोड करण्यासाठी सुरुवातीला नेटवर्क कनेक्शन आवश्यक आहे."
 }

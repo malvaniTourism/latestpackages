@@ -9,6 +9,8 @@ import {
   Keyboard,
   Platform,
   Linking,
+  Animated,
+  TouchableOpacity,
 } from 'react-native';
 import SearchPanel from '../Components/Common/SearchPanel';
 import TopComponent from '../Components/Common/TopComponent';
@@ -54,6 +56,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import DIMENSIONS from '../Services/Constants/DIMENSIONS';
 import ComingSoon from '../Components/Common/ComingSoon';
 import Popup from '../Components/Common/Popup';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
 // SplashScreen.preventAutoHideAsync();
 
@@ -110,9 +113,10 @@ const HomeScreen = ({navigation, route, ...props}) => {
   const [showOnlineMode, setShowOnlineMode] = useState(false);
   const [updateApp, setUpdateApp] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
-
   const [isAlert, setIsAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
+  const [scaleValue] = useState(new Animated.Value(1));
+  const [mode, setMode] = useState(true);
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -335,7 +339,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
 
           if (isFirstTime == 'true') {
             // refRBSheet.current.open()
-            // setModePopup(true);
+            setModePopup(true);
             await AsyncStorage.setItem(
               t('STORAGE.IS_FIRST_TIME'),
               JSON.stringify(false),
@@ -494,12 +498,34 @@ const HomeScreen = ({navigation, route, ...props}) => {
     setIsAlert(false);
   };
 
+  const changeMode = val => {
+    saveToStorage(t('STORAGE.MODE'), JSON.stringify(val));
+    setMode(val);
+    Animated.spring(scaleValue, {
+      toValue: 1.1,
+      friction: 2,
+      useNativeDriver: true,
+    }).start(() => {
+      Animated.spring(scaleValue, {
+        toValue: 1,
+        friction: 2,
+        useNativeDriver: true,
+      }).start();
+    });
+    setModePopup(false);
+    if (!val) {
+      setShowOffline(true);
+    }
+  };
+
   return (
     <>
       {isLoading || routes.length === 0 ? (
         <TopComponentSkeleton />
       ) : (
         <TopComponent
+          mode={mode}
+          setMode={v => setMode(v)}
           cities={[sindhudurg, ...cities]}
           currentCity={currentCity}
           setCurrentCity={v => onCitySelect(v)}
@@ -694,27 +720,50 @@ const HomeScreen = ({navigation, route, ...props}) => {
           style={styles.locationModal}
           isVisible={modePopup}
           onBackdropPress={() => setModePopup(false)}>
-          <GlobalText
-            text={t('ALERT.MODE_CHOICE')}
-            style={styles.locationModal}
-          />
-          <View style={styles.flexRow}>
-            <TextButton
-              title={t('BUTTON.OFFLINE')}
-              buttonView={styles.logoutButtonStyle}
-              titleStyle={styles.locButtonTitle}
-              raised={false}
-              onPress={() => offlineClick()}
-            />
-            <TextButton
-              title={t('BUTTON.ONLINE')}
-              buttonView={styles.logoutButtonStyle}
-              titleStyle={styles.locButtonTitle}
-              raised={false}
-              onPress={() => onlineClick()}
-            />
+          <View style={styles.modeScreen}>
+            <GlobalText text={t('APP_USAGE')} style={styles.sectionTitle} />
+            <View
+              style={{
+                flexDirection: 'column',
+                alignItems: 'center',
+                marginTop: 20,
+              }}>
+              <View style={styles.toggleContainer}>
+                <TouchableOpacity onPress={() => changeMode(true)}>
+                  <Animated.View
+                    style={[
+                      styles.optionCard,
+                      mode && styles.selectedCard,
+                      {transform: [{scale: mode ? scaleValue : 1}]},
+                    ]}>
+                    <FontAwesome5Icon name="cloud" size={50} color="#4cd137" />
+                    <GlobalText
+                      style={styles.optionText}
+                      text={t('BUTTON.ONLINE_MODE')}
+                    />
+                  </Animated.View>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => changeMode(false)}>
+                  <Animated.View
+                    style={[
+                      styles.optionCard,
+                      !mode && styles.selectedCard,
+                      {transform: [{scale: !mode ? scaleValue : 1}]},
+                    ]}>
+                    <Feather name="wifi-off" size={50} color="#f39c12" />
+                    <GlobalText
+                      style={styles.optionText}
+                      text={t('BUTTON.OFFLINE_MODE')}
+                    />
+                  </Animated.View>
+                </TouchableOpacity>
+              </View>
+              <GlobalText text={t('NOTE')} style={styles.note} />
+            </View>
           </View>
         </Overlay>
+
         <Overlay style={styles.locationModal} isVisible={updateApp}>
           <GlobalText
             text={t('ALERT.APP_VERSION')}

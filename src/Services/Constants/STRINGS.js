@@ -47,6 +47,10 @@ const STRING = {
     ATTACHMENT: '+ Upload Attachment',
     ONLINE: 'Online',
     OFFLINE: 'Offline',
+    ONLINE_MODE: 'Online Mode',
+    OFFLINE_MODE: 'Offline Mode',
+    LOCATION: 'Location',
+    ADD_QUERY: 'Add Query',
   },
   SCREEN: {
     ROOT: 'Root',

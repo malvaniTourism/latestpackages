@@ -51,7 +51,6 @@ import {navigateTo} from './src/Services/CommonMethods';
 import TextField from './src/Components/Customs/TextField';
 import {CheckBox, Switch} from '@rneui/themed';
 import PrivacyPolicy from './src/Components/Common/PrivacyPolicy';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 // import LocationEnabler from 'react-native-android-location-enabler';
 import {
   checkLocationEnabled,
@@ -99,13 +98,13 @@ const slides = [
     backgroundColor: COLOR.white,
     type: 'terms',
   },
-  {
-    key: 5,
-    title: STRING.ALERT.SELECT_MODE,
-    image: null,
-    backgroundColor: COLOR.white,
-    type: 'mode',
-  },
+  // {
+  //   key: 5,
+  //   title: STRING.ALERT.SELECT_MODE,
+  //   image: null,
+  //   backgroundColor: COLOR.white,
+  //   type: 'mode',
+  // },
 ];
 
 export default function App() {
@@ -125,9 +124,7 @@ export default function App() {
   });
   const [latitude, setCurrentLatitude] = useState(null);
   const [longitude, setCurrentLongitude] = useState(null);
-  const [mode, setMode] = useState(true);
   const [isPrivacyChecked, setIsPrivacyChecked] = useState(false);
-  const [scaleValue] = useState(new Animated.Value(1));
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const languagesList = [
     {label: 'English', value: 'en'},
@@ -347,22 +344,6 @@ export default function App() {
     setTextValues({...textValues, 4: !textValues[4]});
   };
 
-  const changeMode = () => {
-    saveToStorage(STRING.STORAGE.MODE, JSON.stringify(!mode));
-    setMode(!mode);
-    Animated.spring(scaleValue, {
-      toValue: 1.1,
-      friction: 2,
-      useNativeDriver: true,
-    }).start(() => {
-      Animated.spring(scaleValue, {
-        toValue: 1,
-        friction: 2,
-        useNativeDriver: true,
-      }).start();
-    });
-  };
-
   const renderItem = ({item}) => {
     return (
       <KeyboardAvoidingView
@@ -377,6 +358,9 @@ export default function App() {
               {item.type === 'language' ? (
                 <Dropdown
                   style={styles.dropdown}
+                  selectedTextStyle={styles.selectedTextStyle}
+                  itemTextStyle={styles.itemTextStyle}
+                  dropdownTextStyle={styles.dropdownText}
                   data={languagesList}
                   labelField="label"
                   valueField="value"
@@ -435,52 +419,8 @@ export default function App() {
                     title={STRING.ACCEPT_TNC}
                     onPress={() => privacyClicked()}
                     checked={isPrivacyChecked}
-                    textStyle={{ fontSize: 12.5 }} 
+                    textStyle={{fontSize: 12.5}}
                   />
-                </View>
-              ) : item.type === 'mode' ? (
-                <View style={styles.modeScreen}>
-                  <GlobalText
-                    text={STRING.APP_USAGE}
-                    style={styles.sectionTitle}
-                  />
-                  <View
-                    style={{
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      marginTop: 20,
-                    }}>
-                    <View style={styles.toggleContainer}>
-                      <TouchableOpacity onPress={() => changeMode(true)}>
-                        <Animated.View
-                          style={[
-                            styles.optionCard,
-                            mode && styles.selectedCard,
-                            {transform: [{scale: mode ? scaleValue : 1}]},
-                          ]}>
-                          <FontAwesome5Icon
-                            name="cloud"
-                            size={50}
-                            color="#4cd137"
-                          />
-                          <Text style={styles.optionText}>Online Mode</Text>
-                        </Animated.View>
-                      </TouchableOpacity>
-
-                      <TouchableOpacity onPress={() => changeMode(false)}>
-                        <Animated.View
-                          style={[
-                            styles.optionCard,
-                            !mode && styles.selectedCard,
-                            {transform: [{scale: !mode ? scaleValue : 1}]},
-                          ]}>
-                          <Feather name="wifi-off" size={50} color="#f39c12" />
-                          <Text style={styles.optionText}>Offline Mode</Text>
-                        </Animated.View>
-                      </TouchableOpacity>
-                    </View>
-                    <GlobalText text={STRING.NOTE} style={styles.note} />
-                  </View>
                 </View>
               ) : null}
             </View>
@@ -520,7 +460,7 @@ export default function App() {
 
   const onDone = async () => {
     // Save the user's preferences
-    await saveToStorage(STRING.STORAGE.IS_FIRST_TIME, 'false');
+    await saveToStorage(STRING.STORAGE.IS_FIRST_TIME, 'true');
     await saveToStorage(STRING.STORAGE.LANGUAGE, language);
     await saveToStorage(STRING.STORAGE.REFERRAL_CODE, referral);
     await saveToStorage(
@@ -535,7 +475,6 @@ export default function App() {
       STRING.STORAGE.TERMS_ACCEPTED,
       JSON.stringify(textValues[4] || false),
     );
-    await saveToStorage(STRING.STORAGE.MODE, JSON.stringify(mode));
     setIsFirstTime('false');
   };
 

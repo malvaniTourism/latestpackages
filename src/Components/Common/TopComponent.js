@@ -11,7 +11,6 @@ import SearchDropdown from './SearchDropdown';
 import {useTranslation} from 'react-i18next';
 import {Switch} from '@rneui/themed';
 import {connect} from 'react-redux';
-import {setLoader, setMode} from '../../Reducers/CommonActions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getFromStorage, saveToStorage} from '../../Services/Api/CommonServices';
 
@@ -24,23 +23,23 @@ const TopComponent = ({
   gotoProfile,
   cities,
   setCurrentCity,
+  mode,
+  setMode,
   ...props
 }) => {
   const {t} = useTranslation();
   // const { SettingsModule } = NativeModules;
 
   const [showCities, setShowCities] = useState(false);
-  const [isOnline, setIsOnline] = useState(true);
+  const [isOnline, setIsOnline] = useState(mode);
   const [profilePhoto, setProfilePhoto] = useState(null);
+  console.log('mode  - - ', mode);
 
   useEffect(async () => {
-    let mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
     let picture = JSON.parse(
       await getFromStorage(t('STORAGE.PROFILE_PICTURE')),
     );
-    setIsOnline(mode);
     setProfilePhoto(picture);
-    // props.setMode(mode);
   }, []);
 
   const openDrawer = () => {
@@ -62,8 +61,8 @@ const TopComponent = ({
 
   const changeMode = () => {
     saveToStorage(t('STORAGE.MODE'), JSON.stringify(!isOnline));
+    setMode(!isOnline);
     setIsOnline(!isOnline);
-    // props.setMode(!isOnline);
   };
 
   // const openMobileDataSettings = () => {
@@ -104,17 +103,17 @@ const TopComponent = ({
         </View>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <GlobalText
-            text={isOnline ? t('BUTTON.ONLINE') : t('BUTTON.OFFLINE')}
+            text={mode ? t('BUTTON.ONLINE') : t('BUTTON.OFFLINE')}
             style={{fontSize: DIMENSIONS.textSizeSmall}}
           />
           <Switch
-            thumbColor={isOnline ? COLOR.green : COLOR.red}
+            thumbColor={mode ? COLOR.green : COLOR.red}
             trackColor={{
               false: COLOR.lightRed,
               true: COLOR.lightGreen,
             }}
             onChange={() => changeMode()}
-            value={isOnline}
+            value={mode}
           />
         </View>
         <TouchableOpacity
@@ -159,9 +158,6 @@ const TopComponent = ({
 //   return {
 //     setLoader: data => {
 //       dispatch(setLoader(data));
-//     },
-//     setMode: data => {
-//       dispatch(setMode(data));
 //     },
 //   };
 // };

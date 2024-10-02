@@ -634,7 +634,7 @@ const styles = StyleSheet.create({
   modeScreen: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: DIMENSIONS.screenHeight - 100,
+    height: DIMENSIONS.halfHeight,
   },
   toggleContainer: {
     flexDirection: 'row',
@@ -676,6 +676,17 @@ const styles = StyleSheet.create({
     borderColor: COLOR.themeBlue,
     backgroundColor: COLOR.white,
     height: 45,
+  },
+  itemTextStyle: {
+    color: COLOR.black,
+  },
+  selectedTextStyle: {
+    color: COLOR.black,
+  },
+  dropdownText: {
+    color: COLOR.black,
+    fontSize: DIMENSIONS.textSize,
+    textAlign: 'center',
   },
 });
 
