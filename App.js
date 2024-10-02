@@ -186,6 +186,22 @@ export default function App() {
   //   }
   // };
 
+  const checkValidation = async () => {
+    if (!latitude || !longitude) {
+      alert(STRING.ALERT.SHARE_LOCATION);
+      setCurrentIndex(2);
+      if (sliderRef.current) sliderRef.current.goToSlide(2);
+      return;
+    } else if (!textValues[4]) {
+      alert(STRING.ALERT.TNC);
+      setCurrentIndex(3);
+      if (sliderRef.current) sliderRef.current.goToSlide(3);
+      return;
+    } else {
+      setIsFirstTime('false');
+    }
+  }
+
   const handleNextButton = () => {
     // Check when on the third slide for Terms and Conditions acceptance and location sharing
     if (currentIndex === 3) {
@@ -460,6 +476,7 @@ export default function App() {
 
   const onDone = async () => {
     // Save the user's preferences
+    await checkValidation();
     await saveToStorage(STRING.STORAGE.IS_FIRST_TIME, 'true');
     await saveToStorage(STRING.STORAGE.LANGUAGE, language);
     await saveToStorage(STRING.STORAGE.REFERRAL_CODE, referral);
@@ -475,7 +492,6 @@ export default function App() {
       STRING.STORAGE.TERMS_ACCEPTED,
       JSON.stringify(textValues[4] || false),
     );
-    setIsFirstTime('false');
   };
 
   const handleBackButton = () => {

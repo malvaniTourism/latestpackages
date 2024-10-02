@@ -33,7 +33,6 @@ const TopComponent = ({
   const [showCities, setShowCities] = useState(false);
   const [isOnline, setIsOnline] = useState(mode);
   const [profilePhoto, setProfilePhoto] = useState(null);
-  console.log('mode  - - ', mode);
 
   useEffect(async () => {
     let picture = JSON.parse(
