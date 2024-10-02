@@ -435,6 +435,7 @@ export default function App() {
                     title={STRING.ACCEPT_TNC}
                     onPress={() => privacyClicked()}
                     checked={isPrivacyChecked}
+                    textStyle={{ fontSize: 12.5 }} 
                   />
                 </View>
               ) : item.type === 'mode' ? (
