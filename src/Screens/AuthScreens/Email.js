@@ -6,6 +6,7 @@ import {
   BackHandler,
   ImageBackground,
   KeyboardAvoidingView,
+  Image,
 } from 'react-native';
 import TextField from '../../Components/Customs/TextField';
 import {EmailField} from '../../Services/Constants/FIELDS';
@@ -40,6 +41,7 @@ import {
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
 import LottieView from 'lottie-react-native';
+import { Logo } from '../../Assets/Images/Logos/tourkokan.png'
 
 const Email = ({navigation, route, ...props}) => {
   const {t, i18n} = useTranslation();
@@ -315,6 +317,12 @@ const Email = ({navigation, route, ...props}) => {
         <Loader />
         <GlobalText text={''} style={styles.welcomeText} />
         <GlobalText text={''} style={styles.boldKokan} />
+        <View style={styles.loginLogoView}>
+      <Image
+          source={require('../../Assets/Images/Logos/tourkokan_logo.png')}
+          style={styles.loginLogo}
+        />
+        </View>
       </View>
       {isLoading ? (
         <View style={styles.middleFlexImage}>
@@ -329,8 +337,8 @@ const Email = ({navigation, route, ...props}) => {
         </View>
       ) : (
         <View style={styles.middleFlex}>
-          <GlobalText text={t('LOG_IN')} style={styles.loginText} />
-          {EmailField.map((field, index) => {
+          {/* <GlobalText text={t('SIGN_IN')} style={styles.loginText} /> */}
+          {/* {EmailField.map((field, index) => {
             return (
               <TextField
                 name={field.name}
@@ -361,7 +369,7 @@ const Email = ({navigation, route, ...props}) => {
                 }
               />
             );
-          })}
+          })} */}
 
           {/* login with passowrd commented for the time need to fix functionality as soon as possible */}
           {/* <TouchableOpacity onPress={() => loginWithPassScreen()}>
@@ -370,7 +378,7 @@ const Email = ({navigation, route, ...props}) => {
             style={styles.loginSubText}
           />
         </TouchableOpacity> */}
-          <View style={{alignItems: 'center'}}>
+          {/* <View style={{alignItems: 'center'}}>
             <TextButton
               title={t('BUTTON.SEND_OTP')}
               buttonView={styles.buttonView}
@@ -378,13 +386,13 @@ const Email = ({navigation, route, ...props}) => {
               raised={true}
               onPress={() => generateOtp()}
             />
-          </View>
+          </View> */}
 
           <View style={styles.googleView}>
-            <GlobalText
+            {/* <GlobalText
               text={'---- OR ----'}
               style={{marginTop: DIMENSIONS.sectionGap}}
-            />
+            /> */}
             <GoogleSigninButton
               size={GoogleSigninButton.Size.Wide}
               color={GoogleSigninButton.Color.Dark}
@@ -396,12 +404,12 @@ const Email = ({navigation, route, ...props}) => {
             />
           </View>
 
-          <View style={styles.haveAcc}>
+          {/* <View style={styles.haveAcc}>
             <GlobalText text={t('DONT_HAVE_ACC')} />
             <TouchableOpacity onPress={() => signUpScreen()}>
               <GlobalText text={t('SIGN_UP')} style={styles.blueBold} />
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
       )}
       <KeyboardAvoidingView

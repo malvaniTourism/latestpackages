@@ -31,8 +31,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   middleFlex: {
-    justifyContent: 'flex-end',
-    padding: 10,
+    justifyContent: 'center',
     flex: 5,
     alignItems: 'center',
   },
@@ -44,6 +43,7 @@ const styles = StyleSheet.create({
   googleButton: {
     width: DIMENSIONS.bannerWidth,
     marginVertical: DIMENSIONS.sectionGap,
+    height: 70,
   },
   haveAcc: {
     flexDirection: 'row',
@@ -136,6 +136,15 @@ const styles = StyleSheet.create({
     height: DIMENSIONS.screenHeight - DIMENSIONS.headerHeight,
     width: DIMENSIONS.screenWidth,
     position: 'absolute',
+  },
+  loginLogoView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20
+  },
+  loginLogo: {
+    height: DIMENSIONS.iconCardBig,
+    width: DIMENSIONS.iconCardBig,
   },
   changeOption: {
     fontWeight: 'bold',
