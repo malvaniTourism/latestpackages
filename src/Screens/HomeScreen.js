@@ -223,7 +223,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
         // Avoid setting loading on every network change unless needed
 
         const mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
-
+        setMode(mode);
         if (!state.isConnected) {
           if (mode) {
             await offlineClick();
