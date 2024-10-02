@@ -115,7 +115,7 @@ const STRING = {
     EMERGENCY: 'emergency',
     QUERIES: 'queries',
     GALLERY: 'gallery',
-    MODE: "mode",
+    MODE: 'mode',
     SELECTED_CITY_ID: 'selectedCityId',
     SELECTED_CITY_NAME: 'selectedCityName',
     LANGUAGE: 'language',
@@ -175,8 +175,8 @@ const STRING = {
     INTERNET_AVAILABLE_MODE_OFFLINE:
       'Internet is available, but mode is set to offline, Please check your mode.',
     NETWORK: 'No internet connection available.',
-    THANK_YOU: "Thank You",
-    VISIT_AGAIN: "Thank you for using the Tourkokan...!  Please visit again...",
+    THANK_YOU: 'Thank You',
+    VISIT_AGAIN: 'Thank you for using the Tourkokan...!  Please visit again...',
     TNC: 'Please accept the Terms and Conditions.',
     SHARE_LOCATION: 'Please share your location.',
     LOC_ENABLED: 'Location services are already enabled',
@@ -188,7 +188,7 @@ const STRING = {
     SELECT_LANG: 'Select Language',
     ENTER_REFERRAL: 'Enter Referral Code',
     ACCEPT_TERMS: 'Accept Terms and Conditions',
-    SELECT_MODE: 'Select Online/Offline Mode'
+    SELECT_MODE: 'Select Online/Offline Mode',
   },
   TABLE: {
     CITY: 'City',
@@ -325,9 +325,9 @@ const STRING = {
   CONNECT: "Connect with Us: We're Here to Listen",
   ROUTES: 'Routes',
   VILLAGES: 'Villages',
-  ACCEPT_TNC: 'I Accept Terms & Conditions',
+  ACCEPT_TNC: 'I Accept Terms & Conditions & Privacy Policy',
   APP_USAGE: 'How would you like to use your app?',
-  NOTE: 'Please note: Even in offline mode, a network connection is required initially to complete the login process and load essential data.'
+  NOTE: 'Please note: Even in offline mode, a network connection is required initially to complete the login process and load essential data.',
 };
 
 export default STRING;

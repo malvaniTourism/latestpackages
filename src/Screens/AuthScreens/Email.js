@@ -61,17 +61,26 @@ const Email = ({navigation, route, ...props}) => {
     scopes: ['profile', 'email'], // Specify any additional scopes you need
     webClientId: __DEV__
       ? '203571229982-d9doh1t7ileevdqppomjfjvcvloj1i25.apps.googleusercontent.com' // Debug webClientId
-     // : '203571229982-9uv6encu2akkkh57hsbbmap8jtklvfnl.apps.googleusercontent.com', // Release webClientId
-      :'203571229982-e04hpgiu5k11ff4qg8oamlm6hruvqj2i.apps.googleusercontent.com', //Playstored signed
+      : // : '203571229982-9uv6encu2akkkh57hsbbmap8jtklvfnl.apps.googleusercontent.com', // Release webClientId
+        '203571229982-e04hpgiu5k11ff4qg8oamlm6hruvqj2i.apps.googleusercontent.com', //Playstored signed
   });
 
   const signInWithGoogle = async () => {
     try {
+      console.log(1);
+
       props.setLoader(true);
+      console.log(2);
+
       await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
-      let lat = await getFromStorage(t("STORAGE.CURRENT_LATITUDE"));
-      let long = await getFromStorage(t("STORAGE.CURRENT_LONGITUDE"));
-      let referral_code = await getFromStorage(t("STORAGE.REFERRAL_CODE"));
+      console.log(3);
+
+      let lat = await getFromStorage(t('STORAGE.CURRENT_LATITUDE'));
+      let long = await getFromStorage(t('STORAGE.CURRENT_LONGITUDE'));
+      let referral_code = await getFromStorage(t('STORAGE.REFERRAL_CODE'));
+
+      console.log(lat, long, referral_code);
+
       const userInfo = await GoogleSignin.signIn();
 
       $payload = {
@@ -81,7 +90,7 @@ const Email = ({navigation, route, ...props}) => {
         userEmail: userInfo.data.user.email,
         referral_code: referral_code,
         latitude: lat === null ? '' : lat.toString(),
-        longitude: long === null ? '' : long.toString(), 
+        longitude: long === null ? '' : long.toString(),
         language: t('LANG'),
       };
 

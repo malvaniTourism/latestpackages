@@ -1,10 +1,10 @@
 import 'react-native-gesture-handler';
-import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Provider } from 'react-redux';
+import {StatusBar} from 'expo-status-bar';
+import React, {useEffect, useState} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {Provider} from 'react-redux';
 import store from './Store';
 import {
   Image,
@@ -43,13 +43,13 @@ import {
   getFromStorage,
   saveToStorage,
 } from './src/Services/Api/CommonServices';
-import { useTranslation } from 'react-i18next';
-import { Dropdown } from 'react-native-element-dropdown';
+import {useTranslation} from 'react-i18next';
+import {Dropdown} from 'react-native-element-dropdown';
 import Geolocation from '@react-native-community/geolocation';
 import DeviceInfo from 'react-native-device-info';
-import { navigateTo } from './src/Services/CommonMethods';
+import {navigateTo} from './src/Services/CommonMethods';
 import TextField from './src/Components/Customs/TextField';
-import { CheckBox, Switch } from '@rneui/themed';
+import {CheckBox, Switch} from '@rneui/themed';
 import PrivacyPolicy from './src/Components/Common/PrivacyPolicy';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 // import LocationEnabler from 'react-native-android-location-enabler';
@@ -130,8 +130,8 @@ export default function App() {
   const [scaleValue] = useState(new Animated.Value(1));
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const languagesList = [
-    { label: 'English', value: 'en' },
-    { label: 'मराठी', value: 'mr' },
+    {label: 'English', value: 'en'},
+    {label: 'मराठी', value: 'mr'},
   ];
   const [isLoading, setIsLoading] = useState(false); // State to manage loading spinner
   const [locationStatus, setLocationStatus] = useState('Share Location');
@@ -160,16 +160,26 @@ export default function App() {
 
   useEffect(() => {
     const checkFirstTime = async () => {
-      const isFirstTimeValue = await getFromStorage(STRING.STORAGE.IS_FIRST_TIME);
+      const isFirstTimeValue = await getFromStorage(
+        STRING.STORAGE.IS_FIRST_TIME,
+      );
       setIsFirstTime(isFirstTimeValue);
       setLoading(false);
     };
     checkFirstTime();
-    callAPI();
+    const apiCalling = async () => {
+      const access_token = await getFromStorage(STRING.STORAGE.ACCESS_TOKEN);
+
+      if (access_token) {
+        callAPI();
+      }
+    };
+
+    apiCalling();
   }, []);
 
   const handleInputChange = (key, value) => {
-    setTextValues(prev => ({ ...prev, [key]: value }));
+    setTextValues(prev => ({...prev, [key]: value}));
   };
 
   // const handleNextButton = () => {
@@ -211,12 +221,14 @@ export default function App() {
   };
 
   const callAPI = () => {
-    dataSync(STRING.STORAGE.LANDING_RESPONSE, callLandingPageAPI, true).then(resp => { });
+    dataSync(STRING.STORAGE.LANDING_RESPONSE, callLandingPageAPI, true).then(
+      resp => {},
+    );
   };
 
   const callLandingPageAPI = async site_id => {
     try {
-      let data = { site_id };
+      let data = {site_id};
       const res = await comnPost('v2/landingpage', data);
       if (res && res.data.data) {
         setOfflineData(res.data.data);
@@ -230,7 +242,10 @@ export default function App() {
 
   const setOfflineData = resp => {
     saveToStorage(STRING.STORAGE.LANDING_RESPONSE, JSON.stringify(resp));
-    saveToStorage(STRING.STORAGE.CATEGORIES_RESPONSE, JSON.stringify(resp.categories));
+    saveToStorage(
+      STRING.STORAGE.CATEGORIES_RESPONSE,
+      JSON.stringify(resp.categories),
+    );
     saveToStorage(STRING.STORAGE.ROUTES_RESPONSE, JSON.stringify(resp.routes));
     saveToStorage(STRING.STORAGE.CITIES_RESPONSE, JSON.stringify(resp.cities));
     saveToStorage(STRING.STORAGE.EMERGENCY, JSON.stringify(resp.emergencies));
@@ -316,7 +331,7 @@ export default function App() {
           setIsButtonDisabled(false); // Enable button again
           console.error('Location Error:', error);
         },
-        { enableHighAccuracy: false, timeout: 30000, maximumAge: 1000 },
+        {enableHighAccuracy: false, timeout: 30000, maximumAge: 1000},
       );
     } catch (error) {
       setLocationStatus(STRING.ALERT.ENABLE_LOC); // Reset text
@@ -329,7 +344,7 @@ export default function App() {
 
   const privacyClicked = () => {
     setIsPrivacyChecked(!isPrivacyChecked);
-    setTextValues({ ...textValues, 4: !textValues[4] });
+    setTextValues({...textValues, 4: !textValues[4]});
   };
 
   const changeMode = () => {
@@ -348,14 +363,14 @@ export default function App() {
     });
   };
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({item}) => {
     return (
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ flex: 1 }}
+        style={{flex: 1}}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          <View style={[styles.slide, { backgroundColor: item.backgroundColor }]}>
+        <ScrollView contentContainerStyle={{flexGrow: 1}}>
+          <View style={[styles.slide, {backgroundColor: item.backgroundColor}]}>
             {item.image && <Image source={item.image} style={styles.image} />}
 
             <View style={styles.bottomFields}>
@@ -398,7 +413,7 @@ export default function App() {
                     } // Show spinner instead of text when loading
                     buttonView={[
                       styles.locButtonView,
-                      { backgroundColor: buttonColor },
+                      {backgroundColor: buttonColor},
                     ]}
                     isDisabled={isButtonDisabled}
                     raised={true}
@@ -440,7 +455,7 @@ export default function App() {
                           style={[
                             styles.optionCard,
                             mode && styles.selectedCard,
-                            { transform: [{ scale: mode ? scaleValue : 1 }] },
+                            {transform: [{scale: mode ? scaleValue : 1}]},
                           ]}>
                           <FontAwesome5Icon
                             name="cloud"
@@ -456,17 +471,14 @@ export default function App() {
                           style={[
                             styles.optionCard,
                             !mode && styles.selectedCard,
-                            { transform: [{ scale: !mode ? scaleValue : 1 }] },
+                            {transform: [{scale: !mode ? scaleValue : 1}]},
                           ]}>
                           <Feather name="wifi-off" size={50} color="#f39c12" />
                           <Text style={styles.optionText}>Offline Mode</Text>
                         </Animated.View>
                       </TouchableOpacity>
                     </View>
-                    <GlobalText
-                      text={STRING.NOTE}
-                      style={styles.note}
-                    />
+                    <GlobalText text={STRING.NOTE} style={styles.note} />
                   </View>
                 </View>
               ) : null}
@@ -510,9 +522,18 @@ export default function App() {
     await saveToStorage(STRING.STORAGE.IS_FIRST_TIME, 'false');
     await saveToStorage(STRING.STORAGE.LANGUAGE, language);
     await saveToStorage(STRING.STORAGE.REFERRAL_CODE, referral);
-    await saveToStorage(STRING.STORAGE.CURRENT_LATITUDE, JSON.stringify(latitude));
-    await saveToStorage(STRING.STORAGE.CURRENT_LONGITUDE, JSON.stringify(longitude));
-    await saveToStorage(STRING.STORAGE.TERMS_ACCEPTED, JSON.stringify(textValues[4] || false));
+    await saveToStorage(
+      STRING.STORAGE.CURRENT_LATITUDE,
+      JSON.stringify(latitude),
+    );
+    await saveToStorage(
+      STRING.STORAGE.CURRENT_LONGITUDE,
+      JSON.stringify(longitude),
+    );
+    await saveToStorage(
+      STRING.STORAGE.TERMS_ACCEPTED,
+      JSON.stringify(textValues[4] || false),
+    );
     await saveToStorage(STRING.STORAGE.MODE, JSON.stringify(mode));
     setIsFirstTime('false');
   };
