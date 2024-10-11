@@ -166,6 +166,16 @@ const styles = StyleSheet.create({
     width: DIMENSIONS.screenWidth,
     padding: 20,
   },
+  SmallChipCard: {
+    width: DIMENSIONS.halfWidth - 20,
+    height: DIMENSIONS.headerHeight,
+    backgroundColor: COLOR.white,
+    elevation: 10,
+    borderRadius: DIMENSIONS.borderRadius,
+    alignItems: "center",
+    justifyContent: "center",
+    margin: 10
+  },
   cityListName: {
     fontWeight: 'bold',
   },
@@ -216,6 +226,19 @@ const styles = StyleSheet.create({
     height: DIMENSIONS.screenWidth / 3 - 6,
     borderRadius: 5,
     margin: 1,
+  },
+  locationModal: {
+    padding: 10,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: DIMENSIONS.headerTextSize,
+  },
+  logoutButtonStyle: {
+    width: DIMENSIONS.bannerWidth / 2 - 30,
+    borderRadius: DIMENSIONS.borderRadiusXS,
+    alignSelf: 'center',
+    elevation: 10,
+    marginLeft: 10,
   },
 });
 

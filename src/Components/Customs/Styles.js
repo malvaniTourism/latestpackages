@@ -201,8 +201,14 @@ const styles = StyleSheet.create({
   },
   accordContent: {
     paddingVertical: 50,
-    flex: 1,
+    // flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
+    width: DIMENSIONS.screenWidth,
+    alignSelf: 'center'
+  },
+  columnWrapper: {
+
   },
   catCardIcon: {
     height: DIMENSIONS.iconX,

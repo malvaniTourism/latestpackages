@@ -35,6 +35,8 @@ import styles from './Styles';
 import ComingSoon from '../../Components/Common/ComingSoon';
 import Popup from '../../Components/Common/Popup';
 import FlatListSkeleton from './FlatListSkeleton';
+import CityCardSmall from '../../Components/Cards/CityCardSmall';
+import PlaceCard from '../../Components/Cards/PlaceCard';
 
 const CityList = ({navigation, route, ...props}) => {
   const {t} = useTranslation();
@@ -91,6 +93,9 @@ const CityList = ({navigation, route, ...props}) => {
   }, [route.params]);
 
   const fetchCities = (page, reset) => {
+    if (reset) {
+      setCities([]);
+    }
     if (props.mode) {
       setLoading(true);
       let data = {};
@@ -138,8 +143,8 @@ const CityList = ({navigation, route, ...props}) => {
     }
   };
 
-  const getCityDetails = id => {
-    navigateTo(navigation, t('SCREEN.CITY_DETAILS'), {id});
+  const getCityDetails = city => {
+    navigateTo(navigation, t('SCREEN.CITY_DETAILS'), {city});
   };
 
   const onRefresh = async () => {
@@ -153,11 +158,14 @@ const CityList = ({navigation, route, ...props}) => {
   };
 
   const renderItem = ({item}) => (
-    <TouchableOpacity
-      // onPress={() => getCityDetails(item.id)}
-      style={styles.cityListView}>
-      <GlobalText style={styles.cityListName} text={item.name} />
-    </TouchableOpacity>
+    // <TouchableOpacity
+    //   onPress={() => getCityDetails(item)}
+    //   style={styles.SmallChipCard}>
+    //   <GlobalText style={styles.cityListName} text={item.name} />
+    // </TouchableOpacity>
+    <PlaceCard data={item} onClick={() => getCityDetails(item)} />
+    // <CityCard data={item} onClick={() => getCityDetails(item)} />
+    // <CityCardSmall data={item} onClick={() => getCityDetails(item)} />
   );
 
   const loadMoreCities = async () => {
@@ -231,7 +239,7 @@ const CityList = ({navigation, route, ...props}) => {
         <CheckNet isOff={showOffline || offline} />
         <Loader />
         {cities.length > 0 ? (
-          <View style={{alignItems: 'center', marginBottom: 150}}>
+          <View style={{alignItems: 'center', justifyContent: "space-between", marginBottom: 150}}>
             <FlatList
               data={cities}
               numColumns={1}

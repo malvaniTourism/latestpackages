@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {View, ImageBackground, TouchableOpacity} from 'react-native';
+import React, { useState } from 'react';
+import { View, ImageBackground, TouchableOpacity } from 'react-native';
 import styles from './Styles';
 import Path from '../../Services/Api/BaseUrl';
 import Octicons from 'react-native-vector-icons/Octicons';
@@ -7,19 +7,22 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import COLOR from '../../Services/Constants/COLORS';
 import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
 import StarRating from 'react-native-star-rating-widget'; // Updated import
-import {comnPost} from '../../Services/Api/CommonServices';
+import { comnPost } from '../../Services/Api/CommonServices';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import GlobalText from '../Customs/Text';
 import ComingSoon from '../Common/ComingSoon';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-const PlaceCard = ({data, reload}) => {
-  const {t} = useTranslation();
+const PlaceCard = ({ data, reload, navigation, addComment, onClick }) => {
+  const { t } = useTranslation();
 
   const [isFav, setIsFav] = useState(data.is_favorite);
   const [isLiked, setIsLiked] = useState(false);
-  const [rating, setRating] = useState(3.5);
   const [isVisible, setIsVisible] = useState(false);
+  const [rating, setRating] = useState(data?.rating_avg_rate || 0);
+  const [commentCount, setCommentCount] = useState(data?.comment_count || 0);
+  const [rate, setRate] = useState(data?.rate?.rate || 0);
+  const [cardType, setCardType] = useState(data.category?.code);
 
   const onHeartClick = async () => {
     let cityData = {
@@ -33,7 +36,7 @@ const PlaceCard = ({data, reload}) => {
         AsyncStorage.setItem('isUpdated', 'true');
         reload();
       })
-      .catch(err => {});
+      .catch(err => { });
   };
 
   const onStarRatingPress = async rate => {
@@ -49,7 +52,7 @@ const PlaceCard = ({data, reload}) => {
         AsyncStorage.setItem('isUpdated', 'true');
         reload();
       })
-      .catch(err => {});
+      .catch(err => { });
   };
 
   const onLikeClick = () => {
@@ -57,49 +60,33 @@ const PlaceCard = ({data, reload}) => {
     // reload()
   };
 
-  const getPlace = id => {
-    // navigateTo(navigation, t("SCREEN.PLACE_DETAILS"), { id })
-    // setIsVisible(true)
-    // setTimeout(() => {
-    //     setIsVisible(false)
-    // }, 2000)
-  };
-
   return (
     <View style={styles.placeContainer}>
-      <View style={styles.placeImageView}>
-        <ImageBackground
-          source={{uri: Path.FTP_PATH + data.image}}
-          style={styles.placeImage}
-          imageStyle={styles.placeImageStyle}
-          resizeMode="cover"
-        />
-        <TouchableOpacity
-          style={styles.likeView}
-          onPress={() => onHeartClick()}>
-          {isFav ? (
-            <Octicons
-              name="heart-fill"
-              color={COLOR.red}
-              size={DIMENSIONS.iconSize}
-            />
-          ) : (
-            <Octicons
-              name="heart"
-              color={COLOR.black}
-              size={DIMENSIONS.iconSize}
-            />
-          )}
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={styles.placeImageView} onPress={() => onClick()}>
+        {data.image ? (
+          <ImageBackground
+            source={{ uri: Path.FTP_PATH + data.image }}
+            style={styles.placeImage}
+            imageStyle={styles.placeImageStyle}
+            resizeMode="cover"
+          />
+        ) : (
+          <ImageBackground
+            source={require('../../Assets/Images/no-image.png')}
+            style={styles.placeImage}
+            imageStyle={styles.placeImageStyle}
+            resizeMode="cover"
+          />
+        )}
+      </TouchableOpacity>
       <View style={styles.placeContentView}>
         <View style={styles.placeContentTop}>
-          <TouchableOpacity onPress={() => getPlace(data.id)}>
+          <TouchableOpacity onPress={() => onClick()}>
             <GlobalText text={data.name} style={styles.placeName} />
             <GlobalText text={data.tag_line} style={styles.placeTag} />
           </TouchableOpacity>
-          <View style={styles.flexRow}>
-            <View style={{width: '40%'}}>
+          <View style={styles.flexRowLike}>
+            <View style={{ width: '40%' }}>
               <StarRating
                 rating={rating}
                 onChange={onStarRatingPress}
@@ -108,24 +95,36 @@ const PlaceCard = ({data, reload}) => {
                 enableHalfStar={true} // Optional, depending on your use case
               />
             </View>
-            <TouchableOpacity onPress={() => onLikeClick()}>
-              {isLiked ? (
-                <FontAwesome
-                  name="thumbs-up"
-                  color={COLOR.intentColor}
-                  size={DIMENSIONS.iconSize}
-                />
-              ) : (
-                <FontAwesome
-                  name="thumbs-o-up"
-                  color={COLOR.black}
-                  size={DIMENSIONS.iconSize}
-                />
-              )}
-            </TouchableOpacity>
+            <View style={styles.flexColumn}>
+            <View style={styles.citySmallLikeView}>
+              <GlobalText text={commentCount} style={styles.commentCount} />
+          <Octicons
+            name="comment"
+            color={COLOR.black}
+            size={DIMENSIONS.iconSize}
+          />
+              </View>
+              <TouchableOpacity
+                style={styles.likeView}
+                onPress={() => onHeartClick()}>
+                {isFav ? (
+                  <Octicons
+                    name="heart-fill"
+                    color={COLOR.red}
+                    size={DIMENSIONS.iconSize}
+                  />
+                ) : (
+                  <Octicons
+                    name="heart"
+                    color={COLOR.black}
+                    size={DIMENSIONS.iconSize}
+                  />
+                )}
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-        <View style={styles.placeMetaView}>
+        {/* <View style={styles.placeMetaView}>
           <View style={styles.splitView}>
             <GlobalText
               text={'Rs. 2500 for one'}
@@ -137,7 +136,7 @@ const PlaceCard = ({data, reload}) => {
             <GlobalText text={'2 Km'} style={styles.lightBlackText} />
             <GlobalText text={'25 Min'} style={styles.lightBlackText} />
           </View>
-        </View>
+        </View> */}
       </View>
       <ComingSoon message={t('COMING_SOON')} visible={isVisible} />
     </View>

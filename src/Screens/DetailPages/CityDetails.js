@@ -76,7 +76,7 @@ const CityDetails = ({navigation, route, offline, ...props}) => {
     setLoader(true);
     setCity(route.params.city);
     setIsFav(route.params.city.is_favorite);
-    setRating(route.params.city.rating_avg_rate);
+    setRating(route.params.city.rating_avg_rate || 0);
     setCommentCount(route.params.city.comment_count);
     setLocationMap(route.params.city.latitude, route.params.city.longitude);
     setLoader(false);
@@ -92,7 +92,7 @@ const CityDetails = ({navigation, route, offline, ...props}) => {
         if (res.data.success) {
           setCity(res.data.data);
           setIsFav(res.data.data.is_favorite);
-          setRating(res.data.data.rating_avg_rate);
+          setRating(res.data.data.rating_avg_rate || 0);
           setCommentCount(res.data.data.comment_count);
           setLocationMap(res.data.data.latitude, res.data.data.longitude);
           setLoader(false);
@@ -339,7 +339,7 @@ const CityDetails = ({navigation, route, offline, ...props}) => {
                   variant="text"
                   style={styles.placeImage}
                 />
-              ) : city?.gallery[0] ? (
+              ) : city?.gallery && city?.gallery[0] ? (
                 <GalleryView images={city.gallery} />
               ) : (
                 // <ImageBackground
@@ -347,7 +347,7 @@ const CityDetails = ({navigation, route, offline, ...props}) => {
                 //     style={styles.placeImage}
                 // />
                 <ImageBackground
-                  source={require('../../Assets/Images/nature.jpeg')}
+                  source={require('../../Assets/Images/no-image.png')}
                   style={styles.placeImage}
                   imageStyle={styles.cityImageStyle}
                   resizeMode="cover"
@@ -477,14 +477,16 @@ const CityDetails = ({navigation, route, offline, ...props}) => {
               )}
 
               <View style={styles.sectionView}>
-                {initialRegion && initialRegion.latitude ? (
+                {initialRegion && initialRegion.latitude && currentLatitude ? (
                   <MapContainer
                     initialRegion={initialRegion}
                     currentLatitude={currentLatitude}
                     currentLongitude={currentLongitude}
                   />
                 ) : (
+                  currentLatitude ?
                   <MapSkeleton />
+                  : null
                 )}
               </View>
 
@@ -508,6 +510,7 @@ const CityDetails = ({navigation, route, offline, ...props}) => {
                     />
                   </View>
                 ) : (
+                  city.sites[0] ?
                   <View style={styles.flexAround}>
                     <GlobalText
                       text={t('VILLAGES')}
@@ -521,6 +524,7 @@ const CityDetails = ({navigation, route, offline, ...props}) => {
                       onPress={() => seeMore()}
                     />
                   </View>
+                  : null
                 )}
               </View>
               <View

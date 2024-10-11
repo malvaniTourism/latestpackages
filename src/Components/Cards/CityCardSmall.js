@@ -17,13 +17,13 @@ const CityCardSmall = ({data, reload, navigation, addComment, onClick}) => {
 
   const [isVisible, setIsVisible] = useState(false);
   const [isFav, setIsFav] = useState(data?.is_favorite);
-  const [rating, setRating] = useState(data?.rating_avg_rate);
+  const [rating, setRating] = useState(data?.rating_avg_rate || 0);
   const [commentCount, setCommentCount] = useState(data?.comment_count || 0);
-  const [rate, setRate] = useState(data?.rate?.rating_avg_rate);
+  const [rate, setRate] = useState(data?.rate?.rating_avg_rate || 0);
   const [cardType, setCardType] = useState('city');
 
   useEffect(() => {
-    setRating(data?.rating_avg_rate);
+    setRating(data?.rating_avg_rate || 0);
   }, [rate]);
 
   const onHeartClick = async () => {
@@ -91,7 +91,7 @@ const CityCardSmall = ({data, reload, navigation, addComment, onClick}) => {
         />
       ) : (
         <ImageBackground
-          source={require('../../Assets/Images/nature.jpeg')}
+          source={require('../../Assets/Images/no-image.png')}
           style={cardType == 'city' ? styles.citySmallImage : styles.placeImage}
           imageStyle={styles.cityImageStyle}
           resizeMode="cover"
@@ -135,8 +135,8 @@ const CityCardSmall = ({data, reload, navigation, addComment, onClick}) => {
         <View>
           <GlobalText text={data.name} style={styles.citySmallName} />
           <GlobalText
-            text={`${data.tag_line.slice(0, 50)}${
-              data.tag_line.length > 50 ? '...' : ''
+            text={`${data.tag_line ? data.tag_line?.slice(0, 50) : ''}${
+              data.tag_line?.length > 50 ? '...' : ''
             }`}
             style={styles.citySmallTagLine}
           />

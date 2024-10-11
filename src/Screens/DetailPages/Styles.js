@@ -190,6 +190,10 @@ const styles = StyleSheet.create({
     color: COLOR.themeBlue,
     textAlign: 'right',
   },
+  boldText: {
+    fontWeight: 'bold',
+    fontSize: DIMENSIONS.subtitleTextSize
+  },
 });
 
 export default styles;

@@ -49,7 +49,7 @@ const QueriesList = ({navigation, route, ...props}) => {
   const [nextPage, setNextPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(route.params?.step || 0);
   const [showOnlineMode, setShowOnlineMode] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -136,7 +136,7 @@ const QueriesList = ({navigation, route, ...props}) => {
 
   const fetchData = useCallback(
     async (page, reset) => {
-      if (offline) {
+      if (offline || step == 1) {
         return;
       }
       if (props.mode) {
@@ -289,7 +289,7 @@ const QueriesList = ({navigation, route, ...props}) => {
             </View>
           )
         ) : (
-          <ContactUs step={step} setStep={setStep} offline={offline} />
+          <ContactUs route_id={route.params?.route_id} step={step} setStep={setStep} offline={offline} />
         )}
         <ComingSoon
           message={errorMessage}

@@ -4,6 +4,7 @@ import MapView, {Marker} from 'react-native-maps';
 import styles from './Styles';
 
 const MapContainer = ({initialRegion, currentLatitude, currentLongitude}) => {
+  
   return (
     <View style={styles.profileMapView}>
       <MapView

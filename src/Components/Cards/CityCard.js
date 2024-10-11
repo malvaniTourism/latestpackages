@@ -17,13 +17,13 @@ const CityCard = ({data, reload, navigation, addComment, onClick}) => {
 
   const [isVisible, setIsVisible] = useState(false);
   const [isFav, setIsFav] = useState(data?.is_favorite);
-  const [rating, setRating] = useState(data?.rating_avg_rate);
+  const [rating, setRating] = useState(data?.rating_avg_rate || 0);
   const [commentCount, setCommentCount] = useState(data?.comment_count || 0);
-  const [rate, setRate] = useState(data?.rate?.rate);
+  const [rate, setRate] = useState(data?.rate?.rate || 0);
   const [cardType, setCardType] = useState(data.category?.code);
 
   useEffect(() => {
-    setRating(data?.rating_avg_rate);
+    setRating(data?.rating_avg_rate || 0);
   }, [rate]);
 
   const onHeartClick = async () => {
@@ -93,7 +93,7 @@ const CityCard = ({data, reload, navigation, addComment, onClick}) => {
         />
       ) : (
         <ImageBackground
-          source={require('../../Assets/Images/nature.jpeg')}
+          source={require('../../Assets/Images/no-image.png')}
           style={cardType == 'city' ? styles.cityImage : styles.placeImage}
           imageStyle={styles.cityImageStyle}
           resizeMode="cover"

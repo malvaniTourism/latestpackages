@@ -1,11 +1,12 @@
-import React, {Component} from 'react';
-import {View, Animated, LogBox, Image} from 'react-native';
+import React, { Component } from 'react';
+import { View, Animated, LogBox, Image, TouchableOpacity } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
 import styles from './Styles';
 import Path from '../../Services/Api/BaseUrl';
 import ProgressImage from 'react-native-image-progress';
 import * as Progress from 'react-native-progress';
+import { Linking } from 'react-native';
 
 class AnimationStyle extends Component {
   state = {
@@ -59,7 +60,12 @@ class AnimationStyle extends Component {
   }
 }
 
-const Banner = ({style, bannerImages}) => {
+const Banner = ({ style, bannerImages }) => {
+
+  const bannerClick = (imageUri) => {
+    Linking.openURL(imageUri)
+  }
+
   return (
     <View style={[styles.banner, style]}>
       <Carousel
@@ -69,19 +75,21 @@ const Banner = ({style, bannerImages}) => {
         autoPlay={true}
         data={bannerImages}
         scrollAnimationDuration={3000}
-        renderItem={({index}) => {
+        renderItem={({ index }) => {
           const imageUri = `${Path.FTP_PATH}${bannerImages[index].image}`;
+          const url = `${Path.FTP_PATH}${bannerImages[index].url}`;
 
-          // Fallback to standard Image component if needed
           return (
-            <AnimationStyle
-              source={{uri: imageUri}}
-              style={styles.bannerImage}
-              onLoad={() => console.log(`Image ${imageUri} loaded`)}
-              onError={error =>
-                console.error(`Image ${imageUri} failed to load`, error)
-              }
-            />
+            <TouchableOpacity onPress={() => bannerImages[index].url ? bannerClick(url) : null}>
+              <AnimationStyle
+                source={{ uri: imageUri }}
+                style={styles.bannerImage}
+                onLoad={() => console.log(`Image ${imageUri} loaded`)}
+                onError={error =>
+                  console.error(`Image ${imageUri} failed to load`, error)
+                }
+              />
+            </TouchableOpacity>
           );
         }}
       />

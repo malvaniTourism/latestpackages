@@ -9,34 +9,33 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  flexRowLike: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+  },
+  flexColumn: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
   placeContainer: {
     alignSelf: 'center',
-    flex: 1,
+    // flex: 1,
     flexDirection: 'row',
     width: DIMENSIONS.bannerWidth,
-    maxHeight: DIMENSIONS.halfWidth - 20,
-    minHeight: DIMENSIONS.halfWidth - 20,
+    maxHeight: DIMENSIONS.halfWidth - 50,
+    minHeight: DIMENSIONS.halfWidth - 50,
     backgroundColor: COLOR.white,
     borderRadius: DIMENSIONS.borderRadius,
-    elevation: 5,
+    elevation: 10,
     marginVertical: 10,
+    marginHorizontal: 10
   },
   placeImageView: {
     flex: 2,
   },
-  placeImage: {
-    flex: 1,
-  },
   likeView: {
-    position: 'absolute',
-    backgroundColor: COLOR.white,
-    height: 30,
-    width: 30,
-    borderRadius: DIMENSIONS.borderRadius,
-    right: 5,
-    top: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginRight: 5
   },
   placeImageStyle: {
     borderTopLeftRadius: DIMENSIONS.borderRadius,
@@ -57,6 +56,7 @@ const styles = StyleSheet.create({
     fontSize: DIMENSIONS.headerTextSize,
     fontWeight: 'bold',
     color: COLOR.black,
+    textAlign: "left"
   },
   placeTag: {
     fontSize: DIMENSIONS.subtitleTextSize,
@@ -276,8 +276,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   placeImage: {
-    width: DIMENSIONS.bannerWidth,
-    height: DIMENSIONS.bannerHeight + 100,
+    width: DIMENSIONS.halfWidth - 60,
+    maxHeight: DIMENSIONS.halfWidth - 50,
+    minHeight: DIMENSIONS.halfWidth - 50,
     position: 'absolute',
   },
   cityImageStyle: {
@@ -317,6 +318,7 @@ const styles = StyleSheet.create({
     height: DIMENSIONS.bannerHeight + 90,
     elevation: 10,
     marginVertical: 10,
+    marginBottom: 25,
     marginHorizontal: 5,
     padding: 10,
     backgroundColor: COLOR.white,

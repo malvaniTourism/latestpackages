@@ -51,6 +51,7 @@ const STRING = {
     OFFLINE_MODE: 'Offline Mode',
     LOCATION: 'Location',
     ADD_QUERY: 'Add Query',
+    CONTACT: "Contact",
   },
   SCREEN: {
     ROOT: 'Root',
@@ -193,6 +194,7 @@ const STRING = {
     ENTER_REFERRAL: 'Enter Referral Code',
     ACCEPT_TERMS: 'Accept Terms and Conditions',
     SELECT_MODE: 'Select Online/Offline Mode',
+    "PLEASE_CONTACT": "Data may not be perfect. If you find any false/wrong data here, please Contact Us by clicking on top corner."
   },
   TABLE: {
     CITY: 'City',
@@ -313,7 +315,7 @@ const STRING = {
     'Please check your connectivity... Internet connection is mandatory to load Map.',
   GET_MORE_DATA: 'Please connect to internet to get more data.',
   LOADER_TEXT: 'Picking Up Your Data...',
-  ADDED: 'Places will be added soon...',
+  ADDED: 'More details will be added soon...',
   NO_COMMENTS: 'No comments yet',
   START_CONVO: 'Start Conversation',
   NO_DATA: 'No data available at this instance.',

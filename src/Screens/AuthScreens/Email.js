@@ -69,19 +69,12 @@ const Email = ({navigation, route, ...props}) => {
 
   const signInWithGoogle = async () => {
     try {
-      console.log(1);
-
       props.setLoader(true);
-      console.log(2);
-
       await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
-      console.log(3);
 
       let lat = await getFromStorage(t('STORAGE.CURRENT_LATITUDE'));
       let long = await getFromStorage(t('STORAGE.CURRENT_LONGITUDE'));
       let referral_code = await getFromStorage(t('STORAGE.REFERRAL_CODE'));
-
-      console.log(lat, long, referral_code);
 
       const userInfo = await GoogleSignin.signIn();
 
