@@ -345,7 +345,7 @@ const ProfileView = ({navigation, route, ...props}) => {
   const referralClick = async () => {
     try {
       const deepLink = `awesomeapp://SignUp?code=${profile.uid}`;
-      const shareMessage = `Hey! Use my TourKokan referral code ${profile.uid} to get awesome discounts. Enjoy!`;
+      const shareMessage = t('REFER_EARN');
       const shareUrl = deepLink;
       const result = await Share.share({
         message: shareMessage,

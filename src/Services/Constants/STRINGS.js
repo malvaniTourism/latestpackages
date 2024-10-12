@@ -194,7 +194,7 @@ const STRING = {
     ENTER_REFERRAL: 'Enter Referral Code',
     ACCEPT_TERMS: 'Accept Terms and Conditions',
     SELECT_MODE: 'Select Online/Offline Mode',
-    "PLEASE_CONTACT": "Data may not be perfect. If you find any false/wrong data here, please Contact Us by clicking on top corner."
+    PLEASE_CONTACT: "Data may not be perfect. If you find any false/wrong data here, please Contact Us by clicking on top corner. Arrival timings will be added soon."
   },
   TABLE: {
     CITY: 'City',
@@ -334,6 +334,7 @@ const STRING = {
   ACCEPT_TNC: 'I Accept Terms & Conditions & Privacy Policy',
   APP_USAGE: 'How would you like to use your app?',
   NOTE: 'Please note: Even in offline mode, a network connection is required initially to complete the login process and load essential data.',
+  REFER_EARN: "Friends don’t let friends travel unprepared—refer them to TourKokan and get rewarded for every new journey started!"
 };
 
 export default STRING;

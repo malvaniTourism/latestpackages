@@ -203,12 +203,11 @@ const styles = StyleSheet.create({
     paddingVertical: 50,
     // flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'left',
     width: DIMENSIONS.screenWidth,
-    alignSelf: 'center'
+    marginLeft: -5
   },
   columnWrapper: {
-
   },
   catCardIcon: {
     height: DIMENSIONS.iconX,
