@@ -61,7 +61,6 @@ class AnimationStyle extends Component {
 }
 
 const Banner = ({ style, bannerImages }) => {
-console.log('bannerImages - ', bannerImages);
 
   const bannerClick = (imageUri) => {
     Linking.openURL(imageUri)
@@ -78,10 +77,10 @@ console.log('bannerImages - ', bannerImages);
         scrollAnimationDuration={3000}
         renderItem={({ index }) => {
           const imageUri = `${Path.FTP_PATH}${bannerImages[index].image}`;
-          const url = `${Path.FTP_PATH}${bannerImages[index].meta_data?.url}`;
+          const url = `${bannerImages[index].meta_data?.url}`;
 
           return (
-            <TouchableOpacity onPress={() => bannerImages[index].meta_data?.url ? bannerClick(url) : null}>
+            <TouchableOpacity onPress={() => url ? bannerClick(url) : null}>
               <AnimationStyle
                 source={{ uri: imageUri }}
                 style={styles.bannerImage}
