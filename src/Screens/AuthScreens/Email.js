@@ -42,6 +42,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
 import LottieView from 'lottie-react-native';
 import { Logo } from '../../Assets/Images/Logos/tourkokan.png'
+import { GOOGLE_WEB_CLIENT_ID } from '@env';
 
 const Email = ({navigation, route, ...props}) => {
   const {t, i18n} = useTranslation();
@@ -61,10 +62,7 @@ const Email = ({navigation, route, ...props}) => {
 
   GoogleSignin.configure({
     scopes: ['profile', 'email'], // Specify any additional scopes you need
-    webClientId: __DEV__
-      ? '203571229982-d9doh1t7ileevdqppomjfjvcvloj1i25.apps.googleusercontent.com' // Debug webClientId
-      : // : '203571229982-9uv6encu2akkkh57hsbbmap8jtklvfnl.apps.googleusercontent.com', // Release webClientId
-        '203571229982-e04hpgiu5k11ff4qg8oamlm6hruvqj2i.apps.googleusercontent.com', //Playstored signed
+    webClientId: GOOGLE_WEB_CLIENT_ID
   });
 
   const signInWithGoogle = async () => {

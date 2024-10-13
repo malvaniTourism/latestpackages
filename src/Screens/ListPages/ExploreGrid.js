@@ -38,6 +38,7 @@ import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
 import ExploreGridSkeleton from './ExploreGridSkeleton';
 import ComingSoon from '../../Components/Common/ComingSoon';
 import Popup from '../../Components/Common/Popup';
+import { FTP_PATH } from '@env';
 
 const {height: screenHeight} = Dimensions.get('window');
 
@@ -197,7 +198,7 @@ const ExploreGrid = ({route, navigation, ...props}) => {
   };
 
   const renderItem = ({item}) => {
-    const imageUri = Path.FTP_PATH + item.path;
+    const imageUri = FTP_PATH + item.path;
     return (
       <TouchableOpacity
         onPress={() => openImageViewer(item)}
@@ -288,7 +289,7 @@ const ExploreGrid = ({route, navigation, ...props}) => {
         {selectedImage && (
           <ImageViewing
             images={gallery.map(image => ({
-              uri: Path.FTP_PATH + image.path,
+              uri: FTP_PATH + image.path,
             }))}
             imageIndex={imageIndex}
             visible={isModalVisible}

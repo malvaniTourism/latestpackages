@@ -5,6 +5,7 @@ import * as Progress from 'react-native-progress';
 import ImageViewing from 'react-native-image-viewing';
 import styles from './Styles';
 import Path from '../../Services/Api/BaseUrl';
+import { FTP_PATH } from '@env';
 
 const ImageViewer = ({images}) => {
   const [selectedImage, setSelectedImage] = useState(images[0]);
@@ -16,7 +17,7 @@ const ImageViewer = ({images}) => {
   };
 
   const renderItem = ({item}) => {
-    const imageUri = Path.FTP_PATH + item.path;
+    const imageUri = FTP_PATH + item.path;
     console.log('Thumbnail Image URL:', imageUri); // Debugging: Log URL
 
     return (
@@ -42,7 +43,7 @@ const ImageViewer = ({images}) => {
     <View style={styles.galleryContainer}>
       <ProgressImage
         style={styles.mainImage}
-        source={{uri: Path.FTP_PATH + selectedImage.path}}
+        source={{uri: FTP_PATH + selectedImage.path}}
         indicator={Progress.Bar}
         indicatorProps={{
           size: 80,
@@ -63,7 +64,7 @@ const ImageViewer = ({images}) => {
         />
       </View>
       {/* <ImageViewing
-        images={images.map((image) => ({ uri: Path.FTP_PATH + image.path }))}
+        images={images.map((image) => ({ uri: FTP_PATH + image.path }))}
         imageIndex={images.indexOf(selectedImage)}
         visible={isVisible}
         onRequestClose={() => setIsVisible(false)}

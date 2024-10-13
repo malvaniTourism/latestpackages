@@ -4,9 +4,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import STRING from '../Constants/STRINGS';
 import NetInfo from '@react-native-community/netinfo';
 import {navigateTo} from '../CommonMethods';
+import { API_PATH } from '@env';
 
 export const comnGet = async (url, apiToken, navigation) => {
-  let myUrl = Path.API_PATH + url;
+  let myUrl = API_PATH + url;
   const config = {
     headers: {Authorization: `Bearer ${apiToken}`},
   };
@@ -24,7 +25,7 @@ export const comnGet = async (url, apiToken, navigation) => {
 };
 
 export const comnPost = async (url, data, navigation) => {
-  const myUrl = Path.API_PATH + url;
+  const myUrl = API_PATH + url;
   const token = await AsyncStorage.getItem(STRING.STORAGE.ACCESS_TOKEN);
   const config = {
     headers: {
@@ -48,7 +49,7 @@ export const comnPost = async (url, data, navigation) => {
 };
 
 export const comnPut = async (url, data, navigation) => {
-  const myUrl = Path.API_PATH + url;
+  const myUrl = API_PATH + url;
   const token = await AsyncStorage.getItem(STRING.STORAGE.ACCESS_TOKEN);
   const config = {
     headers: {
@@ -70,7 +71,7 @@ export const comnPut = async (url, data, navigation) => {
 };
 
 export const comnDel = async (url, data, navigation) => {
-  const myUrl = Path.API_PATH + url;
+  const myUrl = API_PATH + url;
   const token = await AsyncStorage.getItem(STRING.STORAGE.ACCESS_TOKEN);
   const config = {
     headers: {

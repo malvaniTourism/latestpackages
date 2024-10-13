@@ -8,7 +8,12 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "format": "npx prettier --write ."
+    "format": "npx prettier --write .",
+    "start:dev": "ENV_FILE=development npx react-native start",
+    "build:android:dev": "ENV_FILE=development npx react-native run-android",
+    "build:android:prod": "ENV_FILE=production npx react-native run-android --variant=release",
+    "build:ios:dev": "ENV_FILE=development npx react-native run-ios",
+    "build:ios:prod": "ENV_FILE=production npx react-native run-ios --configuration Release"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.0.0",
@@ -45,6 +50,7 @@
     "react-native-device-info": "^13.0.0",
     "react-native-dialogbox": "^0.6.10",
     "react-native-document-picker": "^9.3.1",
+    "react-native-dotenv": "^3.4.11",
     "react-native-element-dropdown": "^2.12.1",
     "react-native-flexible-grid": "^0.2.0",
     "react-native-fs": "^2.20.0",

@@ -32,6 +32,7 @@ import CheckNet from '../Components/Common/CheckNet';
 import Feather from 'react-native-vector-icons/Feather';
 import {useTranslation} from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { FTP_PATH } from '@env';
 
 const Profile = ({navigation, ...props}) => {
   const {t} = useTranslation();
@@ -224,7 +225,7 @@ const Profile = ({navigation, ...props}) => {
                 source={{
                   uri: `${
                     profile_picture
-                      ? Path.FTP_PATH + profile_picture
+                      ? FTP_PATH + profile_picture
                       : 'https://api-private.atlassian.com/users/2143ab39b9c73bcab4fe6562fff8d23d/avatar'
                   }`,
                 }}

@@ -20,6 +20,7 @@ import DialogBox from 'react-native-dialogbox';
 import Geolocation from '@react-native-community/geolocation';
 import {useTranslation} from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { GOOGLE_API, GOOGLE_API_KEY } from '@env'
 
 const LocationSheet = ({
   openLocationSheet,
@@ -211,12 +212,12 @@ const LocationSheet = ({
   const getAddress = position => {
     closeLocationSheet();
     fetch(
-      'https://maps.googleapis.com/maps/api/geocode/json?address=' +
+      GOOGLE_API +
         position.coords.latitude +
         ',' +
         position.coords.longitude +
         '&key=' +
-        t('GOOGLE_API_KEY'),
+        t(GOOGLE_API_KEY),
     )
       .then(response => response.json())
       .then(json => {

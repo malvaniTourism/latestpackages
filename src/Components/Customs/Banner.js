@@ -7,6 +7,7 @@ import Path from '../../Services/Api/BaseUrl';
 import ProgressImage from 'react-native-image-progress';
 import * as Progress from 'react-native-progress';
 import { Linking } from 'react-native';
+import { FTP_PATH } from '@env';
 
 class AnimationStyle extends Component {
   state = {
@@ -76,7 +77,7 @@ const Banner = ({ style, bannerImages }) => {
         data={bannerImages}
         scrollAnimationDuration={3000}
         renderItem={({ index }) => {
-          const imageUri = `${Path.FTP_PATH}${bannerImages[index].image}`;
+          const imageUri = `${FTP_PATH}${bannerImages[index].image}`;
           const url = `${bannerImages[index].meta_data?.url}`;
 
           return (

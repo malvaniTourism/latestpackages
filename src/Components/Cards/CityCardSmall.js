@@ -11,6 +11,7 @@ import StarRating from 'react-native-star-rating-widget'; // Updated import
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {comnPost} from '../../Services/Api/CommonServices';
 import {useTranslation} from 'react-i18next';
+import { FTP_PATH } from '@env';
 
 const CityCardSmall = ({data, reload, navigation, addComment, onClick}) => {
   const {t} = useTranslation();
@@ -84,7 +85,7 @@ const CityCardSmall = ({data, reload, navigation, addComment, onClick}) => {
       <View style={styles.cityOverlay} />
       {data.image ? (
         <ImageBackground
-          source={{uri: Path.FTP_PATH + data.image}}
+          source={{uri: FTP_PATH + data.image}}
           style={cardType == 'city' ? styles.citySmallImage : styles.placeImage}
           imageStyle={styles.cityImageStyle}
           resizeMode="cover"

@@ -41,6 +41,7 @@ import GalleryView from '../../Components/Common/GalleryView';
 import ComingSoon from '../../Components/Common/ComingSoon';
 import Popup from '../../Components/Common/Popup';
 import NetInfo from '@react-native-community/netinfo';
+import { FTP_PATH } from '@env';
 
 const CityDetails = ({navigation, route, offline, ...props}) => {
   const {t} = useTranslation();
@@ -343,7 +344,7 @@ const CityDetails = ({navigation, route, offline, ...props}) => {
                 <GalleryView images={city.gallery} />
               ) : (
                 // <ImageBackground
-                //     source={{ uri: Path.FTP_PATH + city.image }}
+                //     source={{ uri: FTP_PATH + city.image }}
                 //     style={styles.placeImage}
                 // />
                 <ImageBackground

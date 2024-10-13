@@ -57,6 +57,7 @@ import DIMENSIONS from '../Services/Constants/DIMENSIONS';
 import ComingSoon from '../Components/Common/ComingSoon';
 import Popup from '../Components/Common/Popup';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import { APP_URL } from '@env';
 
 // SplashScreen.preventAutoHideAsync();
 
@@ -491,7 +492,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
 
   const continueUpdate = () => {
     setUpdateApp(false);
-    Linking.openURL(t('APP_URL'));
+    Linking.openURL(APP_URL);
   };
 
   const closePopup = () => {

@@ -294,7 +294,6 @@ const STRING = {
   GETTING_LOCATION: 'Getting Location ...',
   YOU_ARE_HERE: 'You are Here',
   GRANTED: 'granted',
-  GOOGLE_API_KEY: 'AIzaSyCUUzdHc1ccGZhOzia9NoPf8mf3Yv901ZQ',
   SEARCH_FOR_AREA: 'Search for area, street name...',
   USE_CURRENT_LOCATION: 'Use Current Location',
   RECENT_LOCATION: 'Recent Location',

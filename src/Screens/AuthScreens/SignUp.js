@@ -35,6 +35,7 @@ import {CheckBox} from '@rneui/themed';
 import PrivacyPolicy from '../../Components/Common/PrivacyPolicy';
 import DeviceInfo from 'react-native-device-info';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import { GOOGLE_WEB_CLIENT_ID } from '@env';
 
 const SignUp = ({navigation, ...props}) => {
   const opacity = useRef(new Animated.Value(0)).current;
@@ -81,8 +82,7 @@ const SignUp = ({navigation, ...props}) => {
   const [showPrivacy, setShowPrivacy] = useState(false);
 
   GoogleSignin.configure({
-    webClientId:
-      '203571229982-d7l3as4nv7iq4kefuhn2g5cqpremr7v1.apps.googleusercontent.com',
+    webClientId: GOOGLE_WEB_CLIENT_ID,
   });
 
   const signInWithGoogle = async () => {
