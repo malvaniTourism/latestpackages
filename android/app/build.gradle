@@ -72,6 +72,15 @@ def enableProguardInReleaseBuilds = false
  */
 def jscFlavor = 'org.webkit:android-jsc:+'
 
+task setEnv {
+    doFirst {
+        def envFile = project.hasProperty('env') ? project.getProperty('env') : 'development'
+        println "Building with environment: $envFile"
+        project.ext.set('ENV_FILE', envFile)
+    }
+}
+preBuild.dependsOn setEnv
+
 android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -103,6 +112,7 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            buildConfigField "String", "ENV_FILE", "\"development\""
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
@@ -112,6 +122,7 @@ android {
             minifyEnabled true // Ensures ProGuard/R8 is used
             shrinkResources true // Enable resource shrinking
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            buildConfigField "String", "ENV_FILE", "\"production\""
         }
     }
 }

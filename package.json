@@ -13,7 +13,11 @@
     "build:android:dev": "ENV_FILE=development npx react-native run-android",
     "build:android:prod": "ENV_FILE=production npx react-native run-android --variant=release",
     "build:ios:dev": "ENV_FILE=development npx react-native run-ios",
-    "build:ios:prod": "ENV_FILE=production npx react-native run-ios --configuration Release"
+    "build:ios:prod": "ENV_FILE=production npx react-native run-ios --configuration Release",
+    "build:android:assembleReleaseDev": "ENV_FILE=development ./gradlew assembleRelease",
+    "build:android:bundleReleaseDev": "ENV_FILE=development ./gradlew bundleRelease",
+    "build:android:assembleReleaseProd": "ENV_FILE=production ./gradlew assembleRelease",
+    "build:android:bundleReleaseProd": "ENV_FILE=production ./gradlew bundleRelease"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.0.0",
