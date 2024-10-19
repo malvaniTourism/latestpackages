@@ -3,7 +3,7 @@ import {Image, TouchableOpacity} from 'react-native';
 import styles from './Styles';
 import GlobalText from '../Customs/Text';
 import Path from '../../Services/Api/BaseUrl';
-import { FTP_PATH } from '@env';
+import {FTP_PATH} from '@env';
 
 const SubCatCard = ({data, onClick}) => {
   return (

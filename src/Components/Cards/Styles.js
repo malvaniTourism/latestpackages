@@ -29,13 +29,13 @@ const styles = StyleSheet.create({
     borderRadius: DIMENSIONS.borderRadius,
     elevation: 10,
     marginVertical: 10,
-    marginHorizontal: 10
+    marginHorizontal: 10,
   },
   placeImageView: {
     flex: 2,
   },
   likeView: {
-    marginRight: 5
+    marginRight: 5,
   },
   placeImageStyle: {
     borderTopLeftRadius: DIMENSIONS.borderRadius,
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     fontSize: DIMENSIONS.headerTextSize,
     fontWeight: 'bold',
     color: COLOR.black,
-    textAlign: "left"
+    textAlign: 'left',
   },
   placeTag: {
     fontSize: DIMENSIONS.subtitleTextSize,

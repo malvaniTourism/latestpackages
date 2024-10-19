@@ -14,10 +14,10 @@
     "build:android:prod": "ENV_FILE=production npx react-native run-android --variant=release",
     "build:ios:dev": "ENV_FILE=development npx react-native run-ios",
     "build:ios:prod": "ENV_FILE=production npx react-native run-ios --configuration Release",
-    "build:android:assembleReleaseDev": "ENV_FILE=development ./gradlew assembleRelease",
-    "build:android:bundleReleaseDev": "ENV_FILE=development ./gradlew bundleRelease",
-    "build:android:assembleReleaseProd": "ENV_FILE=production ./gradlew assembleRelease",
-    "build:android:bundleReleaseProd": "ENV_FILE=production ./gradlew bundleRelease"
+    "build:android:assembleReleaseDev": "cd android && ENV_FILE=development ./gradlew assembleDebug",
+    "build:android:bundleReleaseDev": "cd android && ENV_FILE=development ./gradlew bundleDebug",
+    "build:android:assembleReleaseProd": "cd android && ENV_FILE=production ./gradlew assembleRelease",
+    "build:android:bundleReleaseProd": "cd android && ENV_FILE=production ./gradlew bundleRelease"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.0.0",
@@ -84,6 +84,7 @@
     "react-native-svg": "^15.6.0",
     "react-native-svg-transformer": "^1.5.0",
     "react-native-vector-icons": "^10.1.0",
+    "react-native-version-check": "^3.4.7",
     "react-native-webview": "^13.11.1",
     "react-redux": "^9.1.2",
     "redux": "^5.0.1"

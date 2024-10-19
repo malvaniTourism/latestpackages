@@ -18,7 +18,7 @@ import styles from './Styles';
 import ProjectCard from '../Components/Cards/ProjectCard';
 import GlobalText from '../Components/Customs/Text';
 import {useTranslation} from 'react-i18next';
-import { FTP_PATH } from '@env';
+import {FTP_PATH} from '@env';
 
 const CategoryProjects = ({navigation, route, ...props}) => {
   const {t} = useTranslation();

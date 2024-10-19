@@ -453,7 +453,7 @@ const ProfileView = ({navigation, route, ...props}) => {
 
       <View style={styles.headerContainer}>
         <GlobalText text={t('ADDRESS')} />
-        {initialRegion.latitude ? (
+        {initialRegion && initialRegion.latitude && currentLatitude ? (
           <MapContainer
             initialRegion={initialRegion}
             currentLatitude={currentLatitude}
@@ -465,7 +465,7 @@ const ProfileView = ({navigation, route, ...props}) => {
       </View>
 
       <View style={styles.chipContainer}>
-        {initialRegion.latitude ? (
+        {initialRegion && initialRegion.latitude && currentLatitude ? (
           option == 0 ? (
             <ChipOptions
               languageClick={() => setOption(1)}

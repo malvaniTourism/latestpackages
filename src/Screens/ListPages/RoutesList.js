@@ -1,6 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { FlatList, View, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
-import { ListItem, Overlay } from '@rneui/themed';
+import React, {useEffect, useState} from 'react';
+import {
+  FlatList,
+  View,
+  SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
+import {ListItem, Overlay} from '@rneui/themed';
 import Header from '../../Components/Common/Header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import COLOR from '../../Services/Constants/COLORS';
@@ -17,14 +23,14 @@ import RouteLineLast from '../../Components/Customs/RouteLines/RouteLineLast';
 import GlobalText from '../../Components/Customs/Text';
 import RouteHeadCard from '../../Components/Cards/RouteHeadCard';
 import styles from './Styles';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import TextButton from '../../Components/Customs/Buttons/TextButton';
 
-const RoutesList = ({ navigation, route }) => {
-  const { t } = useTranslation();
+const RoutesList = ({navigation, route}) => {
+  const {t} = useTranslation();
 
   const [list, setList] = useState(route.params.item.route_stops);
-  const [isShow, setIsShow] = useState(true)
+  const [isShow, setIsShow] = useState(true);
 
   useEffect(() => {
     const backHandler = goBackHandler(navigation);
@@ -38,12 +44,12 @@ const RoutesList = ({ navigation, route }) => {
     setIsShow(false);
   };
 
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({item, index}) => {
     let isFirst = index === 0;
     let isLast = index === list.length - 1;
 
     return (
-      <ListItem bottomDivider style={{ paddingTop: isFirst ? 20 : 0 }}>
+      <ListItem bottomDivider style={{paddingTop: isFirst ? 20 : 0}}>
         {isFirst ? (
           <RouteLineFirst />
         ) : isLast ? (
@@ -65,7 +71,9 @@ const RoutesList = ({ navigation, route }) => {
               </View>
               <View>
                 {/* <GlobalText text={t("ETA") + item.dept_time.slice(0, -3)} /> */}
-                <GlobalText text={item.arr_time && item.arr_time.slice(0, -3)} />
+                <GlobalText
+                  text={item.arr_time && item.arr_time.slice(0, -3)}
+                />
               </View>
             </View>
           </ListItem.Title>
@@ -90,13 +98,16 @@ const RoutesList = ({ navigation, route }) => {
         endIcon={
           <TouchableOpacity
             onPress={() => {
-              navigateTo(navigation, t('SCREEN.QUERIES_LIST'), { step: 1, route_id: route.params?.item?.id })
+              navigateTo(navigation, t('SCREEN.QUERIES_LIST'), {
+                step: 1,
+                route_id: route.params?.item?.id,
+              });
             }}>
             <GlobalText text={t('BUTTON.CONTACT')} />
           </TouchableOpacity>
         }
       />
-      <View style={{ marginVertical: -15 }}>
+      <View style={{marginVertical: -15}}>
         <RouteHeadCard
           data={route.params.item}
           cardClick={() => console.log('')}

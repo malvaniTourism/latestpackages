@@ -239,7 +239,12 @@ const CityList = ({navigation, route, ...props}) => {
         <CheckNet isOff={showOffline || offline} />
         <Loader />
         {cities.length > 0 ? (
-          <View style={{alignItems: 'center', justifyContent: "space-between", marginBottom: 150}}>
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: 150,
+            }}>
             <FlatList
               data={cities}
               numColumns={1}

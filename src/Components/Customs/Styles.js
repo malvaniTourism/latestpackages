@@ -205,10 +205,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'left',
     width: DIMENSIONS.screenWidth,
-    marginLeft: -5
+    marginLeft: -5,
   },
-  columnWrapper: {
-  },
+  columnWrapper: {},
   catCardIcon: {
     height: DIMENSIONS.iconX,
     width: DIMENSIONS.iconX,

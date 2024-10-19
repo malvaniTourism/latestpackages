@@ -35,7 +35,7 @@ import {CheckBox} from '@rneui/themed';
 import PrivacyPolicy from '../../Components/Common/PrivacyPolicy';
 import DeviceInfo from 'react-native-device-info';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import { GOOGLE_WEB_CLIENT_ID } from '@env';
+import {GOOGLE_WEB_CLIENT_ID} from '@env';
 
 const SignUp = ({navigation, ...props}) => {
   const opacity = useRef(new Animated.Value(0)).current;

@@ -20,7 +20,7 @@ import DialogBox from 'react-native-dialogbox';
 import Geolocation from '@react-native-community/geolocation';
 import {useTranslation} from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { GOOGLE_API, GOOGLE_API_KEY } from '@env'
+import {GOOGLE_API, GOOGLE_API_KEY} from '@env';
 
 const LocationSheet = ({
   openLocationSheet,

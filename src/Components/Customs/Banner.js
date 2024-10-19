@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import { View, Animated, LogBox, Image, TouchableOpacity } from 'react-native';
+import React, {Component} from 'react';
+import {View, Animated, LogBox, Image, TouchableOpacity} from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
 import styles from './Styles';
 import Path from '../../Services/Api/BaseUrl';
 import ProgressImage from 'react-native-image-progress';
 import * as Progress from 'react-native-progress';
-import { Linking } from 'react-native';
-import { FTP_PATH } from '@env';
+import {Linking} from 'react-native';
+import {FTP_PATH} from '@env';
 
 class AnimationStyle extends Component {
   state = {
@@ -61,11 +61,10 @@ class AnimationStyle extends Component {
   }
 }
 
-const Banner = ({ style, bannerImages }) => {
-
-  const bannerClick = (imageUri) => {
-    Linking.openURL(imageUri)
-  }
+const Banner = ({style, bannerImages}) => {
+  const bannerClick = imageUri => {
+    Linking.openURL(imageUri);
+  };
 
   return (
     <View style={[styles.banner, style]}>
@@ -76,14 +75,14 @@ const Banner = ({ style, bannerImages }) => {
         autoPlay={true}
         data={bannerImages}
         scrollAnimationDuration={3000}
-        renderItem={({ index }) => {
+        renderItem={({index}) => {
           const imageUri = `${FTP_PATH}${bannerImages[index].image}`;
           const url = `${bannerImages[index].meta_data?.url}`;
 
           return (
-            <TouchableOpacity onPress={() => url ? bannerClick(url) : null}>
+            <TouchableOpacity onPress={() => (url ? bannerClick(url) : null)}>
               <AnimationStyle
-                source={{ uri: imageUri }}
+                source={{uri: imageUri}}
                 style={styles.bannerImage}
                 onLoad={() => console.log(`Image ${imageUri} loaded`)}
                 onError={error =>

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, ImageBackground, TouchableOpacity } from 'react-native';
+import React, {useState} from 'react';
+import {View, ImageBackground, TouchableOpacity} from 'react-native';
 import styles from './Styles';
 import Path from '../../Services/Api/BaseUrl';
 import Octicons from 'react-native-vector-icons/Octicons';
@@ -7,15 +7,15 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import COLOR from '../../Services/Constants/COLORS';
 import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
 import StarRating from 'react-native-star-rating-widget'; // Updated import
-import { comnPost } from '../../Services/Api/CommonServices';
+import {comnPost} from '../../Services/Api/CommonServices';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import GlobalText from '../Customs/Text';
 import ComingSoon from '../Common/ComingSoon';
-import { useTranslation } from 'react-i18next';
-import { FTP_PATH } from '@env';
+import {useTranslation} from 'react-i18next';
+import {FTP_PATH} from '@env';
 
-const PlaceCard = ({ data, reload, navigation, addComment, onClick }) => {
-  const { t } = useTranslation();
+const PlaceCard = ({data, reload, navigation, addComment, onClick}) => {
+  const {t} = useTranslation();
 
   const [isFav, setIsFav] = useState(data.is_favorite);
   const [isLiked, setIsLiked] = useState(false);
@@ -37,7 +37,7 @@ const PlaceCard = ({ data, reload, navigation, addComment, onClick }) => {
         AsyncStorage.setItem('isUpdated', 'true');
         reload();
       })
-      .catch(err => { });
+      .catch(err => {});
   };
 
   const onStarRatingPress = async rate => {
@@ -53,7 +53,7 @@ const PlaceCard = ({ data, reload, navigation, addComment, onClick }) => {
         AsyncStorage.setItem('isUpdated', 'true');
         reload();
       })
-      .catch(err => { });
+      .catch(err => {});
   };
 
   const onLikeClick = () => {
@@ -66,7 +66,7 @@ const PlaceCard = ({ data, reload, navigation, addComment, onClick }) => {
       <TouchableOpacity style={styles.placeImageView} onPress={() => onClick()}>
         {data.image ? (
           <ImageBackground
-            source={{ uri: FTP_PATH + data.image }}
+            source={{uri: FTP_PATH + data.image}}
             style={styles.placeImage}
             imageStyle={styles.placeImageStyle}
             resizeMode="cover"
@@ -87,7 +87,7 @@ const PlaceCard = ({ data, reload, navigation, addComment, onClick }) => {
             <GlobalText text={data.tag_line} style={styles.placeTag} />
           </TouchableOpacity>
           <View style={styles.flexRowLike}>
-            <View style={{ width: '40%' }}>
+            <View style={{width: '40%'}}>
               <StarRating
                 rating={rating}
                 onChange={onStarRatingPress}
@@ -97,13 +97,13 @@ const PlaceCard = ({ data, reload, navigation, addComment, onClick }) => {
               />
             </View>
             <View style={styles.flexColumn}>
-            <View style={styles.citySmallLikeView}>
-              <GlobalText text={commentCount} style={styles.commentCount} />
-          <Octicons
-            name="comment"
-            color={COLOR.black}
-            size={DIMENSIONS.iconSize}
-          />
+              <View style={styles.citySmallLikeView}>
+                <GlobalText text={commentCount} style={styles.commentCount} />
+                <Octicons
+                  name="comment"
+                  color={COLOR.black}
+                  size={DIMENSIONS.iconSize}
+                />
               </View>
               <TouchableOpacity
                 style={styles.likeView}

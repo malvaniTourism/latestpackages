@@ -41,8 +41,8 @@ import {
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
 import LottieView from 'lottie-react-native';
-import { Logo } from '../../Assets/Images/Logos/tourkokan.png'
-import { GOOGLE_WEB_CLIENT_ID } from '@env';
+import {Logo} from '../../Assets/Images/Logos/tourkokan.png';
+import {GOOGLE_WEB_CLIENT_ID} from '@env';
 
 const Email = ({navigation, route, ...props}) => {
   const {t, i18n} = useTranslation();
@@ -62,7 +62,7 @@ const Email = ({navigation, route, ...props}) => {
 
   GoogleSignin.configure({
     scopes: ['profile', 'email'], // Specify any additional scopes you need
-    webClientId: GOOGLE_WEB_CLIENT_ID
+    webClientId: GOOGLE_WEB_CLIENT_ID,
   });
 
   const signInWithGoogle = async () => {
@@ -309,10 +309,10 @@ const Email = ({navigation, route, ...props}) => {
         <GlobalText text={''} style={styles.welcomeText} />
         <GlobalText text={''} style={styles.boldKokan} />
         <View style={styles.loginLogoView}>
-      <Image
-          source={require('../../Assets/Images/Logos/tourkokan_logo.png')}
-          style={styles.loginLogo}
-        />
+          <Image
+            source={require('../../Assets/Images/Logos/tourkokan_logo.png')}
+            style={styles.loginLogo}
+          />
         </View>
       </View>
       {isLoading ? (

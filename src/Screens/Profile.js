@@ -32,7 +32,7 @@ import CheckNet from '../Components/Common/CheckNet';
 import Feather from 'react-native-vector-icons/Feather';
 import {useTranslation} from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { FTP_PATH } from '@env';
+import {FTP_PATH} from '@env';
 
 const Profile = ({navigation, ...props}) => {
   const {t} = useTranslation();

@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import STRING from '../Constants/STRINGS';
 import NetInfo from '@react-native-community/netinfo';
 import {navigateTo} from '../CommonMethods';
-import { API_PATH } from '@env';
+import {API_PATH} from '@env';
 
 export const comnGet = async (url, apiToken, navigation) => {
   let myUrl = API_PATH + url;

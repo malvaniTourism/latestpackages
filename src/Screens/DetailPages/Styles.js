@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
   },
   boldText: {
     fontWeight: 'bold',
-    fontSize: DIMENSIONS.subtitleTextSize
+    fontSize: DIMENSIONS.subtitleTextSize,
   },
 });
 

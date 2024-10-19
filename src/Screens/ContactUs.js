@@ -21,7 +21,15 @@ import DocumentPicker from 'react-native-document-picker';
 import STRING from '../Services/Constants/STRINGS';
 import NetInfo from '@react-native-community/netinfo';
 
-const ContactUs = ({navigation, route, step, setStep, offline, route_id, ...props}) => {
+const ContactUs = ({
+  navigation,
+  route,
+  step,
+  setStep,
+  offline,
+  route_id,
+  ...props
+}) => {
   const {t} = useTranslation();
 
   const [email, setEmail] = useState('');

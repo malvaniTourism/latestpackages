@@ -38,7 +38,7 @@ import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
 import ExploreGridSkeleton from './ExploreGridSkeleton';
 import ComingSoon from '../../Components/Common/ComingSoon';
 import Popup from '../../Components/Common/Popup';
-import { FTP_PATH } from '@env';
+import {FTP_PATH} from '@env';
 
 const {height: screenHeight} = Dimensions.get('window');
 

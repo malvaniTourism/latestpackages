@@ -3,7 +3,7 @@ import {ImageBackground, View} from 'react-native';
 import styles from './Styles';
 import Path from '../../Services/Api/BaseUrl';
 import GlobalText from '../Customs/Text';
-import { FTP_PATH } from '@env';
+import {FTP_PATH} from '@env';
 
 const ProjectCard = ({project}) => {
   return (

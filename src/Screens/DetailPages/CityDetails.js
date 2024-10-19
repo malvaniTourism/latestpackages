@@ -41,7 +41,7 @@ import GalleryView from '../../Components/Common/GalleryView';
 import ComingSoon from '../../Components/Common/ComingSoon';
 import Popup from '../../Components/Common/Popup';
 import NetInfo from '@react-native-community/netinfo';
-import { FTP_PATH } from '@env';
+import {FTP_PATH} from '@env';
 
 const CityDetails = ({navigation, route, offline, ...props}) => {
   const {t} = useTranslation();
@@ -484,11 +484,9 @@ const CityDetails = ({navigation, route, offline, ...props}) => {
                     currentLatitude={currentLatitude}
                     currentLongitude={currentLongitude}
                   />
-                ) : (
-                  currentLatitude ?
+                ) : currentLatitude ? (
                   <MapSkeleton />
-                  : null
-                )}
+                ) : null}
               </View>
 
               <View
@@ -510,8 +508,7 @@ const CityDetails = ({navigation, route, offline, ...props}) => {
                       style={{width: 100, height: 30}}
                     />
                   </View>
-                ) : (
-                  city.sites[0] ?
+                ) : city.sites[0] ? (
                   <View style={styles.flexAround}>
                     <GlobalText
                       text={t('VILLAGES')}
@@ -525,8 +522,7 @@ const CityDetails = ({navigation, route, offline, ...props}) => {
                       onPress={() => seeMore()}
                     />
                   </View>
-                  : null
-                )}
+                ) : null}
               </View>
               <View
                 style={{

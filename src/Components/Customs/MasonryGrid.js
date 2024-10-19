@@ -12,7 +12,7 @@ import {
 import Path from '../../Services/Api/BaseUrl';
 import styles from './Styles';
 import GlobalText from './Text';
-import { FTP_PATH } from '@env';
+import {FTP_PATH} from '@env';
 
 const MasonryGrid = ({data, loadMore}) => {
   const [selectedImage, setSelectedImage] = useState(null);

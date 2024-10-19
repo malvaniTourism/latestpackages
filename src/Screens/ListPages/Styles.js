@@ -172,9 +172,9 @@ const styles = StyleSheet.create({
     backgroundColor: COLOR.white,
     elevation: 10,
     borderRadius: DIMENSIONS.borderRadius,
-    alignItems: "center",
-    justifyContent: "center",
-    margin: 10
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10,
   },
   cityListName: {
     fontWeight: 'bold',

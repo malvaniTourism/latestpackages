@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
   loginLogoView: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 20
+    marginBottom: 20,
   },
   loginLogo: {
     height: DIMENSIONS.iconCardBig,

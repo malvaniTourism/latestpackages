@@ -11,6 +11,7 @@ import {
   Linking,
   Animated,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import SearchPanel from '../Components/Common/SearchPanel';
 import TopComponent from '../Components/Common/TopComponent';
@@ -57,7 +58,8 @@ import DIMENSIONS from '../Services/Constants/DIMENSIONS';
 import ComingSoon from '../Components/Common/ComingSoon';
 import Popup from '../Components/Common/Popup';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-import { APP_URL } from '@env';
+import {APP_URL} from '@env';
+import VersionCheck from 'react-native-version-check';
 
 // SplashScreen.preventAutoHideAsync();
 
@@ -149,7 +151,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
       (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == null ||
       (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == ''
     ) {
-      navigateTo(navigation, t('SCREEN.LANG_SELECTION'));
+      navigateTo(navigation, t('SCREEN.EMAIL'));
     } else {
       navigateTo(navigation, t('SCREEN.HOME'));
     }
@@ -203,7 +205,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
 
       props.setLoader(true);
       await AsyncStorage.setItem('isUpdated', 'false'); // Ensure await here
-      saveToken(); // Ensure saveToken is a promise or add await if it's async
+      checkToken(); // Ensure checkToken is a promise or add await if it's async
 
       // Only call landing page API once if data isn't fetched
       if (!isLandingDataFetched && props.access_token) {
@@ -273,6 +275,31 @@ const HomeScreen = ({navigation, route, ...props}) => {
     init();
   }, [props.access_token]);
 
+  const checkForUpdate = async () => {
+    const latestVersion = await VersionCheck.getLatestVersion();
+    const currentVersion = await VersionCheck.getCurrentVersion();
+
+    if (latestVersion !== currentVersion) {
+      promptUpdate();
+    }
+  };
+
+  const promptUpdate = () => {
+    Alert.alert(
+      'Update Available',
+      'A new version of the app is available. Please update to continue.',
+      [
+        {text: 'Cancel', style: 'cancel'},
+        {
+          text: 'Update',
+          onPress: async () => {
+            Linking.openURL(await VersionCheck.getStoreUrl());
+          },
+        },
+      ],
+    );
+  };
+
   const onRefresh = () => {
     props.setSource('');
     props.setDestination('');
@@ -288,7 +315,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
   useFocusEffect(
     React.useCallback(async () => {
       const isUpdated = await AsyncStorage.getItem('isUpdated');
-
+      checkToken();
       if (isUpdated === 'true' && props.mode) {
         // setIsInitialLoad(false); // Update state to indicate that the initial load has occurred
 
@@ -298,13 +325,16 @@ const HomeScreen = ({navigation, route, ...props}) => {
         // setBannerObject([]);
         props.setLoader(true);
         callLandingPageAPI();
+        const mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
+        setMode(mode);
       }
+      checkForUpdate();
     }, [props.mode, isInitialLoad]), // Dependencies include props.mode and isInitialLoad
   );
 
   const callLandingPageAPI = async site_id => {
     try {
-      let isFirstTime = await AsyncStorage.getItem(t('STORAGE.IS_FIRST_TIME'));
+      let isFirstTime = await getFromStorage(t('STORAGE.IS_FIRST_TIME'));
       let mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
 
       if (mode) {
@@ -361,17 +391,15 @@ const HomeScreen = ({navigation, route, ...props}) => {
     }
   };
 
-  const saveToken = async () => {
-    // props.saveAccess_token(
-    //   await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN')),
-    // );
+  const checkToken = async () => {
     if (
       (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == null ||
       (await AsyncStorage.getItem(t('STORAGE.ACCESS_TOKEN'))) == ''
     ) {
-      navigateTo(navigation, t('SCREEN.LANG_SELECTION'));
+      navigateTo(navigation, t('SCREEN.EMAIL'));
     }
   };
+
   const setOfflineData = resp => {
     saveToStorage(t('STORAGE.LANDING_RESPONSE'), JSON.stringify(resp));
     saveToStorage(

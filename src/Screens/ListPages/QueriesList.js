@@ -291,7 +291,12 @@ const QueriesList = ({navigation, route, ...props}) => {
             </View>
           )
         ) : (
-          <ContactUs route_id={route.params?.route_id} step={step} setStep={setStep} offline={offline} />
+          <ContactUs
+            route_id={route.params?.route_id}
+            step={step}
+            setStep={setStep}
+            offline={offline}
+          />
         )}
         <ComingSoon
           message={errorMessage}

@@ -200,7 +200,7 @@ export default function App() {
     } else {
       setIsFirstTime('false');
     }
-  }
+  };
 
   const handleNextButton = () => {
     // Check when on the third slide for Terms and Conditions acceptance and location sharing

@@ -5,7 +5,7 @@ import * as Progress from 'react-native-progress';
 import ImageViewing from 'react-native-image-viewing';
 import styles from './Styles';
 import Path from '../../Services/Api/BaseUrl';
-import { FTP_PATH } from '@env';
+import {FTP_PATH} from '@env';
 
 const ImageViewer = ({images}) => {
   const [selectedImage, setSelectedImage] = useState(images[0]);
