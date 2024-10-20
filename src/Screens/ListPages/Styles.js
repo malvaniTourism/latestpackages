@@ -240,6 +240,15 @@ const styles = StyleSheet.create({
     elevation: 10,
     marginLeft: 10,
   },
+  imageTitle: {
+    backgroundColor: 'red',
+    position: 'fixed',
+    zIndex: 1000,
+    height: 100,
+    width: DIMENSIONS.screenWidth,
+    marginTop: -500,
+    left: 0,
+  },
 });
 
 export default styles;

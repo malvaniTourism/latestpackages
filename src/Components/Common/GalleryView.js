@@ -18,7 +18,6 @@ const ImageViewer = ({images}) => {
 
   const renderItem = ({item}) => {
     const imageUri = FTP_PATH + item.path;
-    console.log('Thumbnail Image URL:', imageUri); // Debugging: Log URL
 
     return (
       <TouchableOpacity onPress={() => openImageViewer(item)}>

@@ -71,9 +71,7 @@ const RoutesList = ({navigation, route}) => {
               </View>
               <View>
                 {/* <GlobalText text={t("ETA") + item.dept_time.slice(0, -3)} /> */}
-                <GlobalText
-                  text={item.arr_time && item.arr_time.slice(0, -3)}
-                />
+                <GlobalText text={`${item.distance ? item.distance : 0} Km`} />
               </View>
             </View>
           </ListItem.Title>

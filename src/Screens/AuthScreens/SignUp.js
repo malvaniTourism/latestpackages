@@ -35,7 +35,7 @@ import {CheckBox} from '@rneui/themed';
 import PrivacyPolicy from '../../Components/Common/PrivacyPolicy';
 import DeviceInfo from 'react-native-device-info';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import {GOOGLE_WEB_CLIENT_ID} from '@env';
+import {GOOGLE_WEB_CLIENT_ID, API_PATH} from '@env';
 
 const SignUp = ({navigation, ...props}) => {
   const opacity = useRef(new Animated.Value(0)).current;
@@ -91,21 +91,16 @@ const SignUp = ({navigation, ...props}) => {
       const userInfo = await GoogleSignin.signIn();
 
       // Send userInfo.idToken to your Laravel backend
-      const response = await fetch(
-        'https://dev.tourkokan.com/api/v2/auth/googleAuth',
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({token: userInfo.idToken}),
+      const response = await fetch(API_PATH + 'v2/auth/googleAuth', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      );
+        body: JSON.stringify({token: userInfo.idToken}),
+      });
 
       // Handle authentication response
       const result = await response.json();
-      console.log('res- - - ', result);
-
       // Store result token if successful
     } catch (error) {
       console.error('error- - ', error);

@@ -186,19 +186,21 @@ export default function App() {
   //   }
   // };
 
-  const checkValidation = async () => {
-    if (!latitude || !longitude) {
+  const checkValidation = async index => {
+    if ((!latitude || !longitude) && index >= 3) {
       alert(STRING.ALERT.SHARE_LOCATION);
       setCurrentIndex(2);
       if (sliderRef.current) sliderRef.current.goToSlide(2);
       return;
-    } else if (!textValues[4]) {
+    } else if (!textValues[4] && index >= 4) {
       alert(STRING.ALERT.TNC);
       setCurrentIndex(3);
       if (sliderRef.current) sliderRef.current.goToSlide(3);
       return;
     } else {
-      setIsFirstTime('false');
+      if (latitude && longitude && textValues[4]) {
+        setIsFirstTime('false');
+      }
     }
   };
 
@@ -211,8 +213,6 @@ export default function App() {
       }
 
       if (!latitude || !longitude) {
-        console.log(1);
-
         alert(STRING.ALERT.SHARE_LOCATION);
         return;
       }
@@ -220,8 +220,6 @@ export default function App() {
 
     // Check when on the second slide for location sharing
     if (currentIndex === 2 && (!latitude || !longitude)) {
-      console.log(2);
-
       alert(STRING.ALERT.SHARE_LOCATION);
       return;
     }
@@ -310,7 +308,6 @@ export default function App() {
           });
       }
     } catch (error) {
-      console.log(error);
       Alert.alert('Error', STRING.ALERT.WENT_WRONG);
       setIsLoading(false); // Stop loading spinner
       setIsButtonDisabled(false); // Re-enable the button
@@ -476,7 +473,7 @@ export default function App() {
 
   const onDone = async () => {
     // Save the user's preferences
-    await checkValidation();
+    await checkValidation(4);
     await saveToStorage(STRING.STORAGE.IS_FIRST_TIME, 'true');
     await saveToStorage(STRING.STORAGE.LANGUAGE, language);
     await saveToStorage(STRING.STORAGE.REFERRAL_CODE, referral);
@@ -527,7 +524,8 @@ export default function App() {
     // Update the current index and trigger specific actions for the slide.
     setCurrentIndex(index);
     // Trigger any actions specific to the new slide
-    slides[index].onNext();
+    // slides[index].onNext();
+    checkValidation(index);
   };
 
   if (loading) {
@@ -573,9 +571,9 @@ export default function App() {
         renderDoneButton={renderDoneButton}
         renderNextButton={renderNextButton}
         // renderPrevButton={renderPrevButton}
-        onSlideChange={setCurrentIndex}
-        scrollEnabled={false}
-        dotClickEnabled={false}
+        onSlideChange={onSlideChange}
+        // scrollEnabled={false}
+        // dotClickEnabled={false}
       />
       {currentIndex > 0 && renderNewButton()}
     </>

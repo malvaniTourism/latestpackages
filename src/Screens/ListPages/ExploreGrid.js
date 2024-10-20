@@ -54,9 +54,11 @@ const ExploreGrid = ({route, navigation, ...props}) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const [showOnlineMode, setShowOnlineMode] = useState(false);
-
+  const [errorMessage, setErrorMessage] = useState('');
   const [alertMessage, setAlertMessage] = useState('');
   const [isAlert, setIsAlert] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [nextPage, setNextPage] = useState(1);
 
   useEffect(() => {
     const backHandler = goBackHandler(navigation);
@@ -91,8 +93,11 @@ const ExploreGrid = ({route, navigation, ...props}) => {
   const fetchData = async (page, reset = false) => {
     const mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
 
-    if (props.mode) {
-      if (loading || (page > currentPage && page > lastPage)) return;
+    if (mode) {
+      if (loading) {
+        setRefreshing(false);
+        return;
+      }
 
       setLoading(true);
       const data = {
@@ -113,8 +118,8 @@ const ExploreGrid = ({route, navigation, ...props}) => {
             } else {
               setGallery(prevGallery => [...prevGallery, ...newGallery]);
             }
-            setCurrentPage(res.data.data.current_page);
-            setLastPage(res.data.data.last_page);
+            setHasMore(!!res.data.data.next_page_url); // Check if there's more data
+            setNextPage(page + 1);
           }
           setLoading(false);
           setRefreshing(false);
@@ -129,6 +134,7 @@ const ExploreGrid = ({route, navigation, ...props}) => {
 
   const onRefresh = () => {
     setRefreshing(true);
+    setSearchValue('');
     if (props.mode) {
       fetchData(1, true);
     } else {
@@ -137,50 +143,21 @@ const ExploreGrid = ({route, navigation, ...props}) => {
     }
   };
 
+  const loadMoreData = () => {
+    if (!props.mode) {
+      setErrorMessage(t('GET_MORE_DATA'));
+      setShowOnlineMode(true);
+    } else if (!loading && hasMore) {
+      fetchData(nextPage);
+      setSearchValue('');
+    }
+  };
+
   const handleSearch = value => {
     setSearchValue(value);
     setCurrentPage(1);
     setLastPage(1);
-  };
-
-  const handleScroll = async event => {
-    const mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));
-    // Check the internet connectivity state
-    const state = await NetInfo.fetch();
-    const isConnected = state.isConnected;
-
-    // Combined condition for all three cases
-    if (
-      (isConnected && !mode) || // Case 1: Internet is available but mode is offline
-      (!isConnected && !mode) || // Case 2: Internet is not available and mode is offline
-      (!isConnected && mode) // Case 3: Internet is not available but mode is online
-    ) {
-      // The user should be alerted based on their mode and connectivity status
-      setIsAlert(true);
-      setAlertMessage(
-        !isConnected && !mode
-          ? t('ALERT.NETWORK') // Alert: Network is available but mode is offline
-          : !isConnected && mode
-          ? t('ALERT.NO_INTERNET_AVAILABLE_MODE_ONLINE') // Alert: Mode is offline, you need to set it to online
-          : isConnected && !mode
-          ? t('ALERT.INTERNET_AVAILABLE_MODE_OFFLINE') // Alert: No internet available but mode is online
-          : '', // Default case (optional), if none of the conditions match
-      );
-
-      return;
-    }
-
-    const contentHeight = event.nativeEvent.contentSize.height;
-    const offsetY = event.nativeEvent.contentOffset.y;
-    const scrollHeight = event.nativeEvent.layoutMeasurement.height;
-
-    if (
-      contentHeight - (scrollHeight + offsetY) < 100 &&
-      !loading &&
-      currentPage < lastPage
-    ) {
-      fetchData(currentPage + 1);
-    }
+    fetchData(1, true);
   };
 
   const openImageViewer = image => {
@@ -224,14 +201,12 @@ const ExploreGrid = ({route, navigation, ...props}) => {
   };
 
   const renderFooter = () => {
-    if (loading && gallery.length) {
-      return (
-        <View style={{paddingVertical: 20}}>
-          <ActivityIndicator size="small" color="#0000ff" />
-        </View>
-      );
-    }
-    return null;
+    if (!loading || !hasMore) return null;
+    return (
+      <View style={{paddingVertical: 20}}>
+        <ActivityIndicator size="small" color={COLOR.primary} />
+      </View>
+    );
   };
 
   const imageIndex = gallery.findIndex(img => img.id === selectedImage?.id);
@@ -253,7 +228,7 @@ const ExploreGrid = ({route, navigation, ...props}) => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-        onScroll={handleScroll}
+        onScroll={loadMoreData}
         scrollEventThrottle={16}>
         <CheckNet isOff={offline} />
         {loading && !gallery.length ? (
@@ -298,6 +273,11 @@ const ExploreGrid = ({route, navigation, ...props}) => {
         )}
         <ComingSoon
           message={t('ONLINE_MODE')}
+          visible={showOnlineMode}
+          toggleOverlay={() => setShowOnlineMode(false)}
+        />
+        <ComingSoon
+          message={errorMessage}
           visible={showOnlineMode}
           toggleOverlay={() => setShowOnlineMode(false)}
         />

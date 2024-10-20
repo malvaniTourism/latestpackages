@@ -42,6 +42,7 @@ import ComingSoon from '../../Components/Common/ComingSoon';
 import Popup from '../../Components/Common/Popup';
 import NetInfo from '@react-native-community/netinfo';
 import {FTP_PATH} from '@env';
+import {useFocusEffect} from '@react-navigation/native';
 
 const CityDetails = ({navigation, route, offline, ...props}) => {
   const {t} = useTranslation();
@@ -67,11 +68,16 @@ const CityDetails = ({navigation, route, offline, ...props}) => {
     const backHandler = goBackHandler(navigation);
     checkLogin(navigation);
     setLoader(true);
-    setCityDetails();
     return () => {
       backHandler.remove();
     };
   }, [cityId]);
+
+  useFocusEffect(
+    React.useCallback(async () => {
+      setCityDetails();
+    }, [route.params.city.id]),
+  );
 
   const setCityDetails = () => {
     setLoader(true);
@@ -432,7 +438,7 @@ const CityDetails = ({navigation, route, offline, ...props}) => {
                         {rating > 0 && (
                           <GlobalText text={rating} style={styles.avgRating} />
                         )}
-                        <GlobalText text={`( ${commentCount} Reviews )`} />
+                        <GlobalText text={`   ( ${commentCount} Reviews )`} />
                       </View>
                     </>
                   )}

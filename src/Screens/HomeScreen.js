@@ -304,7 +304,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
     props.setSource('');
     props.setDestination('');
     setRefreshing(true);
-    if (props.mode) {
+    if (mode) {
       callLandingPageAPI();
     } else {
       setShowOnlineMode(true);
