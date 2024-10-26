@@ -194,6 +194,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: DIMENSIONS.subtitleTextSize,
   },
+  searchButtonStyle: {
+    width: DIMENSIONS.bannerWidth / 3,
+    backgroundColor: COLOR.themeBlue,
+    borderRadius: DIMENSIONS.borderRadiusXS,
+    alignSelf: 'flex-end',
+    alignContent: 'center',
+    top: -20,
+    right: 10,
+  },
 });
 
 export default styles;

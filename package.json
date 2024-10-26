@@ -16,7 +16,7 @@
     "build:ios:prod": "ENV_FILE=production npx react-native run-ios --configuration Release",
     "build:android:assembleReleaseDev": "cd android && ENV_FILE=development ./gradlew assembleDebug",
     "build:android:bundleReleaseDev": "cd android && ENV_FILE=development ./gradlew bundleDebug",
-    "build:android:assembleReleaseProd": "cd android && ENV_FILE=production ./gradlew assembleRelease",
+    "build:android:assembleReleaseProd": "cd android && ./gradlew clean && ENV_FILE=production ./gradlew assembleRelease",
     "build:android:bundleReleaseProd": "cd android && ENV_FILE=production ./gradlew bundleRelease"
   },
   "dependencies": {

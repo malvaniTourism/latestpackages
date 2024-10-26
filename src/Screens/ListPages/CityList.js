@@ -37,6 +37,7 @@ import Popup from '../../Components/Common/Popup';
 import FlatListSkeleton from './FlatListSkeleton';
 import CityCardSmall from '../../Components/Cards/CityCardSmall';
 import PlaceCard from '../../Components/Cards/PlaceCard';
+import PackageCard from '../../Components/Cards/PackageCard';
 
 const CityList = ({navigation, route, ...props}) => {
   const {t} = useTranslation();
@@ -163,7 +164,12 @@ const CityList = ({navigation, route, ...props}) => {
     //   style={styles.SmallChipCard}>
     //   <GlobalText style={styles.cityListName} text={item.name} />
     // </TouchableOpacity>
-    <PlaceCard data={item} onClick={() => getCityDetails(item)} />
+    // <PlaceCard data={item} onClick={() => getCityDetails(item)} />
+    <PackageCard
+      data={item}
+      onClick={() => getCityDetails(item)}
+      cardType={'long'}
+    />
     // <CityCard data={item} onClick={() => getCityDetails(item)} />
     // <CityCardSmall data={item} onClick={() => getCityDetails(item)} />
   );

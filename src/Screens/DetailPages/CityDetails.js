@@ -317,6 +317,10 @@ const CityDetails = ({navigation, route, offline, ...props}) => {
     setIsAlert(false);
   };
 
+  const goToCityImages = () => {
+    navigateTo(navigation, t('SCREEN.GALLERY'), {cityName: city.name});
+  };
+
   return (
     <>
       <Header
@@ -347,7 +351,14 @@ const CityDetails = ({navigation, route, offline, ...props}) => {
                   style={styles.placeImage}
                 />
               ) : city?.gallery && city?.gallery[0] ? (
-                <GalleryView images={city.gallery} />
+                <GalleryView images={city.gallery.slice(0, 3)} />
+              ) : city?.image ? (
+                <ImageBackground
+                  source={{uri: FTP_PATH + city.image}}
+                  style={styles.placeImage}
+                  imageStyle={styles.cityImageStyle}
+                  resizeMode="cover"
+                />
               ) : (
                 // <ImageBackground
                 //     source={{ uri: FTP_PATH + city.image }}
@@ -358,6 +369,15 @@ const CityDetails = ({navigation, route, offline, ...props}) => {
                   style={styles.placeImage}
                   imageStyle={styles.cityImageStyle}
                   resizeMode="cover"
+                />
+              )}
+              {city?.gallery && city?.gallery[0] && (
+                <TextButton
+                  title={t('BUTTON.SEE_MORE')}
+                  buttonView={styles.searchButtonStyle}
+                  titleStyle={styles.buttonTitleStyle}
+                  raised={false}
+                  onPress={goToCityImages}
                 />
               )}
             </View>

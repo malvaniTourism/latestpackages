@@ -90,6 +90,13 @@ const CityCardSmall = ({data, reload, navigation, addComment, onClick}) => {
           imageStyle={styles.cityImageStyle}
           resizeMode="cover"
         />
+      ) : data.gallery && data?.gallery[0] ? (
+        <ImageBackground
+          source={{uri: FTP_PATH + data.gallery[0].path}}
+          style={cardType == 'city' ? styles.citySmallImage : styles.placeImage}
+          imageStyle={styles.cityImageStyle}
+          resizeMode="cover"
+        />
       ) : (
         <ImageBackground
           source={require('../../Assets/Images/no-image.png')}

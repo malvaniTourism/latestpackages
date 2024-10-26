@@ -39,6 +39,7 @@ import ExploreGridSkeleton from './ExploreGridSkeleton';
 import ComingSoon from '../../Components/Common/ComingSoon';
 import Popup from '../../Components/Common/Popup';
 import {FTP_PATH} from '@env';
+import {useFocusEffect} from '@react-navigation/native';
 
 const {height: screenHeight} = Dimensions.get('window');
 
@@ -89,6 +90,12 @@ const ExploreGrid = ({route, navigation, ...props}) => {
   useEffect(() => {
     fetchData(1, true);
   }, [searchValue]);
+
+  useFocusEffect(
+    React.useCallback(async () => {
+      setSearchValue(route.params.cityName || '');
+    }, [route.params.cityName]),
+  );
 
   const fetchData = async (page, reset = false) => {
     const mode = JSON.parse(await getFromStorage(t('STORAGE.MODE')));

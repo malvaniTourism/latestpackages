@@ -313,6 +313,13 @@ const styles = StyleSheet.create({
   boldText: {
     fontWeight: 'bold',
   },
+  boldTextLong: {
+    fontWeight: 'bold',
+    textAlign: 'right',
+  },
+  greyText: {
+    color: COLOR.greyDark,
+  },
   cityCardSmall: {
     width: DIMENSIONS.bannerWidth / 2,
     height: DIMENSIONS.bannerHeight + 90,
@@ -380,6 +387,77 @@ const styles = StyleSheet.create({
   },
   routeCardIcons: {
     marginRight: 3,
+  },
+  packageCardSmall: {
+    margin: 10,
+    elevation: 10,
+    backgroundColor: COLOR.white,
+    padding: 5,
+    borderRadius: DIMENSIONS.borderRadiusXS,
+    height: DIMENSIONS.halfWidth + 20,
+    width: DIMENSIONS.halfWidth - 30,
+    // alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  packageCardLong: {
+    marginVertical: 5,
+    marginHorizontal: 10,
+    elevation: 10,
+    backgroundColor: COLOR.white,
+    padding: 5,
+    borderRadius: DIMENSIONS.borderRadiusXS,
+    height: DIMENSIONS.halfWidth - 60,
+    width: DIMENSIONS.screenWidth - 30,
+    // alignItems: "center",
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  smallPackageImage: {
+    width: DIMENSIONS.halfWidth - 40,
+    height: DIMENSIONS.halfWidth - 40,
+  },
+  smallPackageImageStyle: {
+    width: DIMENSIONS.halfWidth - 40,
+    height: DIMENSIONS.halfWidth - 40,
+    borderRadius: DIMENSIONS.borderRadiusXS,
+  },
+  smallPackageImageLong: {
+    width: DIMENSIONS.halfWidth - 60,
+    height: DIMENSIONS.halfWidth - 70,
+  },
+  smallPackageImageLongStyle: {
+    width: DIMENSIONS.halfWidth - 60,
+    height: DIMENSIONS.halfWidth - 70,
+    borderRadius: DIMENSIONS.borderRadiusXS,
+  },
+  packageCardContent: {
+    width: DIMENSIONS.halfWidth - 40,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 5,
+  },
+  packageCardContentLong: {
+    flexDirection: 'column',
+    marginTop: 5,
+    alignItems: 'center',
+    alignSelf: 'center',
+  },
+  flexRowSmall: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  flexRowSmallLong: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-end',
+  },
+  lastContent: {
+    alignSelf: 'center',
+  },
+  lastContentLong: {
+    alignSelf: 'flex-end',
   },
 });
 
