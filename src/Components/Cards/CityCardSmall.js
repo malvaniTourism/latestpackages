@@ -110,19 +110,11 @@ const CityCardSmall = ({data, reload, navigation, addComment, onClick}) => {
           style={styles.citySmallLikeView}
           // onPress={() => onHeartClick()}
         >
-          {isFav ? (
-            <Octicons
-              name="heart-fill"
-              color={COLOR.red}
-              size={DIMENSIONS.iconSize}
-            />
-          ) : (
-            <Octicons
-              name="heart"
-              color={COLOR.black}
-              size={DIMENSIONS.iconSize}
-            />
-          )}
+          <Octicons
+            name={isFav ? 'heart-fill' : 'heart'}
+            color={isFav ? COLOR.red : COLOR.black}
+            size={DIMENSIONS.iconSize}
+          />
         </View>
         <View style={styles.citySmallLikeView}>
           <GlobalText text={commentCount} style={styles.commentCount} />

@@ -7,7 +7,6 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import COLOR from '../../Services/Constants/COLORS';
 import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Feather from 'react-native-vector-icons/Feather';
 
 const PackageCard = ({data, cardType, onClick, reload}) => {
   const [rating, setRating] = useState(data?.rating_avg_rate || 0);
@@ -16,32 +15,22 @@ const PackageCard = ({data, cardType, onClick, reload}) => {
   return (
     <TouchableOpacity
       style={
-        cardType == 'small' ? styles.packageCardSmall : styles.packageCardLong
+        cardType === 'small' ? styles.packageCardSmall : styles.packageCardLong
       }
       onPress={() => onClick()}>
-      <TouchableOpacity
+      <View
         style={
-          cardType == 'small'
+          cardType === 'small'
             ? styles.smallPackageImage
             : styles.smallPackageImageLong
-        }
-        onPress={() => onClick()}>
-        {data.image ? (
+        }>
+        {data.image || data.gallery?.[0] ? (
           <ImageBackground
-            source={{uri: FTP_PATH + data.image}}
-            // style={cardType == 'small' ? styles.smallPackageImage : styles.placeImage}
+            source={{
+              uri: FTP_PATH + (data.image || data.gallery?.[0]?.path),
+            }}
             imageStyle={
-              cardType == 'small'
-                ? styles.smallPackageImageStyle
-                : styles.smallPackageImageLongStyle
-            }
-            resizeMode="cover"
-          />
-        ) : data.gallery && data?.gallery[0] ? (
-          <ImageBackground
-            source={{uri: FTP_PATH + data.gallery[0].path}}
-            imageStyle={
-              cardType == 'small'
+              cardType === 'small'
                 ? styles.smallPackageImageStyle
                 : styles.smallPackageImageLongStyle
             }
@@ -59,43 +48,35 @@ const PackageCard = ({data, cardType, onClick, reload}) => {
             resizeMode="cover"
           />
         )}
-      </TouchableOpacity>
+      </View>
 
-      {cardType == 'small' && (
+      {cardType === 'small' && (
         <View style={styles.packageLikeView}>
-          <View
+          <TouchableOpacity
             style={styles.citySmallLikeView}
-            // onPress={() => onHeartClick()}
+            // onPress={() => setIsFav(!isFav)}
           >
-            {isFav ? (
-              <Octicons
-                name="heart-fill"
-                color={COLOR.red}
-                size={DIMENSIONS.iconSize}
-              />
-            ) : (
-              <Octicons
-                name="heart"
-                color={COLOR.black}
-                size={DIMENSIONS.iconSize}
-              />
-            )}
-          </View>
+            <Octicons
+              name={isFav ? 'heart-fill' : 'heart'}
+              color={isFav ? COLOR.red : COLOR.black}
+              size={DIMENSIONS.iconSize}
+            />
+          </TouchableOpacity>
         </View>
       )}
 
       <View
         style={
-          cardType == 'small'
+          cardType === 'small'
             ? styles.packageCardContent
             : styles.packageCardContentLong
         }>
         <View>
           <GlobalText
             text={data.name}
-            style={cardType == 'small' ? styles.boldText : styles.boldTextLong}
+            style={cardType === 'small' ? styles.boldText : styles.boldTextLong}
           />
-          {cardType == 'small' ? (
+          {cardType === 'small' ? (
             <GlobalText
               text={`${data?.tag_line?.slice(0, 12)}...`}
               style={styles.greyText}
@@ -103,7 +84,7 @@ const PackageCard = ({data, cardType, onClick, reload}) => {
           ) : (
             <View
               style={
-                cardType == 'small'
+                cardType === 'small'
                   ? styles.flexRowSmall
                   : styles.flexRowSmallLong
               }>
@@ -118,41 +99,16 @@ const PackageCard = ({data, cardType, onClick, reload}) => {
         </View>
         <View
           style={
-            cardType == 'small' ? styles.lastContent : styles.lastContentLong
+            cardType === 'small' ? styles.lastContent : styles.lastContentLong
           }>
-          {cardType == 'small' ? (
-            <View style={styles.flexRowSmall}>
-              <Octicons
-                name="star"
-                color={COLOR.yellow}
-                size={DIMENSIONS.smallIcon}
-              />
-              <GlobalText text={rating} style={{marginLeft: 5}} />
-              {/* {rating > 0 && (
-                                <GlobalText text={"4.5"} />
-                                )} */}
-            </View>
-          ) : (
-            // <View>
-            //     <Feather
-            //         name="user"
-            //         size={DIMENSIONS.smallIcon}
-            //         color={COLOR.black}
-            //         style={{ marginTop: 10 }}
-            //     />
-            // </View>
-            <View style={styles.flexRowSmall}>
-              <Octicons
-                name="star"
-                color={COLOR.yellow}
-                size={DIMENSIONS.smallIcon}
-              />
-              <GlobalText text={rating} style={{marginLeft: 5}} />
-              {/* {rating > 0 && (
-                                <GlobalText text={"4.5"} />
-                                )} */}
-            </View>
-          )}
+          <View style={styles.flexRowSmall}>
+            <Octicons
+              name="star"
+              color={COLOR.yellow}
+              size={DIMENSIONS.smallIcon}
+            />
+            <GlobalText text={rating} style={{marginLeft: 5}} />
+          </View>
         </View>
       </View>
     </TouchableOpacity>

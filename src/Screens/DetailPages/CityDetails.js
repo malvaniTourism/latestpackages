@@ -43,6 +43,8 @@ import Popup from '../../Components/Common/Popup';
 import NetInfo from '@react-native-community/netinfo';
 import {FTP_PATH} from '@env';
 import {useFocusEffect} from '@react-navigation/native';
+import PackageCard from '../../Components/Cards/PackageCard';
+import PackageCardSkeleton from '../../Components/Cards/PackageCardSkeleton';
 
 const CityDetails = ({navigation, route, offline, ...props}) => {
   const {t} = useTranslation();
@@ -298,11 +300,20 @@ const CityDetails = ({navigation, route, offline, ...props}) => {
     // ...
   };
 
+  const getCityDetails = city => {
+    // navigateTo(navigation, t('SCREEN.CITY_DETAILS'), {city});
+  };
+
   const renderItem = ({item}) => {
     return (
-      <View style={styles.placesCard}>
-        <GlobalText text={item.name} />
-      </View>
+      // <View style={styles.placesCard}>
+      //   <GlobalText text={item.name} />
+      // </View>
+      <PackageCard
+        data={item}
+        onClick={() => getCityDetails(item)}
+        cardType={'long'}
+      />
     );
   };
 
@@ -409,19 +420,11 @@ const CityDetails = ({navigation, route, offline, ...props}) => {
                     <TouchableOpacity
                       style={styles.cityLikeView}
                       onPress={() => onHeartClick()}>
-                      {isFav ? (
-                        <Octicons
-                          name="heart-fill"
-                          color={COLOR.red}
-                          size={DIMENSIONS.iconSize}
-                        />
-                      ) : (
-                        <Octicons
-                          name="heart"
-                          color={COLOR.black}
-                          size={DIMENSIONS.iconSize}
-                        />
-                      )}
+                      <Octicons
+                        name={isFav ? 'heart-fill' : 'heart'}
+                        color={isFav ? COLOR.red : COLOR.black}
+                        size={DIMENSIONS.iconSize}
+                      />
                     </TouchableOpacity>
                   </View>
                   <GlobalText
@@ -517,7 +520,6 @@ const CityDetails = ({navigation, route, offline, ...props}) => {
 
               <View
                 style={{
-                  paddingBottom: 10,
                   flexDirection: 'row',
                   justifyContent: 'center',
                 }}>
@@ -550,30 +552,23 @@ const CityDetails = ({navigation, route, offline, ...props}) => {
                   </View>
                 ) : null}
               </View>
-              <View
-                style={{
-                  alignItems: 'center',
-                }}>
+              <View style={{marginLeft: -5}}>
                 {isLoading ? (
                   <View>
                     <FlatList
                       keyExtractor={item => item.id}
                       data={city.sites}
                       renderItem={() => (
-                        <CityCardSkeleton type={t('HEADER.PLACE')} />
+                        <PackageCardSkeleton cardType={'long'} />
                       )}
-                      numColumns={2}
                     />
                   </View>
                 ) : city.sites[0] ? (
-                  <View>
-                    <FlatList
-                      keyExtractor={item => item.id}
-                      data={city.sites}
-                      renderItem={renderItem}
-                      numColumns={2}
-                    />
-                  </View>
+                  <FlatList
+                    keyExtractor={item => item.id}
+                    data={city.sites}
+                    renderItem={renderItem}
+                  />
                 ) : (
                   <View style={{marginTop: 20}}>
                     <GlobalText text={t('ADDED')} style={styles.boldText} />

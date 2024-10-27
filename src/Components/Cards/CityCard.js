@@ -104,19 +104,11 @@ const CityCard = ({data, reload, navigation, addComment, onClick}) => {
         <TouchableOpacity
           style={styles.cityLikeView}
           onPress={() => onHeartClick()}>
-          {isFav ? (
-            <Octicons
-              name="heart-fill"
-              color={COLOR.red}
-              size={DIMENSIONS.iconSize}
-            />
-          ) : (
-            <Octicons
-              name="heart"
-              color={COLOR.black}
-              size={DIMENSIONS.iconSize}
-            />
-          )}
+          <Octicons
+            name={isFav ? 'heart-fill' : 'heart'}
+            color={isFav ? COLOR.red : COLOR.black}
+            size={DIMENSIONS.iconSize}
+          />
         </TouchableOpacity>
         <TouchableOpacity style={styles.cityLikeView}>
           <GlobalText text={commentCount} style={styles.commentCount} />
