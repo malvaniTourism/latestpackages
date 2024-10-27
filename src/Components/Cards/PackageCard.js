@@ -78,7 +78,7 @@ const PackageCard = ({data, cardType, onClick, reload}) => {
           />
           {cardType === 'small' ? (
             <GlobalText
-              text={`${data?.tag_line?.slice(0, 12)}...`}
+              text={`${data?.tag_line}`}
               style={styles.greyText}
             />
           ) : (
@@ -93,7 +93,7 @@ const PackageCard = ({data, cardType, onClick, reload}) => {
                 color={COLOR.grey}
                 size={DIMENSIONS.smallIcon}
               />
-              <GlobalText text={data?.site?.name} style={styles.greyText} />
+              <GlobalText text={data?.site?.name} style={styles.greyTextLong} />
             </View>
           )}
         </View>
@@ -105,7 +105,7 @@ const PackageCard = ({data, cardType, onClick, reload}) => {
             <Octicons
               name="star"
               color={COLOR.yellow}
-              size={DIMENSIONS.smallIcon}
+              size={DIMENSIONS.iconSize}
             />
             <GlobalText text={rating} style={{marginLeft: 5}} />
           </View>

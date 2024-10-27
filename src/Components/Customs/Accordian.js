@@ -8,6 +8,7 @@ import DIMENSIONS from '../../Services/Constants/DIMENSIONS';
 import SubCatCard from '../Cards/SubCatCard';
 import {navigateTo} from '../../Services/CommonMethods';
 import {useTranslation} from 'react-i18next';
+import {FTP_PATH} from '@env';
 
 const Accordion = ({data, navigation}) => {
   const {t} = useTranslation();

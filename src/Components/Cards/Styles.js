@@ -321,6 +321,12 @@ const styles = StyleSheet.create({
   },
   greyText: {
     color: COLOR.greyDark,
+    textAlign: 'left',
+    width: DIMENSIONS.halfWidth - 90,
+    fontSize: DIMENSIONS.textSize,
+  },
+  greyTextLong: {
+    color: COLOR.greyDark,
   },
   cityCardSmall: {
     width: DIMENSIONS.bannerWidth / 2,
@@ -396,12 +402,12 @@ const styles = StyleSheet.create({
     marginRight: 3,
   },
   packageCardSmall: {
-    margin: 10,
+    margin: 5,
     elevation: 10,
     backgroundColor: COLOR.white,
     padding: 5,
-    borderRadius: DIMENSIONS.borderRadiusXS,
-    height: DIMENSIONS.halfWidth + 20,
+    borderRadius: DIMENSIONS.borderRadiusSmall,
+    height: DIMENSIONS.halfWidth + 65,
     width: DIMENSIONS.halfWidth - 30,
     // alignItems: "center",
     display: 'flex',
@@ -428,7 +434,10 @@ const styles = StyleSheet.create({
   smallPackageImageStyle: {
     width: DIMENSIONS.halfWidth - 40,
     height: DIMENSIONS.halfWidth - 40,
-    borderRadius: DIMENSIONS.borderRadiusXS,
+    borderTopLeftRadius: DIMENSIONS.borderRadiusSmall,
+    borderTopRightRadius: DIMENSIONS.borderRadiusSmall,
+    borderBottomLeftRadius: DIMENSIONS.borderRadiusXS,
+    borderBottomRightRadius: DIMENSIONS.borderRadiusXS,
   },
   smallPackageImageLong: {
     width: DIMENSIONS.halfWidth - 60,
@@ -463,7 +472,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   lastContent: {
-    alignSelf: 'center',
+    top: 2
   },
   lastContentLong: {
     alignSelf: 'flex-end',
