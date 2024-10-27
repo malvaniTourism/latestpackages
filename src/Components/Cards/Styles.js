@@ -312,10 +312,12 @@ const styles = StyleSheet.create({
   },
   boldText: {
     fontWeight: 'bold',
+    textAlign: 'left',
   },
   boldTextLong: {
     fontWeight: 'bold',
     textAlign: 'right',
+    maxWidth: 200,
   },
   greyText: {
     color: COLOR.greyDark,
@@ -347,6 +349,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: -20,
     textAlign: 'left',
+  },
+  packageLikeView: {
+    position: 'absolute',
+    right: 5,
+    top: 10,
   },
   citySmallLikeView: {
     backgroundColor: COLOR.white,
@@ -437,6 +444,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 5,
+    textAlign: 'left',
+    alignItems: 'flex-start',
   },
   packageCardContentLong: {
     flexDirection: 'column',

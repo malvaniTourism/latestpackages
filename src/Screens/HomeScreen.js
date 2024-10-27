@@ -60,6 +60,8 @@ import Popup from '../Components/Common/Popup';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {APP_URL} from '@env';
 import VersionCheck from 'react-native-version-check';
+import PackageCard from '../Components/Cards/PackageCard';
+import PackageCardSkeleton from '../Components/Cards/PackageCardSkeleton';
 
 // SplashScreen.preventAutoHideAsync();
 
@@ -685,14 +687,14 @@ const HomeScreen = ({navigation, route, ...props}) => {
               {isLoading || cities.length === 0 ? (
                 // Show skeleton loader when loading or when there are no cities
                 <>
-                  <CityCardSmallSkeleton />
-                  <CityCardSmallSkeleton />
-                  <CityCardSmallSkeleton />
+                  <PackageCardSkeleton cardType={'small'} />
+                  <PackageCardSkeleton cardType={'small'} />
+                  <PackageCardSkeleton cardType={'small'} />
                 </>
               ) : (
                 // Show cities if available
                 cities.map((city, index) => (
-                  <CityCardSmall
+                  <PackageCard
                     key={index} // Add key for list items
                     data={city}
                     reload={() => {
@@ -701,6 +703,7 @@ const HomeScreen = ({navigation, route, ...props}) => {
                     navigation={navigation}
                     onClick={() => getCityDetails(city)}
                     isConnected={offline}
+                    cardType={'small'}
                   />
                 ))
               )}

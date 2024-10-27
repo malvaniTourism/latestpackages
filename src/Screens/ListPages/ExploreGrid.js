@@ -94,7 +94,7 @@ const ExploreGrid = ({route, navigation, ...props}) => {
   useFocusEffect(
     React.useCallback(async () => {
       setSearchValue(route.params.cityName || '');
-    }, [route.params.cityName]),
+    }, [route?.params?.cityName]),
   );
 
   const fetchData = async (page, reset = false) => {
